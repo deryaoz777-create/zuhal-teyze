@@ -1,0 +1,6 @@
+[phases.setup]
+nixPkgs = ["python311", "sqlite"]
+aptPkgs = ["libsqlite3-dev", "libswe-dev", "gcc", "python3-dev"]
+
+[start]
+cmd = "python server.py"
