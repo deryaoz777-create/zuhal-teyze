@@ -132,17 +132,33 @@ function ask() {
   if(!q) return;
   const ra = document.getElementById("ra"), rt = document.getElementById("rt");
   const btn = document.getElementById("ask-btn");
-  const tag = document.getElementById("tagline");
   ra.classList.add("show");
   rt.className = "response-text";
   rt.innerHTML = "<span class='loading-phrase'>" + phrases[Math.floor(Math.random()*phrases.length)] + "</span>";
   btn.disabled = true; btn.textContent = "· · ·";
   let i = 0;
   pi = setInterval(function(){i=(i+1)%phrases.length;rt.innerHTML="<span class='loading-phrase'>"+phrases[i]+"</span>";}, 2200);
+
+  // Konum al, yoksa İstanbul default
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function(pos) { sendQuestion(q, pos.coords.latitude, pos.coords.longitude); },
+      function() { sendQuestion(q, 41.01, 28.97); }, // İstanbul fallback
+      {timeout: 5000}
+    );
+  } else {
+    sendQuestion(q, 41.01, 28.97);
+  }
+}
+
+function sendQuestion(q, lat, lon) {
+  const ra = document.getElementById("ra"), rt = document.getElementById("rt");
+  const btn = document.getElementById("ask-btn");
+  const tag = document.getElementById("tagline");
   fetch("/api/zuhal", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({question: q})
+    body: JSON.stringify({question: q, lat: lat, lon: lon})
   })
   .then(r => r.json())
   .then(d => {
