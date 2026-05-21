@@ -19,16 +19,26 @@ body{background:#f5f0e8;font-family:'Cormorant Garamond',serif;min-height:100vh;
 textarea{width:100%;background:#faf8f3;border:1px solid #ddd5c0;border-radius:4px;color:#1a1020;font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.6;padding:12px 14px;resize:none;min-height:90px;outline:none;transition:border-color .2s}
 textarea::placeholder{color:#c4b89a;font-style:italic}
 textarea:focus{border-color:#7b6abf}
+input[type=email]{width:100%;background:#faf8f3;border:1px solid #ddd5c0;border-radius:4px;color:#1a1020;font-family:'Cormorant Garamond',serif;font-size:18px;padding:12px 14px;outline:none;transition:border-color .2s}
+input[type=email]:focus{border-color:#7b6abf}
+input[type=email]::placeholder{color:#c4b89a;font-style:italic}
 .btn{width:100%;margin-top:1rem;background:#2e1f6e;border:none;border-radius:4px;color:#f5e8b8;font-family:'Cinzel',serif;font-size:13px;letter-spacing:.18em;padding:14px;cursor:pointer;transition:background .2s,opacity .2s}
 .btn:hover:not(:disabled){background:#3d2a8a}
 .btn:disabled{opacity:.5;cursor:default}
+.btn-secondary{background:transparent;border:1px solid #ddd5c0;color:#9e8c6a;margin-top:.75rem;font-size:12px;padding:10px}
+.btn-secondary:hover:not(:disabled){background:#f5f0e8}
 .divider{width:100%;height:1px;background:#ece5d5;margin:1.25rem 0}
 .response-area{display:none}
 .response-area.show{display:block}
 .response-text{font-size:19px;font-style:italic;line-height:1.8;color:#1a1020;opacity:0;transition:opacity .6s;white-space:pre-wrap}
 .response-text.visible{opacity:1}
 .loading-phrase{font-size:14px;color:#9e8c6a;font-style:italic;animation:pulse 1.8s ease-in-out infinite}
-.error-text{font-size:15px;color:#c0392b;font-style:italic}
+.error-text{font-size:15px;color:#c0392b;font-style:normal}
+.credits-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.credits-info{font-size:12px;color:#9e8c6a;letter-spacing:.1em}
+.credits-count{font-family:'Cinzel',serif;font-size:14px;color:#2e1f6e}
+.user-email{font-size:12px;color:#b8a88a;font-style:italic}
+.success-msg{font-size:16px;color:#2e7d32;font-style:italic;text-align:center;padding:1rem 0;line-height:1.7}
 @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
 </style>
 </head>
@@ -38,9 +48,23 @@ textarea:focus{border-color:#7b6abf}
 </div>
 <div class="title">ZUHAL TEYZE</div>
 <div class="subtitle">Chaos Lab &middot; Horary &middot; İlişki Danışmanı</div>
-<div class="disclaimer">Zuhal Teyze bir ilişki danışmanıdır. Sadece aşk, sevgili, eski sevgili, evlilik ve ayrılık sorularını alır. İş ve kariyer soruları için başka bir kapı çalın. Gökyüzüne bakarak cevap verir — bazen tatlı, bazen acı, ama her zaman dürüst. Bu uygulama eğlence amaçlıdır.</div>
+<div class="disclaimer">Zuhal Teyze bir ilişki danışmanıdır. Sadece aşk, sevgili, eski sevgili, evlilik ve ayrılık sorularını alır. İş ve kariyer soruları için başka bir kapı çalın. Bu uygulama eğlence amaçlıdır.</div>
 <div class="tagline" id="tagline">&ldquo;G&ouml;z&uuml;m, bunu sormana gerek var m&iuml;yd&iuml; ki.&rdquo;</div>
-<div class="card">
+
+<!-- LOGIN EKRANI -->
+<div class="card" id="login-card">
+  <div class="label">Giriş Yap</div>
+  <input type="email" id="email-input" placeholder="email adresiniz..." />
+  <div id="login-msg" style="min-height:18px;margin-top:.75rem"></div>
+  <button class="btn" id="login-btn" onclick="requestLink()">DEVAM ET</button>
+</div>
+
+<!-- ANA EKRAN -->
+<div class="card" id="main-card" style="display:none">
+  <div class="credits-bar">
+    <span class="user-email" id="user-email"></span>
+    <span class="credits-info">Kalan soru: <span class="credits-count" id="credits-count">-</span></span>
+  </div>
   <div class="label">Sorunuz</div>
   <textarea id="q" placeholder="İlişkinizle ilgili ne sormak istiyorsunuz..." rows="4"></textarea>
   <div class="response-area" id="ra">
@@ -48,61 +72,118 @@ textarea:focus{border-color:#7b6abf}
     <div class="label">Zuhal Teyze diyor ki</div>
     <div class="response-text" id="rt"></div>
   </div>
-  <button class="btn" id="btn" onclick="ask()">SORMAK &Iuml;ST&Iuml;YORUM</button>
+  <button class="btn" id="ask-btn" onclick="ask()">SORMAK &Iuml;ST&Iuml;YORUM</button>
+  <button class="btn btn-secondary" onclick="logout()">çıkış yap</button>
 </div>
+
 <script>
-const phrases=[
-  "Sabrınızı... yıldızlar acele etmez.",
-  "Görüyorum, görüyorum...",
-  "Saturnus düşünüyor.",
-  "Bu soruyu zaten biliyordum.",
-  "Gökyüzü konuşuyor, dinliyorum.",
-  "Hmm. İlginç bir soru."
-];
-const tags=[
-  '"Гözüm, bunu sormana gerek var mıydı ki."',
-  '"Saturnus her şeyi görür. Her şeyi."',
-  '"Sormadan önce ayna bak derim ama..."',
-  '"Yıldızlar yalan söylemez. Sen söylersin."'
-];
+const phrases=["Sabrınızı... yıldızlar acele etmez.","Görüyorum, görüyorum...","Saturnus düşünüyor.","Bu soruyu zaten biliyordum.","Gökyüzü konuşuyor, dinliyorum.","Hmm. İlginç bir soru."];
+const tags=[""Gözüm, bunu sormana gerek var mıydı ki."",""Saturnus her şeyi görür. Her şeyi."",""Sormadan önce ayna bak derim ama..."",""Yıldızlar yalan söylemez. Sen söylersin.""];
 let pi;
-function ask(){
-  const q=document.getElementById("q").value.trim();
-  if(!q)return;
-  const ra=document.getElementById("ra"),rt=document.getElementById("rt"),btn=document.getElementById("btn"),tag=document.getElementById("tagline");
-  ra.classList.add("show");
-  rt.className="response-text";
-  rt.innerHTML='<span class="loading-phrase">'+phrases[Math.floor(Math.random()*phrases.length)]+'</span>';
-  btn.disabled=true;btn.textContent="· · ·";
-  let i=0;
-  pi=setInterval(function(){i=(i+1)%phrases.length;rt.innerHTML='<span class="loading-phrase">'+phrases[i]+'</span>';},2200);
-  fetch("/api/zuhal",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({question:q})
+
+// Sayfa yüklenince oturum kontrol et
+window.onload = function() {
+  fetch("/api/auth/me")
+    .then(r => r.json())
+    .then(d => {
+      if(d.logged_in) showMain(d.email, d.credits);
+    });
+};
+
+function showMain(email, credits) {
+  document.getElementById("login-card").style.display = "none";
+  document.getElementById("main-card").style.display = "block";
+  document.getElementById("user-email").textContent = email;
+  document.getElementById("credits-count").textContent = credits;
+}
+
+function requestLink() {
+  const email = document.getElementById("email-input").value.trim();
+  if(!email) return;
+  const btn = document.getElementById("login-btn");
+  const msg = document.getElementById("login-msg");
+  btn.disabled = true;
+  btn.textContent = "· · ·";
+  fetch("/api/auth/request", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({email: email})
   })
-  .then(function(r){return r.json();})
-  .then(function(d){
-    clearInterval(pi);
-    if(d.error){
-      rt.className="response-text error-text";
-      rt.textContent=d.error;
+  .then(r => r.json())
+  .then(d => {
+    if(d.success) {
+      msg.innerHTML = "<span class='success-msg'>Link gönderildi. Emailinizi kontrol edin.<br><span style='font-size:13px;color:#9e8c6a'>Spam klasörüne de bakın.</span></span>";
+      btn.textContent = "GöNDERİLDİ";
     } else {
-      rt.className="response-text";
-      rt.textContent=d.interpretation||"Yıldızlar şu an sessiz.";
+      msg.innerHTML = "<span class='error-text'>" + (d.error || "Bir hata oluştu.") + "</span>";
+      btn.disabled = false;
+      btn.textContent = "DEVAM ET";
     }
-    setTimeout(function(){rt.classList.add("visible");},30);
-    btn.disabled=false;btn.textContent="YENİDEN SOR";
-    tag.style.opacity=0;
-    setTimeout(function(){tag.textContent=tags[Math.floor(Math.random()*tags.length)];tag.style.opacity=1;},400);
+  })
+  .catch(() => {
+    msg.innerHTML = "<span class='error-text'>Bağlantı hatası.</span>";
+    btn.disabled = false;
+    btn.textContent = "DEVAM ET";
+  });
+}
+
+function ask() {
+  const q = document.getElementById("q").value.trim();
+  if(!q) return;
+  const ra = document.getElementById("ra"), rt = document.getElementById("rt");
+  const btn = document.getElementById("ask-btn");
+  const tag = document.getElementById("tagline");
+  ra.classList.add("show");
+  rt.className = "response-text";
+  rt.innerHTML = "<span class='loading-phrase'>" + phrases[Math.floor(Math.random()*phrases.length)] + "</span>";
+  btn.disabled = true; btn.textContent = "· · ·";
+  let i = 0;
+  pi = setInterval(function(){i=(i+1)%phrases.length;rt.innerHTML="<span class='loading-phrase'>"+phrases[i]+"</span>";}, 2200);
+  fetch("/api/zuhal", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({question: q})
+  })
+  .then(r => r.json())
+  .then(d => {
+    clearInterval(pi);
+    if(d.auth_required) {
+      document.getElementById("main-card").style.display = "none";
+      document.getElementById("login-card").style.display = "block";
+      return;
+    }
+    if(d.error) {
+      rt.className = "response-text error-text";
+      rt.textContent = d.error;
+    } else {
+      rt.className = "response-text";
+      rt.textContent = d.interpretation || "Yıldızlar şu an sessiz.";
+      if(d.credits_remaining !== undefined) {
+        document.getElementById("credits-count").textContent = d.credits_remaining;
+      }
+    }
+    setTimeout(function(){rt.classList.add("visible");}, 30);
+    btn.disabled = false; btn.textContent = "YENİDEN SOR";
+    tag.style.opacity = 0;
+    setTimeout(function(){tag.textContent = tags[Math.floor(Math.random()*tags.length)]; tag.style.opacity = 1;}, 400);
   })
   .catch(function(){
     clearInterval(pi);
-    rt.className="response-text error-text";
-    rt.textContent="Bağlantı hatası. Lütfen tekrar deneyin.";
-    setTimeout(function(){rt.classList.add("visible");},30);
-    btn.disabled=false;btn.textContent="YENİDEN SOR";
+    rt.className = "response-text error-text";
+    rt.textContent = "Bağlantı hatası. Lütfen tekrar deneyin.";
+    setTimeout(function(){rt.classList.add("visible");}, 30);
+    btn.disabled = false; btn.textContent = "YENİDEN SOR";
   });
+}
+
+function logout() {
+  document.cookie = "zt_session=; path=/; max-age=0";
+  document.getElementById("main-card").style.display = "none";
+  document.getElementById("login-card").style.display = "block";
+  document.getElementById("email-input").value = "";
+  document.getElementById("login-msg").innerHTML = "";
+  document.getElementById("login-btn").disabled = false;
+  document.getElementById("login-btn").textContent = "DEVAM ET";
 }
 </script>
 </body>
