@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zuhal Teyze — Lab</title>
+<style>
+  :root {
+    --bg: #0e0c14;
+    --bg2: #16121f;
+    --bg3: #1e1830;
+    --border: #2e2545;
+    --border2: #3d3160;
+    --text: #e8e0f0;
+    --text2: #9b8fa8;
+    --text3: #6b5c7a;
+    --gold: #c4a882;
+    --gold2: #ba7517;
+    --green: #1d9e75;
+    --red: #e24b4a;
+    --orange: #ef9f27;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── PASSWORD GATE ── */
+  #gate {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; flex-direction: column; gap: 16px;
+  }
+  #gate h1 { font-size: 13px; letter-spacing: 0.2em; color: var(--text3); text-transform: uppercase; }
+  #gate input {
+    background: var(--bg2); border: 0.5px solid var(--border);
+    color: var(--text); padding: 10px 14px; border-radius: 6px;
+    font-size: 14px; width: 240px; text-align: center; outline: none;
+  }
+  #gate input:focus { border-color: var(--border2); }
+  #gate button {
+    background: var(--bg3); border: 0.5px solid var(--border2);
+    color: var(--gold); padding: 9px 24px; border-radius: 6px;
+    font-size: 13px; cursor: pointer; letter-spacing: 0.05em;
+  }
+  #gate button:hover { background: #251a35; }
+  #gate-err { font-size: 12px; color: var(--red); }
+
+  /* ── MAIN LAYOUT ── */
+  #app { display: none; }
+  #app.visible { display: flex; flex-direction: column; height: 100vh; }
+  .topbar {
+    padding: 10px 20px; border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  }
+  .topbar-title { font-size: 12px; letter-spacing: 0.15em; color: var(--text3); text-transform: uppercase; }
+  .topbar-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .topbar-stats { margin-left: auto; font-size: 11px; color: var(--text3); display: flex; gap: 16px; }
+  .stat-val { color: var(--gold); font-weight: 500; }
+
+  .workspace {
+    display: grid; grid-template-columns: 320px 1fr 280px;
+    flex: 1; overflow: hidden;
+  }
+
+  /* ── LEFT: INPUT ── */
+  .col-left {
+    border-right: 0.5px solid var(--border);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .col-header {
+    padding: 11px 14px; border-bottom: 0.5px solid var(--border);
+    font-size: 11px; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .col-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+  label { font-size: 10px; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  textarea, input[type=text] {
+    width: 100%; background: var(--bg2); border: 0.5px solid var(--border);
+    color: var(--text); border-radius: 5px; padding: 8px 10px;
+    font-family: inherit; font-size: 12px; resize: vertical; outline: none;
+  }
+  textarea:focus, input[type=text]:focus { border-color: var(--border2); }
+  #q-input { min-height: 56px; }
+  #chart-input { min-height: 90px; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; }
+  .prompt-toggle { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
+  .prompt-toggle input { accent-color: var(--green); }
+  .prompt-toggle span { font-size: 11px; color: var(--text2); }
+  #sys-wrap { display: none; }
+  #sys-wrap.open { display: block; }
+  #sys-input { min-height: 160px; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; }
+  .run-btn {
+    margin: 0 14px 14px; padding: 10px; background: var(--bg3);
+    border: 0.5px solid var(--border2); border-radius: 6px;
+    color: var(--gold); font-size: 13px; font-weight: 500; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background 0.15s; letter-spacing: 0.03em; flex-shrink: 0;
+  }
+  .run-btn:hover:not(:disabled) { background: #251a35; }
+  .run-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  /* ── MIDDLE: OUTPUT ── */
+  .col-mid {
+    display: flex; flex-direction: column; border-right: 0.5px solid var(--border);
+  }
+  .output-area {
+    flex: 1; padding: 18px 20px; overflow-y: auto;
+    font-size: 13px; line-height: 1.8; color: var(--text); white-space: pre-wrap;
+  }
+  .placeholder { color: var(--text3); font-style: italic; font-size: 13px; }
+  .typing::after { content: '▋'; animation: blink 0.8s step-end infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ── FEEDBACK BAR ── */
+  .feedback-bar {
+    border-top: 0.5px solid var(--border); padding: 12px 16px;
+    background: var(--bg2); display: none; flex-direction: column; gap: 10px;
+    flex-shrink: 0;
+  }
+  .feedback-bar.visible { display: flex; }
+  .fb-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .stars { display: flex; gap: 4px; }
+  .star { font-size: 20px; cursor: pointer; color: var(--text3); line-height: 1; transition: color 0.1s; }
+  .star.on { color: var(--gold2); }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 10px; padding: 3px 9px; border: 0.5px solid var(--border);
+    border-radius: 20px; cursor: pointer; color: var(--text2); background: var(--bg);
+    transition: all 0.12s; text-transform: lowercase;
+  }
+  .tag.on { background: #0d2e20; border-color: #2d9e70; color: #5dcaa5; }
+  #fb-note { font-size: 12px; min-height: 36px; flex: 1; min-width: 160px; }
+  .save-btn {
+    padding: 7px 16px; background: var(--bg); border: 0.5px solid var(--border2);
+    border-radius: 5px; font-size: 12px; cursor: pointer; color: var(--gold);
+    white-space: nowrap; transition: background 0.12s;
+  }
+  .save-btn:hover { background: var(--bg3); }
+
+  /* ── RIGHT: HISTORY ── */
+  .col-right { display: flex; flex-direction: column; overflow: hidden; }
+  .hist-list { flex: 1; overflow-y: auto; }
+  .hist-item {
+    padding: 10px 14px; border-bottom: 0.5px solid var(--border);
+    cursor: pointer; transition: background 0.1s;
+  }
+  .hist-item:hover { background: var(--bg2); }
+  .hist-item.active { background: var(--bg3); }
+  .hist-q { font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hist-meta { font-size: 10px; color: var(--text3); margin-top: 3px; display: flex; gap: 8px; align-items: center; }
+  .hist-stars { color: var(--gold2); letter-spacing: -1px; }
+  .hist-tags { color: var(--text3); font-size: 9px; }
+  .empty-hist { padding: 16px 14px; font-size: 12px; color: var(--text3); font-style: italic; }
+
+  /* scrollbars */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .spinner {
+    width: 13px; height: 13px; border: 1.5px solid var(--border2);
+    border-top-color: var(--gold); border-radius: 50%;
+    animation: spin 0.65s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .badge { font-size: 10px; background: var(--bg3); border: 0.5px solid var(--border); border-radius: 10px; padding: 1px 7px; color: var(--text3); }
+</style>
+</head>
+<body>
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <h1>Zuhal Teyze Lab</h1>
+  <input type="password" id="pw-input" placeholder="şifre" onkeydown="if(event.key==='Enter')login()">
+  <button onclick="login()">Gir</button>
+  <span id="gate-err"></span>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-dot" id="status-dot"></div>
+    <span class="topbar-title">Zuhal Teyze · Test Lab</span>
+    <div class="topbar-stats">
+      <span>toplam test <span class="stat-val" id="stat-total">0</span></span>
+      <span>ort. puan <span class="stat-val" id="stat-avg">—</span></span>
+    </div>
+  </div>
+
+  <div class="workspace">
+
+    <!-- LEFT: INPUT -->
+    <div class="col-left">
+      <div class="col-header">Girdi</div>
+      <div class="col-body">
+        <div>
+          <label>Soru</label>
+          <textarea id="q-input" placeholder="Horary sorusu..."></textarea>
+        </div>
+        <div>
+          <label>Harita verisi</label>
+          <textarea id="chart-input" placeholder="ASC Boğa 14°, L1 Venüs Terazi 22°...&#10;veya boş bırak"></textarea>
+        </div>
+        <div>
+          <label class="prompt-toggle">
+            <input type="checkbox" id="show-sys"> <span>Sistem promptu</span>
+          </label>
+          <div id="sys-wrap">
+            <textarea id="sys-input"></textarea>
+          </div>
+        </div>
+      </div>
+      <button class="run-btn" id="run-btn" onclick="runReading()">
+        ✦ Yorum üret
+      </button>
+    </div>
+
+    <!-- MIDDLE: OUTPUT + FEEDBACK -->
+    <div class="col-mid">
+      <div class="col-header">Çıktı</div>
+      <div class="output-area" id="output-area">
+        <span class="placeholder">Soru gir, "Yorum üret"e bas.</span>
+      </div>
+      <div class="feedback-bar" id="feedback-bar">
+        <div class="fb-row">
+          <div>
+            <label>Puan</label>
+            <div class="stars" id="stars">
+              <span class="star" data-v="1">★</span>
+              <span class="star" data-v="2">★</span>
+              <span class="star" data-v="3">★</span>
+              <span class="star" data-v="4">★</span>
+              <span class="star" data-v="5">★</span>
+            </div>
+          </div>
+          <div>
+            <label>Sorun</label>
+            <div class="tags" id="tags">
+              <span class="tag" data-v="ton">ton</span>
+              <span class="tag" data-v="teknik">teknik</span>
+              <span class="tag" data-v="yapı">yapı</span>
+              <span class="tag" data-v="combust">combust</span>
+              <span class="tag" data-v="reception">reception</span>
+              <span class="tag" data-v="eksik">eksik</span>
+              <span class="tag" data-v="uzun">fazla uzun</span>
+              <span class="tag" data-v="harika">★ harika</span>
+            </div>
+          </div>
+        </div>
+        <div class="fb-row">
+          <div style="flex:1">
+            <label>Not</label>
+            <textarea id="fb-note" placeholder="Ne çalıştı, ne çalışmadı..."></textarea>
+          </div>
+          <button class="save-btn" id="save-btn" onclick="saveFeedback()">Kaydet</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: HISTORY -->
+    <div class="col-right">
+      <div class="col-header">
+        Geçmiş
+        <span class="badge" id="hist-badge">0</span>
+      </div>
+      <div class="hist-list" id="hist-list">
+        <div class="empty-hist">Henüz kayıt yok.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const DEFAULT_PROMPT = `Sen Zuhal Teyze'sin. John Frawley'nin The Horary Textbook'una ve William Lilly geleneğine dayanan bir horary astroloji yorumcususun.
+
+Ses:
+- Doğrudan, özlü, bazen sert ama asla zalim değil
+- "Zaten biliyordun ama sormak zorundaydın" enerjisi
+- Kanka gibi konuşur — bilge ama lafı dolandırmaz
+- Teknik detayları yoruma doğal örer
+- Her konuda otoriter ama ilişki ve güç dinamiklerinde özellikle keskin
+- Kadını güçlendiren, ama erkeği de anlayan — sistemi eleştirir, kişiyi değil
+- "Decentering" enerjisi: odağını al, kendine bak
+
+Yapma:
+- "Bu haritada X gezegeni Y'yi temsil eder" diye ayrı blok açma
+- Ders verir gibi konuşma, vaaz verme
+- Aşırı yumuşat veya olumla
+- Belirsiz kal
+
+Her yorumun SONUNDA tek bir satır bırak — çift tire ile ayrılmış:
+--
+[Ekrana alınabilecek keskin bir cümle. Context olmadan da anlam ifade etmeli. Paylaşılabilir.]
+
+Format: Kısa giriş (max 2 cümle) → teknik bulgular + yorum birlikte akar → net yargı → -- → paylaşılabilir satır.`;
+
+let rating = 0;
+let activeTags = new Set();
+let currentOutput = '';
+let currentQuestion = '';
+let currentChartData = '';
+let history = [];
+
+document.getElementById('sys-input').value = DEFAULT_PROMPT;
+
+document.getElementById('show-sys').addEventListener('change', function() {
+  document.getElementById('sys-wrap').classList.toggle('open', this.checked);
+});
+
+document.querySelectorAll('.star').forEach(s => {
+  s.addEventListener('click', () => {
+    rating = parseInt(s.dataset.v);
+    document.querySelectorAll('.star').forEach((x, i) => x.classList.toggle('on', i < rating));
+  });
+});
+
+document.querySelectorAll('.tag').forEach(t => {
+  t.addEventListener('click', () => {
+    const v = t.dataset.v;
+    activeTags.has(v) ? activeTags.delete(v) : activeTags.add(v);
+    t.classList.toggle('on', activeTags.has(v));
+  });
+});
+
+async function login() {
+  const pw = document.getElementById('pw-input').value;
+  const err = document.getElementById('gate-err');
+  try {
+    const res = await fetch('/api/lab/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    });
+    if (res.ok) {
+      document.getElementById('gate').style.display = 'none';
+      document.getElementById('app').classList.add('visible');
+      loadHistory();
+    } else {
+      err.textContent = 'Yanlış şifre.';
+    }
+  } catch(e) {
+    err.textContent = 'Bağlantı hatası.';
+  }
+}
+
+async function checkAuth() {
+  const res = await fetch('/api/lab/history');
+  if (res.ok) {
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    const data = await res.json();
+    renderHistory(data);
+  }
+}
+
+async function runReading() {
+  const q = document.getElementById('q-input').value.trim();
+  const chart = document.getElementById('chart-input').value.trim();
+  const sys = document.getElementById('sys-input').value.trim() || DEFAULT_PROMPT;
+
+  if (!q) { document.getElementById('q-input').focus(); return; }
+
+  const btn = document.getElementById('run-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> yorumlanıyor...';
+
+  const dot = document.getElementById('status-dot');
+  dot.style.background = '#ef9f27';
+
+  const area = document.getElementById('output-area');
+  area.innerHTML = '<span class="placeholder typing">Zuhal Teyze düşünüyor</span>';
+  document.getElementById('feedback-bar').classList.remove('visible');
+
+  currentQuestion = q;
+  currentChartData = chart;
+  currentOutput = '';
+
+  try {
+    const res = await fetch('/api/lab/reading', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question: q, chart_data: chart, system_prompt: sys })
+    });
+    const data = await res.json();
+    if (data.success) {
+      currentOutput = data.output;
+      area.textContent = currentOutput;
+      document.getElementById('feedback-bar').classList.add('visible');
+      dot.style.background = '#1d9e75';
+    } else {
+      area.innerHTML = `<span style="color:var(--red)">Hata: ${data.error}</span>`;
+      dot.style.background = '#e24b4a';
+    }
+  } catch(e) {
+    area.innerHTML = `<span style="color:var(--red)">Hata: ${e.message}</span>`;
+    dot.style.background = '#e24b4a';
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '✦ Yorum üret';
+}
+
+async function saveFeedback() {
+  if (!currentOutput) return;
+  const btn = document.getElementById('save-btn');
+  btn.textContent = 'kaydediliyor...';
+  btn.disabled = true;
+
+  const payload = {
+    question:      currentQuestion,
+    chart_data:    currentChartData,
+    system_prompt: document.getElementById('sys-input').value,
+    output:        currentOutput,
+    rating:        rating,
+    tags:          [...activeTags],
+    note:          document.getElementById('fb-note').value.trim()
+  };
+
+  try {
+    await fetch('/api/lab/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    resetFeedback();
+    loadHistory();
+    btn.textContent = '✓ Kaydedildi';
+    setTimeout(() => { btn.textContent = 'Kaydet'; btn.disabled = false; }, 1500);
+  } catch(e) {
+    btn.textContent = 'Hata!';
+    btn.disabled = false;
+  }
+}
+
+function resetFeedback() {
+  rating = 0;
+  activeTags.clear();
+  document.querySelectorAll('.star').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+  document.getElementById('fb-note').value = '';
+}
+
+async function loadHistory() {
+  try {
+    const res = await fetch('/api/lab/history');
+    const data = await res.json();
+    renderHistory(data);
+  } catch(e) {}
+}
+
+function renderHistory(data) {
+  history = data;
+  const list = document.getElementById('hist-list');
+  document.getElementById('hist-badge').textContent = data.length;
+
+  const ratings = data.filter(h => h.rating > 0).map(h => h.rating);
+  const avg = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : '—';
+  document.getElementById('stat-total').textContent = data.length;
+  document.getElementById('stat-avg').textContent = avg;
+
+  if (data.length === 0) {
+    list.innerHTML = '<div class="empty-hist">Henüz kayıt yok.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  data.forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'hist-item';
+    const stars = h.rating ? '★'.repeat(h.rating) + '☆'.repeat(5 - h.rating) : '☆☆☆☆☆';
+    const tags = h.tags.length ? h.tags.join(', ') : '';
+    div.innerHTML = `
+      <div class="hist-q">${h.question}</div>
+      <div class="hist-meta">
+        <span class="hist-stars">${stars}</span>
+        <span>${h.date}</span>
+        ${tags ? `<span class="hist-tags">${tags}</span>` : ''}
+      </div>
+    `;
+    div.onclick = () => loadEntry(h, div);
+    list.appendChild(div);
+  });
+}
+
+function loadEntry(h, el) {
+  document.querySelectorAll('.hist-item').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('q-input').value = h.question;
+  const area = document.getElementById('output-area');
+  area.textContent = h.output;
+  currentOutput = h.output;
+  currentQuestion = h.question;
+  document.getElementById('feedback-bar').classList.add('visible');
+  if (h.note) document.getElementById('fb-note').value = h.note;
+  // restore rating
+  rating = h.rating || 0;
+  document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('on', i < rating));
+  // restore tags
+  activeTags = new Set(h.tags || []);
+  document.querySelectorAll('.tag').forEach(t => t.classList.toggle('on', activeTags.has(t.dataset.v)));
+}
+
+checkAuth();
+</script>
+</body>
+</html>

@@ -6,6 +6,9 @@ from flask import Flask, request, jsonify, send_from_directory
 import datetime
 import os
 import json as _json
+import sqlite3
+import secrets
+import urllib.request
 import resend
 from database import (
     init_db, get_or_create_user, create_magic_token,
@@ -28,10 +31,95 @@ resend.api_key = RESEND_API_KEY
 DEFAULT_LAT = 42.17
 DEFAULT_LON = 42.67
 
+LAB_PASSWORD = os.environ.get("LAB_PASSWORD", "zuhal2024lab")
+LAB_DB_PATH  = os.environ.get("LAB_DB_PATH", "lab_feedback.db")
+
 print(f"[STARTUP] ANTHROPIC_API_KEY {'tanımlı' if ANTHROPIC_API_KEY else 'YOK'}")
 print(f"[STARTUP] RESEND_API_KEY {'tanımlı' if RESEND_API_KEY else 'YOK'}")
 
 init_db()
+
+
+# ─────────────────────────────────────────
+# LAB DB
+# ─────────────────────────────────────────
+
+def init_lab_db():
+    conn = sqlite3.connect(LAB_DB_PATH)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS lab_sessions (
+            token TEXT PRIMARY KEY,
+            created_at TEXT
+        )
+    """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS lab_feedback (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            created_at  TEXT,
+            question    TEXT,
+            chart_data  TEXT,
+            system_prompt TEXT,
+            output      TEXT,
+            rating      INTEGER DEFAULT 0,
+            tags        TEXT DEFAULT '[]',
+            note        TEXT DEFAULT ''
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+init_lab_db()
+
+
+def _lab_session_valid(token):
+    if not token:
+        return False
+    conn = sqlite3.connect(LAB_DB_PATH)
+    row = conn.execute(
+        "SELECT token FROM lab_sessions WHERE token = ?", (token,)
+    ).fetchone()
+    conn.close()
+    return row is not None
+
+
+def _create_lab_session():
+    token = secrets.token_hex(32)
+    conn = sqlite3.connect(LAB_DB_PATH)
+    conn.execute(
+        "INSERT INTO lab_sessions VALUES (?, ?)",
+        (token, datetime.datetime.now().isoformat())
+    )
+    conn.commit()
+    conn.close()
+    return token
+
+
+def _lab_authed():
+    return _lab_session_valid(request.cookies.get("zt_lab", ""))
+
+
+def _call_claude_raw(system_prompt, user_message):
+    """Anthropic API'yi doğrudan çağır (lab için)."""
+    payload = _json.dumps({
+        "model": "claude-opus-4-5-20251101",
+        "max_tokens": 1024,
+        "system": system_prompt,
+        "messages": [{"role": "user", "content": user_message}]
+    }).encode()
+
+    req = urllib.request.Request(
+        "https://api.anthropic.com/v1/messages",
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "x-api-key": ANTHROPIC_API_KEY,
+            "anthropic-version": "2023-06-01"
+        },
+        method="POST"
+    )
+    with urllib.request.urlopen(req, timeout=60) as resp:
+        data = _json.loads(resp.read())
+    return "".join(b.get("text", "") for b in data.get("content", []))
 
 
 # ─────────────────────────────────────────
@@ -188,6 +276,102 @@ def api_zuhal():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+# ─────────────────────────────────────────
+# LAB
+# ─────────────────────────────────────────
+
+@app.route("/lab")
+def lab():
+    return send_from_directory(".", "lab.html")
+
+
+@app.route("/api/lab/auth", methods=["POST"])
+def lab_auth():
+    data = request.json or {}
+    if data.get("password", "") != LAB_PASSWORD:
+        return jsonify({"error": "Yanlış şifre."}), 401
+    token = _create_lab_session()
+    resp = jsonify({"success": True})
+    resp.set_cookie("zt_lab", token, max_age=86400 * 30, path="/", samesite="Lax")
+    return resp
+
+
+@app.route("/api/lab/reading", methods=["POST"])
+def lab_reading():
+    if not _lab_authed():
+        return jsonify({"error": "Yetkisiz erişim."}), 401
+    if not ANTHROPIC_API_KEY:
+        return jsonify({"error": "ANTHROPIC_API_KEY tanımlı değil."}), 500
+
+    data = request.json or {}
+    question     = data.get("question", "").strip()
+    chart_data   = data.get("chart_data", "").strip()
+    system_prompt = data.get("system_prompt", "").strip()
+
+    if not question:
+        return jsonify({"error": "Soru boş olamaz."}), 400
+
+    user_msg = f"Soru: {question}"
+    if chart_data:
+        user_msg += f"\n\nHarita verisi:\n{chart_data}"
+
+    try:
+        output = _call_claude_raw(system_prompt, user_msg)
+        return jsonify({"success": True, "output": output})
+    except Exception as e:
+        print(f"[LAB READING ERROR] {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/lab/feedback", methods=["POST"])
+def lab_feedback():
+    if not _lab_authed():
+        return jsonify({"error": "Yetkisiz erişim."}), 401
+    data = request.json or {}
+    conn = sqlite3.connect(LAB_DB_PATH)
+    conn.execute("""
+        INSERT INTO lab_feedback
+            (created_at, question, chart_data, system_prompt, output, rating, tags, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        datetime.datetime.now().isoformat(),
+        data.get("question", ""),
+        data.get("chart_data", ""),
+        data.get("system_prompt", ""),
+        data.get("output", ""),
+        data.get("rating", 0),
+        _json.dumps(data.get("tags", []), ensure_ascii=False),
+        data.get("note", "")
+    ))
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True})
+
+
+@app.route("/api/lab/history", methods=["GET"])
+def lab_history():
+    if not _lab_authed():
+        return jsonify({"error": "Yetkisiz erişim."}), 401
+    conn = sqlite3.connect(LAB_DB_PATH)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT * FROM lab_feedback ORDER BY id DESC LIMIT 200"
+    ).fetchall()
+    conn.close()
+    result = []
+    for r in rows:
+        result.append({
+            "id":      r["id"],
+            "date":    r["created_at"][:10],
+            "question": r["question"],
+            "output":   r["output"],
+            "rating":   r["rating"],
+            "tags":     _json.loads(r["tags"] or "[]"),
+            "note":     r["note"]
+        })
+    return jsonify(result)
 
 
 if __name__ == "__main__":
