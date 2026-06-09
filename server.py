@@ -9,6 +9,7 @@ import json as _json
 import sqlite3
 import secrets
 import urllib.request
+import random
 import resend
 from database import (
     init_db, get_or_create_user, create_magic_token,
@@ -246,6 +247,116 @@ def api_zuhal():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
+# ─────────────────────────────────────────
+# FREE QUESTION (ilk soru, auth yok)
+# ─────────────────────────────────────────
+
+@app.route("/api/zuhal/free", methods=["POST"])
+def api_zuhal_free():
+    """İlk ücretsiz soru — auth gerekmez."""
+    if not ANTHROPIC_API_KEY:
+        return jsonify({"error": "Sunucu yapılandırma hatası."}), 500
+    data = request.json or {}
+    question = data.get("question", "").strip()
+    lat = float(data.get("lat", DEFAULT_LAT))
+    lon = float(data.get("lon", DEFAULT_LON))
+    if not question:
+        return jsonify({"error": "Soru boş olamaz."}), 400
+    try:
+        dt = datetime.datetime.now()
+        chart = calc_chart(question, dt, lat, lon)
+        prompt = build_frawley_prompt(chart)
+        interpretation = ask_claude(prompt, ANTHROPIC_API_KEY)
+        return jsonify({"success": True, "interpretation": interpretation})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ─────────────────────────────────────────
+# CODE AUTH (6 haneli kod ile giriş)
+# ─────────────────────────────────────────
+
+@app.route("/api/auth/code/send", methods=["POST"])
+def auth_code_send():
+    """Email'e 6 haneli doğrulama kodu gönder."""
+    data = request.json or {}
+    email = data.get("email", "").strip().lower()
+    if not email or "@" not in email:
+        return jsonify({"error": "Geçerli bir email adresi girin."}), 400
+
+    code = str(random.randint(100000, 999999))
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    conn.execute(
+        "DELETE FROM magic_tokens WHERE email = ?", (email,)
+    )
+    conn.execute(
+        "INSERT INTO magic_tokens (email, token) VALUES (?, ?)",
+        (email, f"CODE:{code}")
+    )
+    conn.commit()
+    conn.close()
+
+    try:
+        resend.Emails.send({
+            "from": "Zuhal Teyze <noreply@zuhalteyze.live>",
+            "to": email,
+            "subject": "Zuhal Teyze — Doğrulama Kodun",
+            "html": f"""
+            <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:2rem;background:#f5f0e8;">
+                <h2 style="font-family:'Cinzel',serif;color:#2e1f6e;text-align:center;letter-spacing:.1em;">ZUHAL TEYZE</h2>
+                <p style="color:#4a3a2a;font-size:17px;line-height:1.7;font-style:italic;text-align:center;">
+                    Doğrulama kodun:
+                </p>
+                <div style="text-align:center;margin:2rem 0;">
+                    <span style="font-size:40px;font-family:'Cinzel',serif;color:#2e1f6e;letter-spacing:.35em;font-weight:bold;">{code}</span>
+                </div>
+                <p style="color:#9e8c6a;font-size:12px;text-align:center;">Bu kod 1 saat geçerlidir.</p>
+            </div>
+            """
+        })
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"[CODE EMAIL ERROR] {e}")
+        return jsonify({"error": "Email gönderilemedi. Lütfen tekrar deneyin."}), 500
+
+
+@app.route("/api/auth/code/verify", methods=["POST"])
+def auth_code_verify():
+    """6 haneli kodu doğrula, oturum oluştur."""
+    data = request.json or {}
+    email = data.get("email", "").strip().lower()
+    code  = data.get("code", "").strip()
+    if not email or not code:
+        return jsonify({"error": "Email ve kod gerekli."}), 400
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    row = conn.execute("""
+        SELECT email FROM magic_tokens
+        WHERE email = ? AND token = ? AND used = 0
+          AND created_at > datetime('now', '-1 hour')
+    """, (email, f"CODE:{code}")).fetchone()
+
+    if not row:
+        conn.close()
+        return jsonify({"error": "Kod geçersiz veya süresi dolmuş."}), 401
+
+    conn.execute(
+        "UPDATE magic_tokens SET used = 1 WHERE email = ? AND token = ?",
+        (email, f"CODE:{code}")
+    )
+    conn.commit()
+    conn.close()
+
+    user = get_or_create_user(email)
+    session_token = create_session(user["id"])
+    resp = jsonify({"success": True, "email": user["email"], "credits": user["credits"]})
+    resp.set_cookie("zt_session", session_token, max_age=2592000, path="/", samesite="Lax")
+    return resp
 
 
 # ─────────────────────────────────────────
