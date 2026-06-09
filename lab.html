@@ -163,6 +163,27 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .badge { font-size: 10px; background: var(--bg3); border: 0.5px solid var(--border); border-radius: 10px; padding: 1px 7px; color: var(--text3); }
+  .tabs { display: flex; border-bottom: 0.5px solid var(--border); flex-shrink: 0; }
+  .tab-btn { padding: 9px 14px; font-size: 11px; color: var(--text3); cursor: pointer; border-bottom: 1.5px solid transparent; margin-bottom: -0.5px; background: none; border-top: none; border-left: none; border-right: none; }
+  .tab-btn:hover { color: var(--text2); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-pane { display: none; flex: 1; overflow-y: auto; }
+  .tab-pane.active { display: block; }
+  .review-item { padding: 10px 14px; border-bottom: 0.5px solid var(--border); cursor: pointer; }
+  .review-item:hover { background: var(--bg2); }
+  .review-item.active { background: var(--bg3); }
+  .review-q { font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .review-meta { font-size: 10px; color: var(--text3); margin-top: 3px; display: flex; gap: 8px; }
+  .status-pending { color: var(--orange); }
+  .status-reviewed { color: var(--green); }
+  .review-detail { padding: 14px 16px; display: none; flex-direction: column; gap: 10px; border-top: 0.5px solid var(--border); background: var(--bg2); flex-shrink: 0; max-height: 300px; overflow-y: auto; }
+  .review-detail.visible { display: flex; }
+  .review-output { font-size: 12px; color: var(--text2); line-height: 1.65; white-space: pre-wrap; }
+  .review-note-input { font-size: 12px; min-height: 60px; }
+  .review-actions { display: flex; gap: 8px; }
+  .btn-sm { padding: 6px 12px; font-size: 11px; background: var(--bg); border: 0.5px solid var(--border2); border-radius: 4px; color: var(--gold); cursor: pointer; }
+  .btn-sm:hover { background: var(--bg3); }
+  .btn-dismiss { border-color: var(--border); color: var(--text3); }
 </style>
 </head>
 <body>
@@ -256,14 +277,33 @@
       </div>
     </div>
 
-    <!-- RIGHT: HISTORY -->
+    <!-- RIGHT: TABS -->
     <div class="col-right">
-      <div class="col-header">
-        Geçmiş
-        <span class="badge" id="hist-badge">0</span>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('feedback')">Geçmiş <span class="badge" id="hist-badge">0</span></button>
+        <button class="tab-btn" onclick="switchTab('reviews')">Kullanıcılar <span class="badge" id="review-badge">0</span></button>
       </div>
-      <div class="hist-list" id="hist-list">
-        <div class="empty-hist">Henüz kayıt yok.</div>
+      <div class="tab-pane active" id="tab-feedback">
+        <div class="hist-list" id="hist-list">
+          <div class="empty-hist">Henüz kayıt yok.</div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-reviews">
+        <div id="review-list">
+          <div class="empty-hist">Henüz gönderim yok.</div>
+        </div>
+      </div>
+      <div class="review-detail" id="review-detail">
+        <div class="field-label">Soru</div>
+        <div id="rv-question" style="font-size:12px;color:var(--text2);"></div>
+        <div class="field-label" style="margin-top:6px;">Zuhal Teyze yorumu</div>
+        <div class="review-output" id="rv-output"></div>
+        <div class="field-label" style="margin-top:6px;">Notun</div>
+        <textarea class="review-note-input" id="rv-note" placeholder="Geri bildirim, düzeltme, not..."></textarea>
+        <div class="review-actions">
+          <button class="btn-sm" onclick="saveReview('reviewed')">✓ İncelendi</button>
+          <button class="btn-sm btn-dismiss" onclick="saveReview('dismissed')">Yoksay</button>
+        </div>
       </div>
     </div>
 
@@ -497,6 +537,70 @@ function loadEntry(h, el) {
   // restore tags
   activeTags = new Set(h.tags || []);
   document.querySelectorAll('.tag').forEach(t => t.classList.toggle('on', activeTags.has(t.dataset.v)));
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', ['feedback','reviews'][i] === tab));
+  document.getElementById('tab-feedback').classList.toggle('active', tab === 'feedback');
+  document.getElementById('tab-reviews').classList.toggle('active', tab === 'reviews');
+  if (tab === 'reviews') loadReviews();
+}
+
+let currentReviewId = null;
+
+async function loadReviews() {
+  try {
+    const res = await fetch('/api/lab/reviews');
+    const data = await res.json();
+    renderReviews(data);
+  } catch(e) {}
+}
+
+function renderReviews(data) {
+  const list = document.getElementById('review-list');
+  const pending = data.filter(r => r.status === 'pending').length;
+  document.getElementById('review-badge').textContent = pending || data.length;
+  if (data.length === 0) {
+    list.innerHTML = '<div class="empty-hist">Henüz gönderim yok.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  data.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div class="review-q">${r.question}</div>
+      <div class="review-meta">
+        <span class="status-${r.status}">${r.status === 'pending' ? '● bekliyor' : r.status === 'reviewed' ? '✓ incelendi' : '— yoksayıldı'}</span>
+        <span>${r.date}</span>
+      </div>
+    `;
+    div.onclick = () => openReview(r, div);
+    list.appendChild(div);
+  });
+}
+
+function openReview(r, el) {
+  document.querySelectorAll('.review-item').forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+  currentReviewId = r.id;
+  document.getElementById('rv-question').textContent = r.question;
+  document.getElementById('rv-output').textContent = r.output;
+  document.getElementById('rv-note').value = r.astrologer_note || '';
+  document.getElementById('review-detail').classList.add('visible');
+}
+
+async function saveReview(status) {
+  if (!currentReviewId) return;
+  const note = document.getElementById('rv-note').value.trim();
+  await fetch(`/api/lab/reviews/${currentReviewId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status, note })
+  });
+  document.getElementById('review-detail').classList.remove('visible');
+  currentReviewId = null;
+  loadReviews();
 }
 
 checkAuth();

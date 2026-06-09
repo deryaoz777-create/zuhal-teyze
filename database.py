@@ -58,6 +58,42 @@ def init_db():
         )
     """)
 
+    # ── LAB TABLOLARI ──────────────────────────
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS lab_sessions (
+            token TEXT PRIMARY KEY,
+            created_at TEXT
+        )
+    """)
+
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS lab_feedback (
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            created_at    TEXT,
+            question      TEXT,
+            chart_data    TEXT,
+            system_prompt TEXT,
+            output        TEXT,
+            rating        INTEGER DEFAULT 0,
+            tags          TEXT DEFAULT '[]',
+            note          TEXT DEFAULT ''
+        )
+    """)
+
+    # ── KULLANICI REVIEW QUEUE ─────────────────
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS review_requests (
+            id               INTEGER PRIMARY KEY AUTOINCREMENT,
+            submitted_at     TEXT,
+            user_id          INTEGER,
+            question         TEXT,
+            output           TEXT,
+            chart_data       TEXT DEFAULT '',
+            status           TEXT DEFAULT 'pending',
+            astrologer_note  TEXT DEFAULT ''
+        )
+    """)
+
     conn.commit()
     conn.close()
     print("[DB] Tablolar hazır.")

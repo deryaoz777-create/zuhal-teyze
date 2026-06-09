@@ -32,7 +32,7 @@ DEFAULT_LAT = 42.17
 DEFAULT_LON = 42.67
 
 LAB_PASSWORD = os.environ.get("LAB_PASSWORD", "zuhal2024lab")
-LAB_DB_PATH  = os.environ.get("LAB_DB_PATH", "lab_feedback.db")
+DB_PATH      = os.environ.get("DB_PATH", "zuhal_teyze.db")
 
 print(f"[STARTUP] ANTHROPIC_API_KEY {'tanımlı' if ANTHROPIC_API_KEY else 'YOK'}")
 print(f"[STARTUP] RESEND_API_KEY {'tanımlı' if RESEND_API_KEY else 'YOK'}")
@@ -40,41 +40,11 @@ print(f"[STARTUP] RESEND_API_KEY {'tanımlı' if RESEND_API_KEY else 'YOK'}")
 init_db()
 
 
-# ─────────────────────────────────────────
-# LAB DB
-# ─────────────────────────────────────────
-
-def init_lab_db():
-    conn = sqlite3.connect(LAB_DB_PATH)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS lab_sessions (
-            token TEXT PRIMARY KEY,
-            created_at TEXT
-        )
-    """)
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS lab_feedback (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            created_at  TEXT,
-            question    TEXT,
-            chart_data  TEXT,
-            system_prompt TEXT,
-            output      TEXT,
-            rating      INTEGER DEFAULT 0,
-            tags        TEXT DEFAULT '[]',
-            note        TEXT DEFAULT ''
-        )
-    """)
-    conn.commit()
-    conn.close()
-
-init_lab_db()
-
 
 def _lab_session_valid(token):
     if not token:
         return False
-    conn = sqlite3.connect(LAB_DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
     row = conn.execute(
         "SELECT token FROM lab_sessions WHERE token = ?", (token,)
     ).fetchone()
@@ -84,7 +54,7 @@ def _lab_session_valid(token):
 
 def _create_lab_session():
     token = secrets.token_hex(32)
-    conn = sqlite3.connect(LAB_DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
     conn.execute(
         "INSERT INTO lab_sessions VALUES (?, ?)",
         (token, datetime.datetime.now().isoformat())
@@ -330,7 +300,7 @@ def lab_feedback():
     if not _lab_authed():
         return jsonify({"error": "Yetkisiz erişim."}), 401
     data = request.json or {}
-    conn = sqlite3.connect(LAB_DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
     conn.execute("""
         INSERT INTO lab_feedback
             (created_at, question, chart_data, system_prompt, output, rating, tags, note)
@@ -354,7 +324,7 @@ def lab_feedback():
 def lab_history():
     if not _lab_authed():
         return jsonify({"error": "Yetkisiz erişim."}), 401
-    conn = sqlite3.connect(LAB_DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     rows = conn.execute(
         "SELECT * FROM lab_feedback ORDER BY id DESC LIMIT 200"
@@ -372,6 +342,75 @@ def lab_history():
             "note":     r["note"]
         })
     return jsonify(result)
+
+
+
+# ─────────────────────────────────────────
+# REVIEW (Kullanıcıdan astrologa gönder)
+# ─────────────────────────────────────────
+
+@app.route("/api/review/submit", methods=["POST"])
+def review_submit():
+    """Kullanıcı yorumu astrologa gönderir."""
+    session_token = request.cookies.get("zt_session", "")
+    user = get_user_by_session(session_token) if session_token else None
+    user_id = user["id"] if user else None
+
+    data = request.json or {}
+    question = data.get("question", "").strip()
+    output   = data.get("output", "").strip()
+    chart    = data.get("chart_data", "")
+
+    if not question or not output:
+        return jsonify({"error": "Soru ve yorum zorunlu."}), 400
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute("""
+        INSERT INTO review_requests
+            (submitted_at, user_id, question, output, chart_data, status)
+        VALUES (?, ?, ?, ?, ?, 'pending')
+    """, (datetime.datetime.now().isoformat(), user_id, question, output, chart))
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True})
+
+
+@app.route("/api/lab/reviews", methods=["GET"])
+def lab_reviews():
+    """Lab: bekleyen ve geçmiş review'ları döndür."""
+    if not _lab_authed():
+        return jsonify({"error": "Yetkisiz erişim."}), 401
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute(
+        "SELECT * FROM review_requests ORDER BY id DESC LIMIT 200"
+    ).fetchall()
+    conn.close()
+    return jsonify([{
+        "id":              r["id"],
+        "date":            r["submitted_at"][:10] if r["submitted_at"] else "",
+        "question":        r["question"],
+        "output":          r["output"],
+        "status":          r["status"],
+        "astrologer_note": r["astrologer_note"]
+    } for r in rows])
+
+
+@app.route("/api/lab/reviews/<int:review_id>", methods=["POST"])
+def lab_review_update(review_id):
+    """Lab: review'u güncelle (not ekle, status değiştir)."""
+    if not _lab_authed():
+        return jsonify({"error": "Yetkisiz erişim."}), 401
+    data = request.json or {}
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute("""
+        UPDATE review_requests
+        SET status = ?, astrologer_note = ?
+        WHERE id = ?
+    """, (data.get("status", "reviewed"), data.get("note", ""), review_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True})
 
 
 if __name__ == "__main__":
