@@ -359,6 +359,89 @@ def auth_code_verify():
     return resp
 
 
+
+# ─────────────────────────────────────────
+# LEGAL PAGES
+# ─────────────────────────────────────────
+
+LEGAL_STYLE = """
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f5f0e8;color:#2e1f2e;padding:3rem 1rem;max-width:720px;margin:0 auto;line-height:1.8}
+h1{font-family:'Cinzel',serif;color:#2e1f6e;font-size:1.6rem;margin-bottom:2rem;letter-spacing:.05em}
+h2{color:#2e1f6e;font-size:1.1rem;margin:1.5rem 0 .5rem}
+p{margin-bottom:1rem;color:#4a3a2a}
+a{color:#2e1f6e}
+.back{display:inline-block;margin-bottom:2rem;font-size:.9rem;color:#9e8c6a;text-decoration:none}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet">
+"""
+
+@app.route("/terms")
+def terms():
+    return f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kullanım Koşulları — Zuhal Teyze</title>{LEGAL_STYLE}</head><body>
+<a href="/" class="back">← Zuhal Teyze'ye dön</a>
+<h1>Kullanım Koşulları</h1>
+<p>Son güncelleme: Haziran 2025</p>
+<h2>1. Hizmet Hakkında</h2>
+<p>Zuhal Teyze (zuhalteyze.live), geleneksel horary astroloji tekniklerine dayanan yapay zeka destekli yorum servisidir. Sunulan içerikler tamamen eğlence amaçlıdır; tıbbi, hukuki veya finansal tavsiye niteliği taşımaz.</p>
+<h2>2. Sorumluluk Sınırlaması</h2>
+<p>Bu platform üzerinden sağlanan yorumlar kehanet veya kesin gerçek olarak değerlendirilemez. Kullanıcı, aldığı yorumları kendi takdir ve sorumluluğunda değerlendirir. Platform, yorumların doğruluğu veya sonuçları konusunda herhangi bir garanti vermez.</p>
+<h2>3. Kullanıcı Yükümlülükleri</h2>
+<p>Kullanıcılar platformu yasalara uygun şekilde, başkalarına zarar vermeyecek biçimde kullanmayı kabul eder. Sistemi kötüye kullanmak, aşırı yük oluşturmak veya izinsiz erişim sağlamak yasaktır.</p>
+<h2>4. Fikri Mülkiyet</h2>
+<p>Platform içeriği, tasarımı ve yazılımı Zuhal Teyze'ye aittir. İzinsiz çoğaltılamaz veya dağıtılamaz.</p>
+<h2>5. Değişiklikler</h2>
+<p>Bu koşullar önceden bildirim yapılmaksızın güncellenebilir. Platformu kullanmaya devam etmek güncel koşulları kabul etmek anlamına gelir.</p>
+<h2>İletişim</h2>
+<p>Sorularınız için: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</body></html>"""
+
+
+@app.route("/privacy")
+def privacy():
+    return f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gizlilik Politikası — Zuhal Teyze</title>{LEGAL_STYLE}</head><body>
+<a href="/" class="back">← Zuhal Teyze'ye dön</a>
+<h1>Gizlilik Politikası</h1>
+<p>Son güncelleme: Haziran 2025</p>
+<h2>Topladığımız Veriler</h2>
+<p>Platform yalnızca şu verileri toplar: e-posta adresi (giriş için), sorulan astroloji soruları ve soru zamanı. Ödeme işlemleri Paddle tarafından yürütülür; kart bilgileri Zuhal Teyze'ye iletilmez.</p>
+<h2>Verilerin Kullanımı</h2>
+<p>E-posta adresiniz yalnızca kimlik doğrulama ve hizmet bildirimleri için kullanılır. Sorularınız hizmet kalitesini geliştirmek amacıyla anonim olarak analiz edilebilir. Verileriniz üçüncü taraflarla paylaşılmaz veya satılmaz.</p>
+<h2>Çerezler ve Oturumlar</h2>
+<p>Platform, oturum yönetimi için çerez kullanır. Tarayıcı ayarlarınızdan çerezleri devre dışı bırakabilirsiniz; ancak bu durumda giriş yapamazsınız.</p>
+<h2>Veri Saklama</h2>
+<p>Hesabınızı silmek veya verilerinizin kaldırılmasını talep etmek için bizimle iletişime geçebilirsiniz.</p>
+<h2>KVKK / GDPR</h2>
+<p>Türkiye'de yerleşik kullanıcılar KVKK kapsamındaki haklarını, AB'de yerleşik kullanıcılar GDPR kapsamındaki haklarını kullanabilir. Talepler için: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</body></html>"""
+
+
+@app.route("/refund")
+def refund():
+    return f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İade Politikası — Zuhal Teyze</title>{LEGAL_STYLE}</head><body>
+<a href="/" class="back">← Zuhal Teyze'ye dön</a>
+<h1>İade Politikası</h1>
+<p>Son güncelleme: Haziran 2025</p>
+<h2>Genel İlke</h2>
+<p>Zuhal Teyze, dijital içerik satmaktadır. Satın alınan krediler kullanıldıktan sonra iade edilemez.</p>
+<h2>İade Koşulları</h2>
+<p>Satın alma tarihinden itibaren 14 gün içinde, hiç kullanılmamış kredi paketleri için tam iade talebinde bulunabilirsiniz. İade talebi, ödeme yapılan e-posta adresinden <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a> adresine gönderilmelidir.</p>
+<h2>Teknik Sorunlar</h2>
+<p>Platform kaynaklı teknik bir hata nedeniyle kredi harcandıysa, kanıtlayıcı bilgilerle başvurmanız halinde kredi iadesi yapılır.</p>
+<h2>İşlem Süresi</h2>
+<p>Onaylanan iadeler 5-10 iş günü içinde orijinal ödeme yöntemiyle gerçekleştirilir.</p>
+<h2>İletişim</h2>
+<p>İade talepleriniz için: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</body></html>"""
+
+
 # ─────────────────────────────────────────
 # LAB
 # ─────────────────────────────────────────
