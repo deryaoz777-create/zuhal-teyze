@@ -173,7 +173,8 @@ function askFree(){
     .then(r=>r.json()).then(d=>{
       clearInterval(pi);
       if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
-      else{ rt.className='response-text'; rt.textContent=d.interpretation||'Yıldızlar şu an sessiz.'; savedAnswer=d.interpretation||''; }
+      else{ rt.className='response-text'; const raw2=d.interpretation||'Yıldızlar şu an sessiz.';
+        rt.textContent=raw2.replace(/\*\*(.+?)\*\*/g,'$1').replace(/#{1,6}\s*/g,'').replace(/\*(.+?)\*/g,'$1'); savedAnswer=d.interpretation||''; }
       setTimeout(()=>rt.classList.add('visible'),30);
       btn.disabled=false; btn.textContent='BİR SORU DAHA';
       btn.onclick = ()=>showWall();
@@ -234,7 +235,8 @@ function ask(){
       clearInterval(pi);
       if(d.auth_required){ showWall(); return; }
       if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
-      else{ rt.className='response-text'; rt.textContent=d.interpretation||'Yıldızlar şu an sessiz.'; if(d.credits_remaining!==undefined) document.getElementById('credits-count').textContent=d.credits_remaining; }
+      else{ rt.className='response-text'; const raw2=d.interpretation||'Yıldızlar şu an sessiz.';
+        rt.textContent=raw2.replace(/\*\*(.+?)\*\*/g,'$1').replace(/#{1,6}\s*/g,'').replace(/\*(.+?)\*/g,'$1'); if(d.credits_remaining!==undefined) document.getElementById('credits-count').textContent=d.credits_remaining; }
       setTimeout(()=>rt.classList.add('visible'),30);
       btn.disabled=false; btn.textContent='YENİDEN SOR';
       tag.style.opacity=0; setTimeout(()=>{tag.textContent=tags[Math.floor(Math.random()*tags.length)];tag.style.opacity=1;},400);
