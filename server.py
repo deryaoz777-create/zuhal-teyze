@@ -360,6 +360,87 @@ def auth_code_verify():
 
 
 
+
+# ─────────────────────────────────────────
+# PADDLE ENTEGRASYONU
+# ─────────────────────────────────────────
+
+PADDLE_WEBHOOK_SECRET = os.environ.get("PADDLE_WEBHOOK_SECRET", "")
+PADDLE_PRICE_ID       = os.environ.get("PADDLE_PRICE_ID", "pri_01ktryb7je2xte6q7p8v3r2wpp")
+PADDLE_CLIENT_TOKEN   = os.environ.get("PADDLE_CLIENT_TOKEN", "")
+PADDLE_ENV            = os.environ.get("PADDLE_ENV", "production")  # sandbox | production
+CREDITS_PER_PURCHASE  = int(os.environ.get("CREDITS_PER_PURCHASE", "10"))
+
+
+@app.route("/api/paddle/webhook", methods=["POST"])
+def paddle_webhook():
+    """Paddle ödeme bildirimi — kredi ekle."""
+    import hmac, hashlib
+
+    raw_body = request.get_data()
+    sig_header = request.headers.get("Paddle-Signature", "")
+
+    # İmza doğrulama
+    if PADDLE_WEBHOOK_SECRET:
+        try:
+            parts = dict(p.split("=", 1) for p in sig_header.split(";"))
+            ts = parts.get("ts", "")
+            h1 = parts.get("h1", "")
+            signed = f"{ts}:{raw_body.decode()}"
+            expected = hmac.new(
+                PADDLE_WEBHOOK_SECRET.encode(),
+                signed.encode(),
+                hashlib.sha256
+            ).hexdigest()
+            if not hmac.compare_digest(expected, h1):
+                return jsonify({"error": "Invalid signature"}), 401
+        except Exception as e:
+            print(f"[PADDLE WEBHOOK] Signature error: {e}")
+            return jsonify({"error": "Signature error"}), 401
+
+    data = request.json or {}
+    event_type = data.get("event_type", "")
+    print(f"[PADDLE WEBHOOK] event: {event_type}")
+
+    if event_type == "transaction.completed":
+        txn = data.get("data", {})
+        customer_email = None
+
+        # Email'i address objesinden al
+        address = txn.get("address", {})
+        if not customer_email:
+            customer_email = txn.get("customer", {}).get("email")
+        if not customer_email:
+            # custom_data varsa dene
+            custom = txn.get("custom_data") or {}
+            customer_email = custom.get("email")
+
+        if customer_email:
+            user = get_or_create_user(customer_email.lower().strip())
+            conn = sqlite3.connect(DB_PATH)
+            conn.execute(
+                "UPDATE users SET credits = credits + ? WHERE id = ?",
+                (CREDITS_PER_PURCHASE, user["id"])
+            )
+            conn.commit()
+            conn.close()
+            print(f"[PADDLE] +{CREDITS_PER_PURCHASE} kredi → {customer_email}")
+        else:
+            print(f"[PADDLE WEBHOOK] Email bulunamadı: {_json.dumps(txn)[:200]}")
+
+    return jsonify({"ok": True})
+
+
+@app.route("/api/paddle/config")
+def paddle_config():
+    """Frontend'e Paddle config döndür."""
+    return jsonify({
+        "client_token": PADDLE_CLIENT_TOKEN,
+        "price_id": PADDLE_PRICE_ID,
+        "env": PADDLE_ENV
+    })
+
+
 # ─────────────────────────────────────────
 # LEGAL PAGES
 # ─────────────────────────────────────────
