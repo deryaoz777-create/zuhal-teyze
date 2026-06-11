@@ -576,8 +576,11 @@ def lab_reading():
                 # Haritayı hesapla, veri bölümünü ekle
                 chart = calc_chart(question, dt, lat, lon)
                 auto_prompt = build_frawley_prompt(chart)
-                data_section = auto_prompt.split("---")[-1].strip() if "---" in auto_prompt else ""
-                user_msg = f"Soru: {question}\n\n{data_section}"
+                # Prompt yapısı: [sistem talimatı] --- [harita verisi] --- [kapanış]
+                # İkinci bölüm (index 1) harita verisidir
+                parts = auto_prompt.split("---")
+                data_section = parts[1].strip() if len(parts) >= 3 else auto_prompt
+                user_msg = f"{data_section}"
             output = _call_claude_raw(system_prompt, user_msg)
 
         # Otomatik kaydet (rating/tags sonra eklenebilir)
