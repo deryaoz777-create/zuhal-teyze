@@ -457,35 +457,42 @@ def paddle_config():
 def faq():
     return f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sıkça Sorulan Sorular — Zuhal Teyze</title>
-<meta name="description" content="Horary astroloji nedir? Zuhal Teyze nasıl çalışır? Tüm sorularınızın cevabı burada.">
-{LEGAL_STYLE}</head><body>
+<title>SSS — Zuhal Teyze</title>
+<meta name="description" content="Zuhal Teyze nedir, nasıl çalışır, ne kadar güvenilir? Dürüst cevaplar.">
+{LEGAL_STYLE}
+<style>
+.lab-box{{background:#ede8d8;border-left:3px solid #2e1f6e;padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.5rem 0}}
+.lab-box p{{margin:0;color:#2e1f2e;font-size:14px;line-height:1.75}}
+.lab-box strong{{color:#2e1f6e}}
+</style>
+</head><body>
 <a href="/" class="back">← Zuhal Teyze'ye dön</a>
 <h1>Sıkça Sorulan Sorular</h1>
 
+<div class="lab-box">
+  <p><strong>Önce şunu söyleyelim:</strong> Bu platform bir deney laboratuvarıdır. Klasik horary astroloji yöntemleri üzerine kurulmuş, gerçek kullanıcı geri bildirimleriyle sürekli geliştirilen, açık uçlu bir uğraştır. Asla gerçek bir astroloğun yerini tutmaz — bunu iddia etmek de doğru olmaz.</p>
+</div>
+
+<h2>Bu ne, tam olarak?</h2>
+<p>Zuhal Teyze; pyswisseph ile gerçek zamanlı gökyüzü hesabı yapan, Regiomontanus ev sistemi ve Frawley/Lilly geleneğine dayanan kurallarla haritayı analiz eden, ardından bu teknik veriyi yapay zekaya yorumlatan bir uygulamadır. Hesaplama kısmı gerçek horary metodolojisine dayanır. Yorum kısmı ise — dürüst olmak gerekirse — hâlâ geliştirilmektedir. Bazen çok iyi okur. Bazen hata yapar. Bu yüzden lab.</p>
+
 <h2>Horary astroloji nedir?</h2>
-<p>Horary astroloji, bir sorunun sorulduğu tam ana ait gökyüzü haritasını yorumlayan kadim bir astroloji dalıdır. Modern astrolojiden farklı olarak doğum haritasına ihtiyaç duymaz — sorunun kendisi, sorulan an ve yer yeterlidir. Yüzyıllar önce William Lilly ve diğer klasik astrologlar tarafından sistematize edilen bu yöntem, belirli teknik kurallara dayanır: gezegenlerin konumları, birbirleriyle yaptıkları açılar, ev lordları ve reception analizi bir araya gelerek soruya yanıt verir.</p>
+<p>Bir sorunun sorulduğu tam ana ait gökyüzü haritasını yorumlayan kadim bir disiplindir. Doğum haritasına ihtiyaç duymaz — sorunun kendisi, sorulduğu an ve yer yeterlidir. William Lilly ve diğer klasik astrologlar tarafından sistematize edilmiş bu yöntem; ev lordları, aspect'ler, reception, combust ve void of course gibi teknik kurallara dayanır. Doğru uygulandığında şaşırtıcı kesinlikte sonuçlar verebilir.</p>
 
-<h2>Zuhal Teyze nasıl çalışır?</h2>
-<p>Sorunuzu girdiğiniz anda sistem, o anki gökyüzü konumunuzu hesaplar ve Regiomontanus ev sistemiyle bir horary haritası oluşturur. Bu harita, John Frawley'nin "The Horary Textbook" ve William Lilly geleneğine dayanan kurallarla analiz edilir. Combust gezegenler, void of course Ay, reception ilişkileri ve aspect'ler otomatik olarak değerlendirilir. Yorum yapay zeka tarafından üretilir; ancak teknik analiz gerçek horary metodolojisine dayanır.</p>
+<h2>Ne kadar güvenilir?</h2>
+<p>Dürüst cevap: değişken. Sistem teknik veriyi doğru hesaplar — gezegen dereceleri, ev cusps'ları, dignity tablosu gerçektir. Ancak bu veriyi yorumlamak başka bir iştir. Gerçek bir horary astroloğu on yıllık pratikle ve sezgisel bir okumayla yorumlar; bu uygulama kurallara dayalı bir yapay zeka yorumudur. Bazı okumalar neredeyse mükemmel çıkar. Bazılarında teknik bir hata veya gözden kaçan bir nüans olabilir. Bu yüzden her yorumu kör bir güvenle değil, merakla okuyun.</p>
 
-<h2>Sonuçlar ne kadar doğru?</h2>
-<p>Horary astroloji, doğru uygulandığında şaşırtıcı kesinlikte sonuçlar verebilen bir sistemdir — ancak bu, her soruya her zaman net bir cevap geleceği anlamına gelmez. Bazı haritalar "radical" değildir (yorumlanmaya uygun değildir), bazılarında Ay void of course'dır. Bu uygulama güçlü bir başlangıç noktası sunar, ancak karmaşık ve hayat değiştirici kararlar için gerçek bir uzmanla çalışmanızı öneririz.</p>
+<h2>Önemli bir kararım var — bunu kullanabilir miyim?</h2>
+<p>Fikir edinmek, haritayı görmek, teknik durumu anlamak için evet. Ama kariyer değişikliği, ilişki kararı, sağlık meselesi gibi hayat değiştirici konularda lütfen gerçek bir klasik astrologla çalışın. Her önüne gelen horary okuyamaz — Frawley geleneğinde uzmanlaşmış, gerçek pratikle pişmiş biri gerekir. Türkçe için <a href="https://t.me/zuhalteyze" target="_blank" rel="noopener">Telegram</a>'dan ulaşabilirsiniz. İngilizce detaylı okuma için <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr profilim</a>e bakabilirsiniz.</p>
 
 <h2>Soru nasıl sorulmalı?</h2>
-<p>Horary'de soru kalitesi yorumun kalitesini doğrudan etkiler. İyi bir soru: spesifik, samimi ve o an gerçekten merak ettiğiniz bir şey olmalıdır. "Hayatım nasıl gidecek?" gibi geniş sorular yerine "Mert ile ilişkim ilerler mi?" veya "Bu iş teklifini kabul etsem mi?" gibi tek bir konuya odaklanan sorular tercih edilmelidir. Soruyu soran kişinin o an gerçekten o konuyu merak etmesi gerekir — astroloji test etmek için sorulan sorular genellikle net yanıt vermez.</p>
+<p>Spesifik, samimi, o an gerçekten merak edilen bir şey olmalı. "Hayatım nasıl gidecek?" değil — "Bu işi kabul etsem mi?" veya "O kişi geri döner mi?" gibi tek konuya odaklı sorular. Soruyu sormadan önce gerçekten o şeyi merak ediyor olmanız gerekir; test amaçlı veya eğlence için sorulan sorular genellikle net yanıt vermez.</p>
 
 <h2>Aynı soruyu tekrar sorabilir miyim?</h2>
-<p>Horary geleneğinde aynı soruyu tekrar sormak önerilmez. Cevabı beğenmediğiniz için değil, gerçekten bir şeyler değiştiğine inandığınızda yeniden sorulabilir. Birden fazla kez sorulan aynı soru genellikle tutarsız veya yanıltıcı sonuçlar verir.</p>
-
-<h2>Kredi sistemi nasıl işliyor?</h2>
-<p>İlk sorunuz ücretsizdir, herhangi bir kayıt gerekmez. İkinci sorudan itibaren email ile giriş yapmanız gerekir — size 6 haneli bir doğrulama kodu gönderilir. Yeni üyelere 3 soru kredisi tanımlanır. Ek kredi satın almak için ödeme sayfasını kullanabilirsiniz.</p>
+<p>Klasik gelenekte önerilmez. Cevabı beğenmediğiniz için değil, gerçekten bir şeyler değiştiğinde yeniden sorulabilir. Aynı soruyu arka arkaya sormak tutarsız veya yanıltıcı haritalar üretir.</p>
 
 <h2>Verilerimi nasıl kullanıyorsunuz?</h2>
-<p>E-posta adresiniz yalnızca kimlik doğrulama için kullanılır. Sorularınız hizmet geliştirme amacıyla anonim olarak analiz edilebilir. Detaylı bilgi için <a href="/privacy">Gizlilik Politikamıza</a> bakabilirsiniz.</p>
-
-<h2>Gerçek bir astrologla çalışmak istiyorum</h2>
-<p>Bu uygulama güçlü bir araçtır, ancak her önüne gelen astrolog horary okuyamaz. Gerçek bir horary yorumu için Frawley geleneğinde uzmanlaşmış bir astrolog gerekir. Türkçe sorular için <a href="https://t.me/zuhalteyze" target="_blank" rel="noopener">Telegram'dan</a> ulaşabilirsiniz. İngilizce detaylı yorum için <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr profilime</a> göz atabilirsiniz.</p>
+<p>E-posta adresiniz yalnızca giriş için kullanılır. Sorularınız anonim olarak hizmet kalitesini geliştirmek amacıyla incelenebilir. Detay için <a href="/privacy">Gizlilik Politikası</a>na bakabilirsiniz.</p>
 
 </body></html>"""
 
@@ -599,28 +606,175 @@ def privacy():
 
 @app.route("/refund")
 def refund():
-    return f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>İade Politikası — Zuhal Teyze</title>{LEGAL_STYLE}</head><body>
-<a href="/" class="back">← Zuhal Teyze'ye dön</a>
-<h1>İade Politikası</h1>
-<p>Son güncelleme: Haziran 2025</p>
-<h2>Genel İlke</h2>
-<p>Zuhal Teyze, dijital içerik satmaktadır. Satın alınan krediler kullanıldıktan sonra iade edilemez.</p>
-<h2>İade Koşulları</h2>
-<p>Satın alma tarihinden itibaren 14 gün içinde, hiç kullanılmamış kredi paketleri için tam iade talebinde bulunabilirsiniz. İade talebi, ödeme yapılan e-posta adresinden <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a> adresine gönderilmelidir.</p>
-<h2>Teknik Sorunlar</h2>
-<p>Platform kaynaklı teknik bir hata nedeniyle kredi harcandıysa, kanıtlayıcı bilgilerle başvurmanız halinde kredi iadesi yapılır.</p>
-<h2>İşlem Süresi</h2>
-<p>Onaylanan iadeler 5-10 iş günü içinde orijinal ödeme yöntemiyle gerçekleştirilir.</p>
-<h2>İletişim</h2>
-<p>İade talepleriniz için: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
-</body></html>"""
+    from flask import redirect
+    return redirect("/faq")
 
 
 # ─────────────────────────────────────────
 # LAB
 # ─────────────────────────────────────────
+
+@app.route("/tablo")
+def tablo():
+    return """<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Onurlar Tablosu — Zuhal Teyze</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#1a0e18;color:#e6d3ae;font-family:Georgia,serif;padding:1.5rem 1rem;min-height:100vh}
+h1{font-family:'Cinzel',serif;font-size:1.2rem;letter-spacing:.15em;color:#c9a876;text-align:center;margin-bottom:.3rem}
+.sub{text-align:center;font-size:11px;color:rgba(201,168,118,.45);letter-spacing:.1em;margin-bottom:1.5rem}
+.back{display:inline-block;margin-bottom:1.25rem;font-size:11px;color:rgba(201,168,118,.4);text-decoration:none;letter-spacing:.05em}
+.back:hover{color:rgba(201,168,118,.75)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:640px}
+thead th{background:rgba(201,168,118,.1);color:#c9a876;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;padding:8px 6px;border-bottom:1px solid rgba(201,168,118,.25);text-align:center;white-space:nowrap}
+tbody tr{border-bottom:1px solid rgba(201,168,118,.08)}
+tbody tr:hover{background:rgba(201,168,118,.05)}
+td{padding:7px 5px;text-align:center;color:rgba(230,211,174,.82);vertical-align:middle}
+td.sign{font-size:16px;text-align:left;padding-left:8px}
+td.pl{font-size:14px}
+td.terms{font-size:11px;color:rgba(201,168,118,.65);white-space:nowrap;letter-spacing:.01em}
+td.deg{font-size:10px;color:rgba(201,168,118,.5)}
+.sect{font-size:9px;color:rgba(201,168,118,.4);display:block;margin-top:1px}
+.none{color:rgba(201,168,118,.25);font-size:11px}
+.note{margin-top:1.5rem;font-size:11px;color:rgba(201,168,118,.35);text-align:center;line-height:1.7;letter-spacing:.03em}
+</style>
+</head><body>
+<a href="/" class="back">← Zuhal Teyze'ye dön</a>
+<h1>ONURLAR TABLOSU</h1>
+<div class="sub">BATLAMYUS · PTOLEMY · FRAWLEY/LİLLY GELENEĞİ</div>
+<div class="tbl-wrap">
+<table>
+<thead>
+<tr>
+  <th>BURÇ</th>
+  <th>TAHT</th>
+  <th>YÜCELME</th>
+  <th>ÜÇLÜLÜK<br>G / G</th>
+  <th colspan="5">HADLER (PTOLEMAEUS)</th>
+  <th colspan="3">YÜZLER</th>
+  <th>ZARAR</th>
+  <th>DÜŞÜŞ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td class="sign">♈ Koç</td>
+  <td class="pl">♂</td>
+  <td>☉ <span class="deg">19°</span></td>
+  <td class="terms">☉ / ♃</td>
+  <td class="terms">♃ 6</td><td class="terms">♀ 14</td><td class="terms">☿ 21</td><td class="terms">♂ 26</td><td class="terms">♄ 30</td>
+  <td class="terms">♂ 10</td><td class="terms">☉ 20</td><td class="terms">♀ 30</td>
+  <td class="pl">♀</td><td class="pl">♄</td>
+</tr>
+<tr>
+  <td class="sign">♉ Boğa</td>
+  <td class="pl">♀</td>
+  <td>☽ <span class="deg">3°</span></td>
+  <td class="terms">♀ / ☽</td>
+  <td class="terms">♀ 8</td><td class="terms">☿ 15</td><td class="terms">♃ 22</td><td class="terms">♄ 26</td><td class="terms">♂ 30</td>
+  <td class="terms">☿ 10</td><td class="terms">☽ 20</td><td class="terms">♄ 30</td>
+  <td class="pl">♂</td><td class="none">—</td>
+</tr>
+<tr>
+  <td class="sign">♊ İkizler</td>
+  <td class="pl">☿</td>
+  <td>☊ <span class="deg">3°</span></td>
+  <td class="terms">♄ / ☿</td>
+  <td class="terms">☿ 7</td><td class="terms">♃ 14</td><td class="terms">♀ 21</td><td class="terms">♄ 25</td><td class="terms">♂ 30</td>
+  <td class="terms">♃ 10</td><td class="terms">♂ 20</td><td class="terms">☉ 30</td>
+  <td class="pl">♃</td><td class="none">—</td>
+</tr>
+<tr>
+  <td class="sign">♋ Yengeç</td>
+  <td class="pl">☽</td>
+  <td>♃ <span class="deg">15°</span></td>
+  <td class="terms">♂ / ♂</td>
+  <td class="terms">♂ 6</td><td class="terms">♃ 13</td><td class="terms">☿ 20</td><td class="terms">♀ 27</td><td class="terms">♄ 30</td>
+  <td class="terms">♀ 10</td><td class="terms">☿ 20</td><td class="terms">☽ 30</td>
+  <td class="pl">♄</td><td class="pl">♂</td>
+</tr>
+<tr>
+  <td class="sign">♌ Aslan</td>
+  <td class="pl">☉</td>
+  <td class="none">—</td>
+  <td class="terms">☉ / ♃</td>
+  <td class="terms">♄ 6</td><td class="terms">☿ 13</td><td class="terms">♀ 19</td><td class="terms">♃ 25</td><td class="terms">♂ 30</td>
+  <td class="terms">♄ 10</td><td class="terms">♃ 20</td><td class="terms">♂ 30</td>
+  <td class="pl">♄</td><td class="none">—</td>
+</tr>
+<tr>
+  <td class="sign">♍ Başak</td>
+  <td class="pl">☿</td>
+  <td>☿ <span class="deg">15°</span></td>
+  <td class="terms">♀ / ☽</td>
+  <td class="terms">☿ 7</td><td class="terms">♀ 13</td><td class="terms">♃ 18</td><td class="terms">♄ 24</td><td class="terms">♂ 30</td>
+  <td class="terms">☉ 10</td><td class="terms">♀ 20</td><td class="terms">☿ 30</td>
+  <td class="pl">♃</td><td class="pl">♀</td>
+</tr>
+<tr>
+  <td class="sign">♎ Terazi</td>
+  <td class="pl">♀</td>
+  <td>♄ <span class="deg">21°</span></td>
+  <td class="terms">♄ / ☿</td>
+  <td class="terms">♄ 6</td><td class="terms">♀ 11</td><td class="terms">♃ 19</td><td class="terms">☿ 24</td><td class="terms">♂ 30</td>
+  <td class="terms">☽ 10</td><td class="terms">♄ 20</td><td class="terms">♃ 30</td>
+  <td class="pl">♂</td><td class="pl">☉</td>
+</tr>
+<tr>
+  <td class="sign">♏ Akrep</td>
+  <td class="pl">♂</td>
+  <td class="none">—</td>
+  <td class="terms">♂ / ♂</td>
+  <td class="terms">♂ 6</td><td class="terms">♃ 14</td><td class="terms">♀ 21</td><td class="terms">☿ 27</td><td class="terms">♄ 30</td>
+  <td class="terms">♂ 10</td><td class="terms">☉ 20</td><td class="terms">♀ 30</td>
+  <td class="pl">♀</td><td class="pl">☽</td>
+</tr>
+<tr>
+  <td class="sign">♐ Yay</td>
+  <td class="pl">♃</td>
+  <td>☊ <span class="deg">3°</span></td>
+  <td class="terms">☉ / ♃</td>
+  <td class="terms">♃ 8</td><td class="terms">♀ 14</td><td class="terms">☿ 19</td><td class="terms">♄ 25</td><td class="terms">♂ 30</td>
+  <td class="terms">☿ 10</td><td class="terms">☽ 20</td><td class="terms">♄ 30</td>
+  <td class="pl">☿</td><td class="none">—</td>
+</tr>
+<tr>
+  <td class="sign">♑ Oğlak</td>
+  <td class="pl">♄</td>
+  <td>♂ <span class="deg">28°</span></td>
+  <td class="terms">♀ / ☽</td>
+  <td class="terms">♀ 6</td><td class="terms">☿ 12</td><td class="terms">♃ 19</td><td class="terms">♂ 25</td><td class="terms">♄ 30</td>
+  <td class="terms">♃ 10</td><td class="terms">♂ 20</td><td class="terms">☉ 30</td>
+  <td class="pl">☽</td><td class="pl">♃</td>
+</tr>
+<tr>
+  <td class="sign">♒ Kova</td>
+  <td class="pl">♄</td>
+  <td class="none">—</td>
+  <td class="terms">♄ / ☿</td>
+  <td class="terms">♄ 6</td><td class="terms">☿ 12</td><td class="terms">♀ 20</td><td class="terms">♃ 25</td><td class="terms">♂ 30</td>
+  <td class="terms">♀ 10</td><td class="terms">☿ 20</td><td class="terms">☽ 30</td>
+  <td class="pl">☉</td><td class="none">—</td>
+</tr>
+<tr>
+  <td class="sign">♓ Balık</td>
+  <td class="pl">♃</td>
+  <td>♀ <span class="deg">27°</span></td>
+  <td class="terms">♂ / ♂</td>
+  <td class="terms">♀ 8</td><td class="terms">♃ 14</td><td class="terms">☿ 20</td><td class="terms">♂ 26</td><td class="terms">♄ 30</td>
+  <td class="terms">♄ 10</td><td class="terms">♃ 20</td><td class="terms">♂ 30</td>
+  <td class="pl">☿</td><td class="pl">☿</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="note">Üçlülük: G = Gündüz, G = Gece &nbsp;·&nbsp; Hadler kümülatif derece &nbsp;·&nbsp; Yüzler Keldani sırası (her 10°)<br>
+☊ = Baş Ejder (Kuzey Düğüm) &nbsp;·&nbsp; Kaynak: Ptolemy / Lilly / Frawley</p>
+</body></html>"""
+
 
 @app.route("/lab")
 def lab():
