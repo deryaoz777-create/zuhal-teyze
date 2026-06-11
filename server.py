@@ -699,6 +699,98 @@ a{color:#2e1f6e}
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet">
 """
 
+@app.route("/ogren")
+def ogren():
+    return f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Horary Astroloji Nedir? Sade Bir Rehber — Zuhal Teyze</title>
+<meta name="description" content="Horary astroloji nasıl çalışır, soru nasıl sorulur, harita ne söyler — doğum haritası gerekmez. Zuhal Teyze ile ücretsiz deneyin.">
+<link rel="canonical" href="https://zuhalteyze.live/ogren">
+<meta property="og:title" content="Horary Astroloji Nedir? — Zuhal Teyze">
+<meta property="og:description" content="Horary astroloji nasıl çalışır, soru nasıl sorulur, harita ne söyler. Sade, dürüst bir rehber.">
+<meta property="og:url" content="https://zuhalteyze.live/ogren">
+<meta name="google-site-verification" content="hhgkCOajijszpcMpIxFkPTokjYTPS7CzDhsG1L1aqJA">
+{LEGAL_STYLE}
+<style>
+body{{max-width:760px}}
+.cta-box{{background:#2e1f2e;color:#e6d3ae;border-radius:8px;padding:1.5rem 1.8rem;margin:2.5rem 0;text-align:center}}
+.cta-box p{{color:#c9a876;margin-bottom:1rem;font-size:15px;font-style:italic}}
+.cta-btn{{display:inline-block;background:transparent;border:1px solid rgba(201,168,118,.6);color:#c9a876;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.15em;padding:12px 28px;text-decoration:none;border-radius:4px}}
+.toc{{background:#f0ead8;border-radius:6px;padding:1.2rem 1.6rem;margin:1.5rem 0;font-size:14px}}
+.toc h3{{color:#2e1f6e;font-size:.85rem;letter-spacing:.1em;margin-bottom:.75rem}}
+.toc ol{{padding-left:1.2rem;color:#4a3a2a;line-height:2}}
+.toc a{{color:#2e1f6e;text-decoration:none}}
+blockquote{{border-left:3px solid #2e1f6e;margin:1.5rem 0;padding:.75rem 1.2rem;background:#f0ead8;color:#4a3a2a;font-style:italic;font-size:15px}}
+</style>
+</head><body>
+<a href="/" class="back">← Zuhal Teyze'ye dön</a>
+<h1>Horary Astroloji Nedir?</h1>
+<p style="color:#9e8c6a;font-size:13px;margin-bottom:1.5rem">Sade bir rehber — önceden astroloji bilgisi gerekmez</p>
+
+<div class="toc">
+  <h3>BU REHBERDE</h3>
+  <ol>
+    <li><a href="#ne">Horary astroloji nedir</a></li>
+    <li><a href="#fark">Modern astrolojiden farkı</a></li>
+    <li><a href="#harita">Haritada ne var</a></li>
+    <li><a href="#kurallar">Temel kurallar</a></li>
+    <li><a href="#soru">İyi soru nasıl sorulur</a></li>
+    <li><a href="#sinir">Horary'nin yapamadıkları</a></li>
+    <li><a href="#dene">Ücretsiz deneyin</a></li>
+  </ol>
+</div>
+
+<h2 id="ne">Horary astroloji nedir</h2>
+<p>Horary astroloji, belirli bir soruyu — sorunun samimiyetle sorulduğu tam ana ait gökyüzü haritasını okuyarak — yanıtlar. <em>Horary</em> kelimesi Latince <em>hora</em>'dan gelir: saat. Bu, ömürlerin değil, anların astrolojisidir.</p>
+<p>Doğum haritanıza ihtiyacınız yok. Yükselen burcu bilmenize gerek yok. Harita sorunun kendisine aittir: sorma anı, sorma yeri ve arkasındaki samimilik. Bu yeterlidir.</p>
+<p>Gelenek eskidir. Ortaçağ'da İslam dünyasının büyük astrologları bu yöntemi sistematize etti. İngilizce'de en kapsamlı eser 1647'de <strong>William Lilly</strong> tarafından yazılan <em>Christian Astrology</em>'dir — bugün hâlâ temel başvuru kaynağıdır. Yirminci yüzyılın sonunda <strong>John Frawley</strong> bu geleneği çağdaş pratisyenler için yeniden canlandırdı ve netleştirdi. Zuhal Teyze bu çizgiyi takip eder.</p>
+
+<h2 id="fark">Modern astrolojiden farkı</h2>
+<p>Modern astroloji — gazete köşelerinde ve çoğu uygulamada gördüğünüz tür — ağırlıklı olarak natal astrolojidir. Doğum haritası üzerinden karakter ve yaşam temalarını inceler. Psikolojik dil kullanır: arketipler, örüntüler, iç yolculuklar.</p>
+<p>Horary neredeyse her açıdan farklıdır:</p>
+<p><strong>Kişiliği değil, soruları yanıtlar.</strong> "Bu ilişki devam eder mi?" sorusunun horary'de evet ya da hayır cevabı vardır. Bağlanma stilinize dair bir meditasyon değil.</p>
+<p><strong>Yalnızca yedi klasik gezegen kullanılır.</strong> Güneş, Ay, Merkür, Venüs, Mars, Jüpiter, Satürn. Uranüs, Neptün ve Plüton — gelenek kurulduktan sonra keşfedildiğinden — kullanılmaz. Atanmış yöneticilik ilişkileri, test edilmiş anlamları yoktur. Zuhal Teyze bunları kullanmaz.</p>
+<p><strong>Regiomontanus ev sistemi kullanılır.</strong> Placidus değil, tam burç değil. Regiomontanus sistemi yüzyıllarca horary için standart olmuş ve kurallar bu sistem üzerine inşa edilmiştir.</p>
+<p><strong>Teknik önce, sezgi sonra gelir.</strong> Bir horary haritası belirli kurallarla okunur. Astrolog haritayı sadece "hissetmez." Ev lordlarını tespit eder, kondisyonlarını kontrol eder, uygulayan bir açı yapıp yapmadıklarını inceler ve o açının her iki gezegen de burcunu değiştirmeden tamamlanıp tamamlanmadığını belirler. Bu süreç bir hüküm üretir.</p>
+
+<h2 id="harita">Haritada ne var</h2>
+<p>Bir horary haritası gökyüzünü on iki eve böler; her ev yaşamın bir alanını yönetir. <strong>Birinci ev</strong> soru soran kişiyi temsil eder. Sorulan konunun evi — ilişkiler ve açık düşmanlar için <strong>yedinci ev</strong>, kariyer için <strong>onuncu ev</strong>, ev ve mülkiyet için <strong>dördüncü ev</strong> vb. — sorulan şeyi temsil eder.</p>
+<p>Her evin bir <strong>lordu</strong> vardır: o evin cuspundaki burcu yöneten gezegen. Birinci evin lordu haritadaki "siz"sinizdir. Yedinci evin lordu karşı taraf ya da sorulan konudur. Harita bu anlamlandırıcılar arasındaki ilişkiyi inceleyerek okunur.</p>
+<p><strong>Ay</strong> özel bir ağırlık taşır. Sorucuya ortak anlamlandırıcı olur, son yaşananları gösterir ve mevcut burcunu terk etmeden önceki son açısı çoğunlukla sonucu tarif eder. Boş seyreden Ay — mevcut burçta başka bir uygulayan açı yapmayan Ay — geleneksel olarak "bu konudan bir şey çıkmaz" anlamına gelir. Bu her zaman olumsuz değildir: bazen hiçbir şeyin olmaması tam olarak aradığınız cevaptır.</p>
+
+<h2 id="kurallar">Temel kurallar</h2>
+<p><strong>Combustion (yanma).</strong> Güneş'e yaklaşık 8 derece içinde olan bir gezegen combust sayılır — zayıflamış, gizlenmiş, etkin biçimde hareket edemiyor. 17 yay dakikası içinde ise gezegen <em>cazimi</em>'dedir, Güneş'in kalbindedir; bu olağanüstü güç konumudur. Fark önemlidir.</p>
+<p><strong>Temel onurlar (essential dignity).</strong> Her gezegen bulunduğu burca göre güçlü ya da zayıftır. Kendi burcunda (taht) veya yücelmesinde olan bir gezegen güven ve etkinlikle hareket eder. Zararında ya da düşüşünde olan bir gezegen zayıftır ve temsil ettiği kişiye kolayca yardım edemez. <a href="/tablo">Batlamyus onurlar tablosu</a> tüm bu konumları gösterir.</p>
+<p><strong>Reception (kabul).</strong> İki gezegen birbirinin burcunda olabilir — karşılıklı kabul — ya da biri diğerinin onura sahip olduğu bir burçta bulunabilir. Kabul, bir açının anlamını önemli ölçüde değiştirir. Karşılıklı kabulde iki gezegen arasındaki zorlu bir açı, kabul olmaksızın aynı açıya kıyasla çok daha az ciddidir.</p>
+<p><strong>Açı ve tamamlanma.</strong> Bir sonucun gerçekleşmesi için anlamlandırıcıların, her iki gezegen de burcunu değiştirmeden önce tamamlanan bir uygulayan açı yapması gerekir. Ayrılan bir açı olanı tarif eder. Uygulayan açı gelecekte olanı tarif eder. Açının gerçekten tamamlanıp tamamlanmadığı — yoksa bir burç değişimi ya da araya giren bir gezegen tarafından engellenip engellenmediği — cevabı belirler.</p>
+
+<blockquote>"Harita yalan söylemez. Yalnızca bir düzeyde zaten bildiğinizi söyler." — Zuhal Teyze'nin oldukça ikna olduğu bir horary ilkesi.</blockquote>
+
+<h2 id="soru">İyi soru nasıl sorulur</h2>
+<p>Sorunun kalitesi doğrudan haritanın kalitesini etkiler. Bir horary sorusu şöyle olmalıdır:</p>
+<p><strong>Spesifik.</strong> "Hayatım nasıl gidecek?" değil, "bu işe gireceğim mi?" değil. "Bu iş teklifini kabul etsem mi?" veya "o geri döner mi?" Tek konu, tek soru.</p>
+<p><strong>Samimi.</strong> Gerçekten bilmek istemelisiniz. Sistemi test etmek ya da boş meraktan sorulan sorular belirsiz veya okunamaz haritalar üretir. Gelenek, haritanın sorucunun zihnini yansıttığını öne sürer — zihin gerçekten meşgul değilse, harita da öyle.</p>
+<p><strong>Şimdiki zaman.</strong> "Berlin'e taşınmalı mıyım?" "Hiç yurt dışında yaşar mıyım?"dan iyidir. Soru, şu an karşı karşıya olduğunuz gerçek bir kararı veya gerçek bir belirsizliği tarif etmelidir.</p>
+<p>Varsa bağlam ekleyin: soruyu sorduğunuz tarih ve saat, konumunuz ve duruma ilişkin ilgili ayrıntılar. Harita ne kadar kesin dökülebilirse, o kadar kesin okunabilir.</p>
+
+<h2 id="sinir">Horary'nin yapamadıkları</h2>
+<p>Horary yanılmaz değildir. Doğru teknik temeller üzerine dikkatle inşa edilmiş bile olsa otomatik bir sistem, deneyimli bir insan astroloğun yerini tutamaz. Gerçek horary hükmü yıllarca süren pratik, bağlam duygusu ve haritadaki çelişen tanıklıkları tartabilme becerisini gerektirir. Zuhal Teyze bir laboratuvardır: faydalı, eğitici, çoğunlukla şaşırtıcı derecede isabetli ve ne olduğu konusunda her zaman dürüst.</p>
+<p>Hayatı değiştiren kararlar için — önemli sağlık, hukuk veya finans meseleleri — lütfen gerçek bir klasik astrologla çalışın. Türkçe sorularınız ve detaylı okuma için <a href="https://t.me/zuhalteyze" target="_blank" rel="noopener">Telegram</a>'dan ulaşabilirsiniz. İngilizce derinlemesine okuma için <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr — Horary Derya</a>.</p>
+
+<h2 id="dene">Ücretsiz deneyin</h2>
+
+<div class="cta-box">
+  <p>Yeterince okudunuz. Şimdi gerçekten merak ettiğiniz bir şeyi sorun.</p>
+  <a href="/" class="cta-btn">ZUHAL TEYZE'YE SOR — ÜCRETSİZ</a>
+</div>
+
+<p style="font-size:12px;color:#9e8c6a;margin-top:2rem">
+  İleri okuma: William Lilly, <em>Christian Astrology</em> (1647) — internette ücretsiz mevcut. John Frawley, <em>The Horary Textbook</em> (2005). Ayrıca her okumada kullanılan <a href="/tablo">klasik onurlar tablosuna</a> bakabilirsiniz.
+</p>
+
+</body></html>"""
+
+
 @app.route("/en/learn")
 def en_learn():
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
@@ -1090,6 +1182,7 @@ def sitemap():
     base = "https://zuhalteyze.live"
     urls = [
         ("", "1.0",  "daily"),
+        ("/ogren", "0.9", "monthly"),
         ("/en", "1.0",  "daily"),
         ("/en/learn", "0.9", "monthly"),
         ("/faq", "0.8", "weekly"),
