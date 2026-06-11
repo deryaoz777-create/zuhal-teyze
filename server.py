@@ -122,6 +122,7 @@ def auth_request():
         resend.Emails.send({
             "from": "Zuhal Teyze <noreply@zuhalteyze.live>",
             "to": email,
+            "reply_to": "deryaoz777@gmail.com",
             "subject": "Zuhal Teyze — Giriş Linkiniz",
             "html": f"""
             <div style="font-family: Georgia, serif; max-width: 480px; margin: 0 auto; padding: 2rem; background: #f5f0e8;">
@@ -304,6 +305,7 @@ def auth_code_send():
         resend.Emails.send({
             "from": "Zuhal Teyze <noreply@zuhalteyze.live>",
             "to": email,
+            "reply_to": "deryaoz777@gmail.com",
             "subject": "Zuhal Teyze — Doğrulama Kodun",
             "html": f"""
             <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:2rem;background:#f5f0e8;">
@@ -500,13 +502,6 @@ def contact():
   <span class="tag">DESTEK</span>
   <h3>Teknik sorun veya ödeme ile ilgili</h3>
   <p>Email: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
-</div>
-
-<div class="contact-card">
-  <span class="tag">PROFESYONEL YORUM</span>
-  <h3>Detaylı horary okuma</h3>
-  <p>Kişiselleştirilmiş, derinlemesine horary yorumu için:<br>
-  <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr — Horary Derya</a></p>
 </div>
 
 <div class="contact-card">
