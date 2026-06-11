@@ -392,7 +392,9 @@ function askFree(){
       clearInterval(pi);
       if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
       else{ rt.className='response-text'; const raw2=d.interpretation||'Yıldızlar şu an sessiz.';
-        rt.textContent=raw2.replace(/\*\*(.+?)\*\*/g,'$1').replace(/#{1,6}\s*/g,'').replace(/\*(.+?)\*/g,'$1'); savedAnswer=d.interpretation||''; }
+        const cleaned=raw2.replace(/\*\*(.+?)\*\*/g,'$1').replace(/#{1,6}\s*/g,'').replace(/\*(.+?)\*/g,'$1');
+        rt.textContent=cleaned; savedAnswer=cleaned;
+        showShareBar('free', cleaned); }
       setTimeout(()=>rt.classList.add('visible'),30);
       btn.disabled=false; btn.textContent='BİR SORU DAHA';
       btn.onclick = ()=>showWall();
