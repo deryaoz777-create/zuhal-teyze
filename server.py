@@ -474,7 +474,7 @@ def faq():
 <p>E-posta adresiniz yalnızca kimlik doğrulama için kullanılır. Sorularınız hizmet geliştirme amacıyla anonim olarak analiz edilebilir. Detaylı bilgi için <a href="/privacy">Gizlilik Politikamıza</a> bakabilirsiniz.</p>
 
 <h2>Gerçek bir astrologla çalışmak istiyorum</h2>
-<p>Bu uygulama güçlü bir araçtır, ancak her önüne gelen astrolog horary okuyamaz. Gerçek bir horary yorumu için Frawley geleneğinde uzmanlaşmış bir astrolog gerekir. Detaylı, kişiselleştirilmiş horary yorumu için <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr profilime</a> göz atabilirsiniz.</p>
+<p>Bu uygulama güçlü bir araçtır, ancak her önüne gelen astrolog horary okuyamaz. Gerçek bir horary yorumu için Frawley geleneğinde uzmanlaşmış bir astrolog gerekir. Türkçe sorular için <a href="https://t.me/zuhalteyze" target="_blank" rel="noopener">Telegram'dan</a> ulaşabilirsiniz. İngilizce detaylı yorum için <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr profilime</a> göz atabilirsiniz.</p>
 
 </body></html>"""
 
@@ -505,6 +505,19 @@ def contact():
 <div class="contact-card">
   <span class="tag">PROFESYONEL YORUM</span>
   <h3>Detaylı horary okuma</h3>
+  <p>Kişiselleştirilmiş, derinlemesine horary yorumu için:<br>
+  <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr — Horary Derya</a></p>
+</div>
+
+<div class="contact-card">
+  <span class="tag">TELEGRAM</span>
+  <h3>Hızlı ulaşım</h3>
+  <p><a href="https://t.me/zuhalteyze" target="_blank" rel="noopener">@zuhalteyze</a> — sorular, destek, duyurular</p>
+</div>
+
+<div class="contact-card">
+  <span class="tag">PROFESYONEL YORUM</span>
+  <h3>Detaylı horary okuma (İngilizce)</h3>
   <p>Kişiselleştirilmiş, derinlemesine horary yorumu için:<br>
   <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr — Horary Derya</a></p>
 </div>
