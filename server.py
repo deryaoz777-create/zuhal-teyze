@@ -101,6 +101,10 @@ def _call_claude_raw(system_prompt, user_message):
 def index():
     return send_from_directory(".", "zuhal_teyze.html")
 
+@app.route("/en")
+def index_en():
+    return send_from_directory(".", "en.html")
+
 
 # ─────────────────────────────────────────
 # AUTH

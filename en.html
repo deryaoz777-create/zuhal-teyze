@@ -1,9 +1,16 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zuhal Teyze</title>
+<title>Auntie Zuhal — Free Horary Astrology</title>
+<meta name="description" content="Ask Auntie Zuhal a horary question. Classical astrology in the Frawley/Lilly tradition — free, online, no birth chart needed.">
+<link rel="canonical" href="https://zuhalteyze.live/en">
+<link rel="alternate" hreflang="tr" href="https://zuhalteyze.live/">
+<link rel="alternate" hreflang="en" href="https://zuhalteyze.live/en">
+<meta property="og:title" content="Auntie Zuhal — Free Horary Astrology">
+<meta property="og:description" content="Ask a real horary question. Classical Frawley/Lilly tradition. Free, no birth chart needed.">
+<meta property="og:url" content="https://zuhalteyze.live/en">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
 <style>
@@ -87,7 +94,7 @@ footer a:hover{color:rgba(201,168,118,.65)}
 <div class="moon-deco">☽</div>
 <div class="wrap">
   <div class="avatar-wrap">
-    <svg role="img" aria-label="Zuhal Teyze" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600">
+    <svg role="img" aria-label="Auntie Zuhal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600">
   <defs>
     <!-- sıva dokusu -->
     <filter id="zt-plaster" x="-10%" y="-10%" width="120%" height="120%">
@@ -290,15 +297,15 @@ footer a:hover{color:rgba(201,168,118,.65)}
   <rect x="0" y="0" filter="url(#zt-plaster)" fill="none"/>
 </svg>
   </div>
-  <div class="title">ZUHAL TEYZE</div>
+  <div class="title">AUNTIE ZUHAL</div>
   <div class="subtitle">Chaos Lab &middot; Horary</div>
-  <div style="font-size:10px;letter-spacing:.12em;color:rgba(201,168,118,.32);margin-bottom:.2rem"><span style="color:rgba(201,168,118,.75)">TR</span> &nbsp;·&nbsp; <a href="/en" style="color:rgba(201,168,118,.45);text-decoration:none">EN</a></div>
-  <div class="disclaimer">Hayatın her sorusuna yıldızlardan cevap arar. Ama asıl bildiği şey — cevabı zaten bildiğinizi.</div>
-  <div class="tagline" id="tagline">Bu uygulama eğlence amaçlıdır.</div>
+  <div style="font-size:10px;letter-spacing:.12em;color:rgba(201,168,118,.32);margin-bottom:.2rem"><a href="/" style="color:rgba(201,168,118,.45);text-decoration:none">TR</a> &nbsp;·&nbsp; <span style="color:rgba(201,168,118,.75)">EN</span></div>
+  <div class="disclaimer">She seeks answers from the stars for every question in life. But what she truly knows — is that you already know.</div>
+  <div class="tagline" id="tagline">This application is for entertainment purposes.</div>
 
   <div class="card" id="app-card">
     <div id="state-free">
-      <textarea id="q-free" placeholder="Yıldızlara sormak istediğiniz şey..." rows="4"></textarea>
+      <textarea id="q-free" placeholder="What do you wish to ask the stars..." rows="4"></textarea>
       <div class="response-area" id="ra-free">
         <div class="divider"></div>
         <div class="response-text" id="rt-free"></div>
@@ -306,41 +313,41 @@ footer a:hover{color:rgba(201,168,118,.65)}
       <div class="share-bar" id="share-bar-free">
         <div class="share-viral" id="viral-free" onclick="copyViral('free')" title="Kopyala"></div>
         <div class="share-btns">
-          <button class="share-btn" onclick="shareStory('free')">STORY İNDİR</button>
-          <button class="share-btn" onclick="shareNative('free')">PAYLAŞ</button>
+          <button class="share-btn" onclick="shareStory('free')">SAVE STORY</button>
+          <button class="share-btn" onclick="shareNative('free')">SHARE</button>
         </div>
         <div class="copy-toast" id="toast-free"></div>
       </div>
-      <button class="btn" id="btn-free" onclick="askFree()">SORMAK İSTİYORUM</button>
+      <button class="btn" id="btn-free" onclick="askFree()">I WISH TO ASK</button>
     </div>
 
     <div id="state-wall" style="display:none">
-      <div class="wall-hint">Devam etmek için email adresinizi girin.</div>
-      <input type="email" id="wall-email" placeholder="email adresiniz...">
+      <div class="wall-hint">To continue, enter your email address.</div>
+      <input type="email" id="wall-email" placeholder="your email address...">
       <div class="wall-msg" id="wall-msg"></div>
-      <button class="btn" id="btn-wall" onclick="sendCode()">KODU GÖNDER</button>
+      <button class="btn" id="btn-wall" onclick="sendCode()">SEND CODE</button>
     </div>
 
     <div id="state-code" style="display:none">
-      <div class="wall-hint">6 haneli doğrulama kodunuzu girin.<br><small style="opacity:.65">Spam klasörünü de kontrol edin.</small></div>
+      <div class="wall-hint">Enter your 6-digit verification code.<br><small style="opacity:.65">Check your spam folder too.</small></div>
       <input type="tel" id="code-input" placeholder="— — — — — —" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
       <div class="wall-msg" id="code-msg"></div>
-      <button class="btn" id="btn-code" onclick="verifyCode()">DOĞRULA</button>
-      <span class="back-link" onclick="showWall()">← geri dön</span>
+      <button class="btn" id="btn-code" onclick="verifyCode()">VERIFY</button>
+      <span class="back-link" onclick="showWall()">← go back</span>
     </div>
 
     <div id="state-authed" style="display:none">
       <div class="credits-bar">
         <span class="user-email" id="user-email"></span>
-        <span class="credits-info">Kalan: <span class="credits-count" id="credits-count">—</span></span>
+        <span class="credits-info">Remaining: <span class="credits-count" id="credits-count">—</span></span>
       </div>
-      <button class="btn btn-sm" id="btn-buy" onclick="openCheckout()">✦ 10 Soru Satın Al — $4.99</button>
+      <button class="btn btn-sm" id="btn-buy" onclick="openCheckout()">✦ 10 Questions — $4.99</button>
       <div id="carry-wrap" style="display:none">
         <div class="divider"></div>
         <div class="response-text visible" id="carry-answer" style="font-size:16px"></div>
         <div class="divider"></div>
       </div>
-      <textarea id="q" placeholder="Bir soru daha..." rows="4" style="margin-top:1rem"></textarea>
+      <textarea id="q" placeholder="One more question..." rows="4" style="margin-top:1rem"></textarea>
       <div class="response-area" id="ra">
         <div class="divider"></div>
         <div class="response-text" id="rt"></div>
@@ -348,41 +355,41 @@ footer a:hover{color:rgba(201,168,118,.65)}
       <div class="share-bar" id="share-bar-authed">
         <div class="share-viral" id="viral-authed" onclick="copyViral('authed')" title="Kopyala"></div>
         <div class="share-btns">
-          <button class="share-btn" onclick="shareStory('authed')">STORY İNDİR</button>
-          <button class="share-btn" onclick="shareNative('authed')">PAYLAŞ</button>
+          <button class="share-btn" onclick="shareStory('authed')">SAVE STORY</button>
+          <button class="share-btn" onclick="shareNative('authed')">SHARE</button>
         </div>
         <div class="copy-toast" id="toast-authed"></div>
       </div>
-      <button class="btn" id="ask-btn" onclick="ask()">SORMAK İSTİYORUM</button>
-      <button class="btn btn-sm" onclick="logout()">çıkış yap</button>
+      <button class="btn" id="ask-btn" onclick="ask()">I WISH TO ASK</button>
+      <button class="btn btn-sm" onclick="logout()">sign out</button>
     </div>
   </div>
 
-  <button class="btn-astro" onclick="toggleAstro()">✦ &nbsp;GERÇEK ASTROLOGA SOR&nbsp; ✦</button>
+  <button class="btn-astro" onclick="toggleAstro()">✦ &nbsp;ASK A REAL ASTROLOGER&nbsp; ✦</button>
 
   <div class="astro-card" id="astro-card">
-    <div class="astro-hint">Yapay teyze değil, gerçek bir horary astroloğu baksın istiyorsan —<br>sorunla birlikte e-postanı bırak, sana dönülür.</div>
-    <input type="email" id="astro-email" placeholder="e-posta adresiniz...">
-    <textarea id="astro-soru" placeholder="Sorunuz... (soru tarihi, saati, yeri varsa ekleyin)" rows="4" style="margin-top:.6rem"></textarea>
+    <div class="astro-hint">Not the artificial aunt — if you want a real horary astrologer to look —<br>leave your question and email, you will be answered.</div>
+    <input type="email" id="astro-email" placeholder="your email address...">
+    <textarea id="astro-soru" placeholder="Your question... (include date, time, place if known)" rows="4" style="margin-top:.6rem"></textarea>
     <input type="text" id="astro-gotcha" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
     <div class="astro-msg" id="astro-msg"></div>
-    <button class="btn" id="astro-send-btn" onclick="sendAstro()">GÖNDER</button>
+    <button class="btn" id="astro-send-btn" onclick="sendAstro()">SEND</button>
   </div>
 
   <footer>
     <div style="display:flex;gap:1.25rem;justify-content:center;flex-wrap:wrap">
-      <a href="/faq">SSS</a>
-      <a href="/tablo">Onurlar</a>
-      <a href="/contact">İletişim</a>
-      <a href="/terms">Kullanım Koşulları</a>
-      <a href="/privacy">Gizlilik</a>
+      <a href="/faq">FAQ</a>
+      <a href="/tablo">Dignities</a>
+      <a href="/contact">Contact</a>
+      <a href="/terms">Terms</a>
+      <a href="/privacy">Privacy</a>
     </div>
   </footer>
 </div>
 <script>
 
-const PHRASES = ["Sabrınızı... yıldızlar acele etmez.","Görüyorum, görüyorum...","Saturnus düşünüyor.","Bu soruyu zaten biliyordun.","Hmm. İlginç bir soru."];
-const TAGS = ["Saturnus her şeyi görür.","Yıldızlar yalan söylemiyor.","Bu cevabı zaten biliyordun.","Sormadan önce aynaya bak derim ama..."];
+const PHRASES = ["Patience... the stars do not rush.","I see, I see...","Saturn is thinking.","You already knew this answer.","Hmm. Interesting question."];
+const TAGS = ["Saturn sees everything.","The stars do not lie.","You already knew this answer.","I would say look in the mirror first, but..."];
 let savedAnswer='', wallEmail='', viralText={free:'',authed:''}, loadingInterval;
 
 function showState(id){
@@ -452,15 +459,15 @@ function askFree(){
       stopLoading();
       if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
       else{
-        const text=cleanMD(d.interpretation||'Yıldızlar şu an sessiz.');
+        const text=cleanMD(d.interpretation||'The stars are silent right now.');
         rt.className='response-text'; rt.textContent=text; savedAnswer=text;
         setTimeout(()=>rt.classList.add('visible'),30);
         showShareBtns('free',text); rotateTagline();
       }
-      btn.disabled=false; btn.textContent='BİR SORU DAHA'; btn.onclick=()=>showWall();
+      btn.disabled=false; btn.textContent='ONE MORE QUESTION'; btn.onclick=()=>showWall();
     }).catch(()=>{
       stopLoading(); rt.className='response-text error-text';
-      rt.textContent='Bağlantı hatası. Lütfen tekrar deneyin.';
+      rt.textContent='Connection error. Please try again.';
       setTimeout(()=>rt.classList.add('visible'),30);
       btn.disabled=false; btn.textContent='TEKRAR DENE';
     });
@@ -470,25 +477,25 @@ function askFree(){
 function sendCode(){
   const email=document.getElementById('wall-email').value.trim();
   const msg=document.getElementById('wall-msg');
-  if(!email){ msg.textContent='Email girin.'; return; }
+  if(!email){ msg.textContent='Please enter your email.'; return; }
   const btn=document.getElementById('btn-wall'); btn.disabled=true; btn.textContent='· · ·';
   fetch('/api/auth/code/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})})
   .then(r=>r.json()).then(d=>{
     if(d.success){ wallEmail=email; showCodeState(); }
-    else{ msg.textContent=d.error||'Hata oluştu.'; btn.disabled=false; btn.textContent='KODU GÖNDER'; }
-  }).catch(()=>{ msg.textContent='Bağlantı hatası.'; btn.disabled=false; btn.textContent='KODU GÖNDER'; });
+    else{ msg.textContent=d.error||'An error occurred.'; btn.disabled=false; btn.textContent='SEND CODE'; }
+  }).catch(()=>{ msg.textContent='Connection error.'; btn.disabled=false; btn.textContent='SEND CODE'; });
 }
 
 function verifyCode(){
   const code=document.getElementById('code-input').value.trim();
   const msg=document.getElementById('code-msg');
-  if(code.length!==6){ msg.textContent='6 haneli kodu girin.'; return; }
+  if(code.length!==6){ msg.textContent='Please enter the 6-digit code.'; return; }
   const btn=document.getElementById('btn-code'); btn.disabled=true; btn.textContent='· · ·';
   fetch('/api/auth/code/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:wallEmail,code})})
   .then(r=>r.json()).then(d=>{
     if(d.success) showAuthed(d.email,d.credits,true);
-    else{ msg.textContent=d.error||'Kod hatalı.'; btn.disabled=false; btn.textContent='DOĞRULA'; }
-  }).catch(()=>{ msg.textContent='Bağlantı hatası.'; btn.disabled=false; btn.textContent='DOĞRULA'; });
+    else{ msg.textContent=d.error||'Invalid code.'; btn.disabled=false; btn.textContent='VERIFY'; }
+  }).catch(()=>{ msg.textContent='Connection error.'; btn.disabled=false; btn.textContent='VERIFY'; });
 }
 
 function ask(){
@@ -506,18 +513,18 @@ function ask(){
       if(d.auth_required){ showWall(); return; }
       if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
       else{
-        const text=cleanMD(d.interpretation||'Yıldızlar şu an sessiz.');
+        const text=cleanMD(d.interpretation||'The stars are silent right now.');
         rt.className='response-text'; rt.textContent=text;
         setTimeout(()=>rt.classList.add('visible'),30);
         if(d.credits_remaining!==undefined) document.getElementById('credits-count').textContent=d.credits_remaining;
         showShareBtns('authed',text); rotateTagline();
       }
-      btn.disabled=false; btn.textContent='YENİDEN SOR';
+      btn.disabled=false; btn.textContent='ASK AGAIN';
     }).catch(()=>{
       stopLoading(); rt.className='response-text error-text';
-      rt.textContent='Bağlantı hatası. Lütfen tekrar deneyin.';
+      rt.textContent='Connection error. Please try again.';
       setTimeout(()=>rt.classList.add('visible'),30);
-      btn.disabled=false; btn.textContent='TEKRAR DENE';
+      btn.disabled=false; btn.textContent='TRY AGAIN';
     });
   });
 }
@@ -549,19 +556,19 @@ function showShareBtns(which,text){
   document.getElementById('share-bar-'+which).classList.add('show');
 }
 function copyViral(which){
-  const text=(viralText[which]||'zuhalteyze.live')+'\n\nzuhalteyze.live';
+  const text=(viralText[which]||'zuhalteyze.live/en')+'\n\nzuhalteyze.live/en';
   navigator.clipboard.writeText(text).then(()=>{
     const t=document.getElementById('toast-'+which);
-    t.textContent='✓ kopyalandı'; setTimeout(()=>t.textContent='',2000);
+    t.textContent='✓ copied'; setTimeout(()=>t.textContent='',2000);
   });
 }
 function shareNative(which){
   const viral=viralText[which]||'Zuhal Teyze konuştu';
-  if(navigator.share) navigator.share({title:'Zuhal Teyze',text:viral+'\n\nzuhalteyze.live',url:'https://zuhalteyze.live'}).catch(()=>{});
+  if(navigator.share) navigator.share({title:'Auntie Zuhal',text:viral+'\n\nzuhalteyze.live/en',url:'https://zuhalteyze.live/en'}).catch(()=>{});
   else copyViral(which);
 }
 function shareStory(which){
-  const viral=viralText[which]||'Yıldızlar biliyor.';
+  const viral=viralText[which]||'The stars know.';
   const c=document.createElement('canvas'); c.width=1080; c.height=1920;
   const ctx=c.getContext('2d');
   const g=ctx.createLinearGradient(0,0,1080,1920);
@@ -579,7 +586,7 @@ function shareStory(which){
   ctx.fillStyle='rgba(201,168,118,.65)'; ctx.font='36px serif'; ctx.textAlign='center';
   ctx.fillText('✦',540,758); ctx.fillText('✦',540,1162);
   ctx.fillStyle='#c9a876'; ctx.font='500 58px Georgia,serif';
-  ctx.fillText('ZUHAL TEYZE',540,900);
+  ctx.fillText('AUNTIE ZUHAL',540,900);
   ctx.fillStyle='rgba(201,168,118,.5)'; ctx.font='26px Georgia,serif';
   ctx.fillText('CHAOS LAB · HORARY',540,955);
   ctx.fillStyle='rgba(230,211,174,.9)'; ctx.font='italic 44px Georgia,serif';
@@ -605,7 +612,7 @@ async function initPaddle(){
 }
 function openCheckout(){
   const email=document.getElementById('user-email').textContent;
-  if(!window._paddlePrice){ alert('Ödeme sistemi yüklenemedi.'); return; }
+  if(!window._paddlePrice){ alert('Payment system unavailable.'); return; }
   Paddle.Checkout.open({items:[{priceId:window._paddlePrice,quantity:1}],customer:{email},customData:{email},settings:{displayMode:'overlay',theme:'dark'}});
 }
 
@@ -635,8 +642,8 @@ function sendAstro(){
   const msg   = document.getElementById('astro-msg');
   msg.className = 'astro-msg';
 
-  if(!email || !email.includes('@')){ msg.classList.add('err'); msg.textContent='Geçerli bir e-posta girin.'; return; }
-  if(soru.length < 10){ msg.classList.add('err'); msg.textContent='Sorunuzu biraz daha açar mısınız?'; return; }
+  if(!email || !email.includes('@')){ msg.classList.add('err'); msg.textContent='Please enter a valid email.'; return; }
+  if(soru.length < 10){ msg.classList.add('err'); msg.textContent='Could you describe your question a bit more?'; return; }
 
   const btn = document.getElementById('astro-send-btn');
   btn.disabled = true; btn.textContent = '· · ·';
@@ -644,17 +651,17 @@ function sendAstro(){
   fetch('https://formspree.io/f/' + FORMSPREE_ID, {
     method:'POST',
     headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body: JSON.stringify({email, soru, _subject:'Zuhal Teyze — Gerçek Astrolog Talebi'})
+    body: JSON.stringify({email, soru, _subject:'Auntie Zuhal — Real Astrologer Request'})
   }).then(r=>{
     if(r.ok){
       msg.classList.add('ok');
-      msg.textContent='✓ Mesajınız ulaştı. Yıldızlar değil, insan dönecek — biraz sabır.';
+      msg.textContent='✓ Your message has arrived. Not the stars — a human will reply. A little patience.';
       document.getElementById('astro-soru').value='';
-      btn.textContent='GÖNDER'; btn.disabled=false;
+      btn.textContent='SEND'; btn.disabled=false;
     } else throw new Error();
   }).catch(()=>{
-    msg.classList.add('err'); msg.textContent='Gönderilemedi, tekrar deneyin.';
-    btn.textContent='GÖNDER'; btn.disabled=false;
+    msg.classList.add('err'); msg.textContent='Could not send, please try again.';
+    btn.textContent='SEND'; btn.disabled=false;
   });
 }
 
