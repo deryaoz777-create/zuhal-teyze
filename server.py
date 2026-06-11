@@ -615,6 +615,152 @@ def refund():
 
 
 # ─────────────────────────────────────────
+# ENGLISH PAGES
+# ─────────────────────────────────────────
+
+EN_LEGAL_STYLE = """
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#f5f0e8;color:#2e1f2e;padding:3rem 1rem;max-width:720px;margin:0 auto;line-height:1.8}
+h1{font-family:'Cinzel',serif;color:#2e1f6e;font-size:1.6rem;margin-bottom:2rem;letter-spacing:.05em}
+h2{color:#2e1f6e;font-size:1.1rem;margin:1.5rem 0 .5rem}
+p{margin-bottom:1rem;color:#4a3a2a}
+a{color:#2e1f6e}
+.back{display:inline-block;margin-bottom:2rem;font-size:.9rem;color:#9e8c6a;text-decoration:none}
+.lab-box{background:#ede8d8;border-left:3px solid #2e1f6e;padding:1.1rem 1.4rem;border-radius:0 6px 6px 0;margin:1.5rem 0}
+.lab-box p{margin:0;color:#2e1f2e;font-size:14px;line-height:1.75}
+.lab-box strong{color:#2e1f6e}
+.contact-card{background:#efe9d8;border-radius:8px;padding:1.5rem;margin:1rem 0}
+.contact-card h3{color:#2e1f6e;font-size:1rem;margin-bottom:.5rem}
+.contact-card p{font-size:14px;margin:0}
+.contact-card a{color:#2e1f6e;font-weight:500}
+.tag{display:inline-block;font-size:11px;background:#2e1f6e;color:#f5e8b8;padding:2px 8px;border-radius:3px;margin-bottom:.5rem;letter-spacing:.05em}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet">
+"""
+
+@app.route("/en/faq")
+def en_faq():
+    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FAQ — Auntie Zuhal</title>
+<meta name="description" content="What is Auntie Zuhal? How does horary astrology work? Honest answers.">
+{EN_LEGAL_STYLE}</head><body>
+<a href="/en" class="back">← Back to Auntie Zuhal</a>
+<h1>Frequently Asked Questions</h1>
+
+<div class="lab-box">
+  <p><strong>First, let us be clear:</strong> This platform is an experiment. It is a labour of love built on classical horary astrology, continuously improved through real user feedback. It will never replace a real astrologer — and it would be dishonest to claim otherwise.</p>
+</div>
+
+<h2>What is this, exactly?</h2>
+<p>Auntie Zuhal calculates a real-time sky chart using pyswisseph, analyses it with Regiomontanus houses and rules from the Frawley/Lilly tradition, and then asks an AI to interpret the result. The calculation is genuine horary methodology. The interpretation is — honestly — still being refined. Sometimes it reads very well. Sometimes it makes mistakes. That is why it is a lab.</p>
+
+<h2>What is horary astrology?</h2>
+<p>Horary astrology interprets the sky chart cast for the exact moment a question is asked. No birth chart is needed — the question itself, the time it was asked, and the place are sufficient. Systematised by William Lilly and other classical astrologers centuries ago, it relies on specific technical rules: house lords, aspects, reception, combustion, and void of course Moon. When applied correctly, it can produce remarkably precise answers.</p>
+
+<h2>How reliable is it?</h2>
+<p>Honestly: variable. The technical data is real — planetary degrees, house cusps, dignity scores are all calculated correctly. But interpreting that data is a different matter. A real horary astrologer reads with years of practice and intuition; this application produces a rule-based AI interpretation. Some readings come out nearly perfect. Others contain a technical error or a missed nuance. Read every answer with curiosity, not blind trust.</p>
+
+<h2>I have an important decision to make — should I use this?</h2>
+<p>For gaining perspective, seeing the chart, understanding the technical situation — yes. But for life-changing matters such as career changes, relationship decisions, or health concerns, please work with a real classical astrologer. Not everyone can read horary — you need someone trained in the Frawley tradition with real practice. For English readings: <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr — Horary Derya</a>. For Turkish: <a href="https://t.me/zuhalteyze" target="_blank" rel="noopener">Telegram</a>.</p>
+
+<h2>How should I phrase my question?</h2>
+<p>Specific, sincere, and about something you genuinely want to know right now. Not "how will my life go?" — but "should I accept this job offer?" or "will this person come back?" One subject, asked honestly. Questions asked to test the system, or out of idle curiosity, tend not to produce clear answers.</p>
+
+<h2>Can I ask the same question again?</h2>
+<p>Classical tradition advises against it. Not because you disliked the answer — but only when something has genuinely changed. Repeating the same question tends to produce inconsistent or misleading charts.</p>
+
+<h2>What data do you collect?</h2>
+<p>Email address (for login only) and question time. This application is currently in beta and is completely free. No payment system is active. Your data is not shared with or sold to third parties.</p>
+
+</body></html>"""
+
+
+@app.route("/en/contact")
+def en_contact():
+    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contact — Auntie Zuhal</title>
+<meta name="description" content="Contact Auntie Zuhal. Support, professional horary readings, and collaborations.">
+{EN_LEGAL_STYLE}</head><body>
+<a href="/en" class="back">← Back to Auntie Zuhal</a>
+<h1>Contact</h1>
+
+<div class="contact-card">
+  <span class="tag">SUPPORT</span>
+  <h3>Technical issues</h3>
+  <p>Email: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</div>
+
+<div class="contact-card">
+  <span class="tag">TELEGRAM</span>
+  <h3>Quick contact</h3>
+  <p><a href="https://t.me/zuhalteyze" target="_blank" rel="noopener">@zuhalteyze</a> — questions, support, announcements</p>
+</div>
+
+<div class="contact-card">
+  <span class="tag">PROFESSIONAL READING</span>
+  <h3>In-depth horary reading (English)</h3>
+  <p>For a personalised, detailed horary interpretation:<br>
+  <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr — Horary Derya</a></p>
+</div>
+
+<div class="contact-card">
+  <span class="tag">COLLABORATION</span>
+  <h3>Partnership and business enquiries</h3>
+  <p>Email: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</div>
+
+<p style="margin-top:2rem;font-size:13px;color:#9e8c6a;">Response time is usually 24–48 hours.</p>
+</body></html>"""
+
+
+@app.route("/en/terms")
+def en_terms():
+    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Terms of Use — Auntie Zuhal</title>{EN_LEGAL_STYLE}</head><body>
+<a href="/en" class="back">← Back to Auntie Zuhal</a>
+<h1>Terms of Use</h1>
+<p>Last updated: June 2026</p>
+<h2>1. About the Service</h2>
+<p>Auntie Zuhal (zuhalteyze.live/en) is an AI-assisted interpretation service based on traditional horary astrology techniques. All content provided is strictly for entertainment purposes and does not constitute medical, legal, or financial advice.</p>
+<h2>2. Limitation of Liability</h2>
+<p>Interpretations provided through this platform cannot be treated as prophecy or certain fact. Users evaluate any interpretation at their own discretion and responsibility. The platform makes no guarantees regarding the accuracy or outcomes of its interpretations.</p>
+<h2>3. User Obligations</h2>
+<p>Users agree to use the platform lawfully and in a manner that does not harm others. Misuse, overloading the system, or unauthorised access is prohibited.</p>
+<h2>4. Intellectual Property</h2>
+<p>The platform's content, design, and software belong to Auntie Zuhal / zuhalteyze.live. Reproduction or distribution without permission is not permitted.</p>
+<h2>5. Changes</h2>
+<p>These terms may be updated without prior notice. Continued use of the platform constitutes acceptance of the current terms.</p>
+<h2>Contact</h2>
+<p>Questions: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</body></html>"""
+
+
+@app.route("/en/privacy")
+def en_privacy():
+    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy Policy — Auntie Zuhal</title>{EN_LEGAL_STYLE}</head><body>
+<a href="/en" class="back">← Back to Auntie Zuhal</a>
+<h1>Privacy Policy</h1>
+<p>Last updated: June 2026</p>
+<h2>Data We Collect</h2>
+<p>The platform collects only the following: email address (for login) and question time. This application is currently in beta and is completely free; no payment system is active.</p>
+<h2>How Data Is Used</h2>
+<p>Your email address is used only for authentication and service notifications. Your data is not shared with or sold to third parties.</p>
+<h2>Cookies and Sessions</h2>
+<p>The platform uses a cookie for session management. You may disable cookies in your browser settings; however, you will not be able to log in if you do so.</p>
+<h2>Data Retention</h2>
+<p>To request deletion of your account or data, please contact us.</p>
+<h2>GDPR</h2>
+<p>Users resident in the EU may exercise their rights under GDPR. Requests: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</body></html>"""
+
+
+# ─────────────────────────────────────────
 # LAB
 # ─────────────────────────────────────────
 
