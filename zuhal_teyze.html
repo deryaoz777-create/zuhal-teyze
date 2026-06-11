@@ -105,6 +105,16 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 /* Floating particle canvas */
 .particle{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:particleRise var(--dur,4s) ease-in-out infinite;animation-delay:var(--delay,0s);}
 @keyframes particleRise{0%{transform:translateY(0) translateX(0);opacity:0}20%{opacity:.8}100%{transform:translateY(-120px) translateX(var(--dx,15px));opacity:0}}
+
+/* ─── PAYLAŞ ─── */
+.share-bar{display:none;margin-top:1.25rem;gap:.75rem;flex-direction:column}
+.share-bar.show{display:flex}
+.share-viral{font-size:14px;color:rgba(200,180,255,.75);font-style:italic;text-align:center;padding:.85rem 1rem;border:1px dashed rgba(160,130,255,.25);border-radius:6px;cursor:pointer;transition:all .25s;line-height:1.5}
+.share-viral:hover{background:rgba(130,100,255,.12);border-color:rgba(160,130,255,.5)}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.share-btn{width:100%;padding:13px 10px;border:1px solid rgba(160,130,255,.35);border-radius:6px;background:rgba(20,10,40,.6);color:rgba(200,180,255,.85);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.13em;cursor:pointer;transition:all .25s;text-align:center}
+.share-btn:hover{background:rgba(160,130,255,.2);box-shadow:0 0 16px rgba(160,130,255,.3);border-color:rgba(160,130,255,.6)}
+.copy-toast{font-size:11px;color:rgba(160,130,255,.6);text-align:center;min-height:16px;letter-spacing:.05em}
 </style>
 <script src="https://cdn.paddle.com/paddle/v2/paddle.js">
 
@@ -256,19 +266,17 @@ function shareStory(which){
 
   <!-- STATE: FREE (ilk soru, auth yok) -->
   <div id="state-free">
-    <div class="free-tag">İlk sorun ücretsiz</div>
-    <div class="label">Sorunuz</div>
-    <textarea id="q-free" placeholder="Ne sormak istiyorsunuz..." rows="4"></textarea>
+    <div class="free-tag">✦ ilk soru ücretsiz ✦</div>
+    <textarea id="q-free" placeholder="Yıldızlara sormak istediğiniz şey..." rows="4"></textarea>
     <div class="response-area" id="ra-free">
       <div class="divider"></div>
-      <div class="label">Zuhal Teyze diyor ki</div>
       <div class="response-text" id="rt-free"></div>
     </div>
     <div class="share-bar" id="share-bar-free">
-      <div class="share-viral" id="share-viral-free" onclick="copyViral('free')" title="Kopyala">— ✦ —</div>
+      <div class="share-viral" id="share-viral-free" onclick="copyViral('free')" title="Kopyalamak için tıkla">...</div>
       <div class="share-btns">
-        <button class="share-btn" onclick="shareStory('free')">📱 Story Oluştur</button>
-        <button class="share-btn" onclick="shareNative('free')">↗ Paylaş</button>
+        <button class="share-btn" onclick="shareStory('free')">STORY İNDİR</button>
+        <button class="share-btn" onclick="shareNative('free')">PAYLAŞ</button>
       </div>
       <div class="copy-toast" id="copy-toast-free"></div>
     </div>
@@ -307,22 +315,19 @@ function shareStory(which){
     <button class="btn btn-secondary" id="btn-buy" onclick="openCheckout()" style="margin-bottom:.5rem">✦ 10 Soru Satın Al — $4.99</button>
     <div id="first-q-carry" style="display:none">
       <div class="divider"></div>
-      <div class="label">İlk sorunuz</div>
       <div class="response-text visible" id="first-q-answer" style="font-size:16px;opacity:1"></div>
       <div class="divider"></div>
     </div>
-    <div class="label">Yeni soru</div>
-    <textarea id="q" placeholder="Yeni sorunuzu yazın..." rows="4"></textarea>
+    <textarea id="q" placeholder="Bir soru daha..." rows="4"></textarea>
     <div class="response-area" id="ra">
       <div class="divider"></div>
-      <div class="label">Zuhal Teyze diyor ki</div>
       <div class="response-text" id="rt"></div>
     </div>
     <div class="share-bar" id="share-bar-authed">
-      <div class="share-viral" id="share-viral-authed" onclick="copyViral('authed')" title="Kopyala">— ✦ —</div>
+      <div class="share-viral" id="share-viral-authed" onclick="copyViral('authed')" title="Kopyalamak için tıkla">...</div>
       <div class="share-btns">
-        <button class="share-btn" onclick="shareStory('authed')">📱 Story Oluştur</button>
-        <button class="share-btn" onclick="shareNative('authed')">↗ Paylaş</button>
+        <button class="share-btn" onclick="shareStory('authed')">STORY İNDİR</button>
+        <button class="share-btn" onclick="shareNative('authed')">PAYLAŞ</button>
       </div>
       <div class="copy-toast" id="copy-toast-authed"></div>
     </div>
