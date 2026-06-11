@@ -68,6 +68,16 @@ textarea:focus,input:focus{border-color:rgba(232,154,139,.65);box-shadow:0 0 10p
 @keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.9;transform:scale(1.4)}}
 .moon-deco{position:fixed;top:1.5rem;right:2rem;font-size:1.6rem;color:rgba(201,168,118,.38);pointer-events:none;z-index:0;animation:moonFloat 7s ease-in-out infinite}
 @keyframes moonFloat{0%,100%{transform:translateY(0) rotate(-8deg);opacity:.3}50%{transform:translateY(-8px) rotate(8deg);opacity:.55}}
+.btn-astro{width:100%;margin-top:1.25rem;background:rgba(13,80,86,.45);border:1px solid rgba(46,122,134,.5);border-radius:5px;color:#8ecbd4;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.18em;padding:13px;cursor:pointer;transition:all .3s;position:relative;z-index:1}
+.btn-astro:hover{background:rgba(46,122,134,.25);border-color:#2e7a86;color:#b0dde4;box-shadow:0 0 18px rgba(46,122,134,.3)}
+.astro-card{width:100%;margin-top:.75rem;background:rgba(8,40,46,.75);backdrop-filter:blur(8px);border:1px solid rgba(46,122,134,.32);border-radius:8px;padding:1.4rem;display:none;position:relative;z-index:1}
+.astro-card.show{display:block;animation:cardEnter .35s ease-out both}
+.astro-hint{font-size:12px;color:rgba(201,168,118,.6);font-style:italic;text-align:center;margin-bottom:1.1rem;line-height:1.65;letter-spacing:.02em}
+.astro-divider{display:flex;align-items:center;gap:.75rem;margin:.9rem 0;color:rgba(201,168,118,.22);font-size:10px;letter-spacing:.1em}
+.astro-divider::before,.astro-divider::after{content:'';flex:1;height:1px;background:rgba(201,168,118,.14)}
+.astro-msg{min-height:18px;margin-top:.75rem;font-size:12px;text-align:center;color:rgba(201,168,118,.65);letter-spacing:.04em}
+.astro-msg.err{color:#e07070}
+.astro-msg.ok{color:rgba(142,203,150,.75)}
 footer{margin-top:2.5rem;position:relative;z-index:1}
 footer a{font-size:11px;color:rgba(201,168,118,.32);text-decoration:none;letter-spacing:.05em}
 footer a:hover{color:rgba(201,168,118,.65)}
@@ -348,6 +358,17 @@ footer a:hover{color:rgba(201,168,118,.65)}
     </div>
   </div>
 
+  <button class="btn-astro" onclick="toggleAstro()">✦ &nbsp;GERÇEK ASTROLOGA SOR&nbsp; ✦</button>
+
+  <div class="astro-card" id="astro-card">
+    <div class="astro-hint">Yapay teyze değil, gerçek bir horary astroloğu baksın istiyorsan —<br>sorunla birlikte e-postanı bırak, sana dönülür.</div>
+    <input type="email" id="astro-email" placeholder="e-posta adresiniz...">
+    <textarea id="astro-soru" placeholder="Sorunuz... (soru tarihi, saati, yeri varsa ekleyin)" rows="4" style="margin-top:.6rem"></textarea>
+    <input type="text" id="astro-gotcha" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+    <div class="astro-msg" id="astro-msg"></div>
+    <button class="btn" id="astro-send-btn" onclick="sendAstro()">GÖNDER</button>
+  </div>
+
   <footer>
     <div style="display:flex;gap:1.25rem;justify-content:center;flex-wrap:wrap">
       <a href="/faq">SSS</a>
@@ -597,6 +618,44 @@ function createStars(){
     s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;--dur:'+(Math.random()*3+2).toFixed(1)+'s;--delay:'+(Math.random()*4).toFixed(1)+'s;background:'+c+';box-shadow:0 0 '+Math.ceil(sz*2)+'px '+c;
     document.body.appendChild(s);
   }
+}
+// ── Gerçek Astrologa Sor ──
+const FORMSPREE_ID = 'xwvrwpnj';
+
+function toggleAstro(){
+  const card = document.getElementById('astro-card');
+  card.classList.toggle('show');
+  if(card.classList.contains('show')) card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function sendAstro(){
+  if(document.getElementById('astro-gotcha').value) return;
+  const email = document.getElementById('astro-email').value.trim();
+  const soru  = document.getElementById('astro-soru').value.trim();
+  const msg   = document.getElementById('astro-msg');
+  msg.className = 'astro-msg';
+
+  if(!email || !email.includes('@')){ msg.classList.add('err'); msg.textContent='Geçerli bir e-posta girin.'; return; }
+  if(soru.length < 10){ msg.classList.add('err'); msg.textContent='Sorunuzu biraz daha açar mısınız?'; return; }
+
+  const btn = document.getElementById('astro-send-btn');
+  btn.disabled = true; btn.textContent = '· · ·';
+
+  fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({email, soru, _subject:'Zuhal Teyze — Gerçek Astrolog Talebi'})
+  }).then(r=>{
+    if(r.ok){
+      msg.classList.add('ok');
+      msg.textContent='✓ Mesajınız ulaştı. Yıldızlar değil, insan dönecek — biraz sabır.';
+      document.getElementById('astro-soru').value='';
+      btn.textContent='GÖNDER'; btn.disabled=false;
+    } else throw new Error();
+  }).catch(()=>{
+    msg.classList.add('err'); msg.textContent='Gönderilemedi, tekrar deneyin.';
+    btn.textContent='GÖNDER'; btn.disabled=false;
+  });
 }
 
 </script>

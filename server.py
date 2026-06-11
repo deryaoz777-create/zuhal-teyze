@@ -355,6 +355,15 @@ def auth_code_verify():
     conn.close()
 
     user = get_or_create_user(email)
+
+    # Email doğrulamasında minimum 3 kredi garantile
+    if user["credits"] < 3:
+        conn3 = sqlite3.connect(DB_PATH)
+        conn3.execute("UPDATE users SET credits = 3 WHERE id = ?", (user["id"],))
+        conn3.commit()
+        conn3.close()
+        user = get_or_create_user(email)
+
     session_token = create_session(user["id"])
     resp = jsonify({"success": True, "email": user["email"], "credits": user["credits"]})
     resp.set_cookie("zt_session", session_token, max_age=2592000, path="/", samesite="Lax")
