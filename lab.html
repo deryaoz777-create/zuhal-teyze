@@ -427,6 +427,7 @@ async function runReading() {
       area.textContent = currentOutput;
       document.getElementById('feedback-bar').classList.add('visible');
       dot.style.background = '#1d9e75';
+      loadHistory(); // otomatik kayıt oldu, geçmişi güncelle
     } else {
       area.innerHTML = `<span style="color:var(--red)">Hata: ${data.error}</span>`;
       dot.style.background = '#e24b4a';
@@ -440,28 +441,39 @@ async function runReading() {
   btn.innerHTML = '✦ Yorum üret';
 }
 
+let currentEntryId = null;
+
 async function saveFeedback() {
   if (!currentOutput) return;
   const btn = document.getElementById('save-btn');
   btn.textContent = 'kaydediliyor...';
   btn.disabled = true;
 
-  const payload = {
-    question:      currentQuestion,
-    chart_data:    currentChartData,
-    system_prompt: document.getElementById('sys-input').value,
-    output:        currentOutput,
-    rating:        rating,
-    tags:          [...activeTags],
-    note:          document.getElementById('fb-note').value.trim()
-  };
-
   try {
-    await fetch('/api/lab/feedback', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+    if (currentEntryId) {
+      // Mevcut kaydı güncelle
+      await fetch('/api/lab/feedback/' + currentEntryId, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          rating: rating,
+          tags: [...activeTags],
+          note: document.getElementById('fb-note').value.trim()
+        })
+      });
+    } else {
+      // Yeni kayıt
+      await fetch('/api/lab/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: currentQuestion, chart_data: currentChartData,
+          system_prompt: document.getElementById('sys-input').value,
+          output: currentOutput, rating, tags: [...activeTags],
+          note: document.getElementById('fb-note').value.trim()
+        })
+      });
+    }
     resetFeedback();
     loadHistory();
     btn.textContent = '✓ Kaydedildi';

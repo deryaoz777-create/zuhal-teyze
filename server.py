@@ -551,20 +551,47 @@ def lab_reading():
         return jsonify({"error": "ANTHROPIC_API_KEY tanımlı değil."}), 500
 
     data = request.json or {}
-    question     = data.get("question", "").strip()
-    chart_data   = data.get("chart_data", "").strip()
+    question      = data.get("question", "").strip()
+    chart_data    = data.get("chart_data", "").strip()
     system_prompt = data.get("system_prompt", "").strip()
+    lat = float(data.get("lat", DEFAULT_LAT))
+    lon = float(data.get("lon", DEFAULT_LON))
 
     if not question:
         return jsonify({"error": "Soru boş olamaz."}), 400
 
-    user_msg = f"Soru: {question}"
-    if chart_data:
-        user_msg += f"\n\nHarita verisi:\n{chart_data}"
-
     try:
-        output = _call_claude_raw(system_prompt, user_msg)
-        return jsonify({"success": True, "output": output})
+        dt = datetime.datetime.now()
+
+        if not system_prompt:
+            # Tam horary engine — haritayı hesapla, build_frawley_prompt kullan
+            chart = calc_chart(question, dt, lat, lon)
+            prompt = build_frawley_prompt(chart)
+            output = ask_claude(prompt, ANTHROPIC_API_KEY)
+        else:
+            # Custom prompt modu — sistem promptunu kullan
+            if chart_data:
+                user_msg = f"Soru: {question}\n\nHarita verisi:\n{chart_data}"
+            else:
+                # Haritayı hesapla, veri bölümünü ekle
+                chart = calc_chart(question, dt, lat, lon)
+                auto_prompt = build_frawley_prompt(chart)
+                data_section = auto_prompt.split("---")[-1].strip() if "---" in auto_prompt else ""
+                user_msg = f"Soru: {question}\n\n{data_section}"
+            output = _call_claude_raw(system_prompt, user_msg)
+
+        # Otomatik kaydet (rating/tags sonra eklenebilir)
+        conn = sqlite3.connect(DB_PATH)
+        conn.execute("""
+            INSERT INTO lab_feedback
+                (created_at, question, chart_data, system_prompt, output, rating, tags, note)
+            VALUES (?, ?, ?, ?, ?, 0, '[]', '')
+        """, (dt.isoformat(), question, chart_data, system_prompt, output))
+        conn.commit()
+        new_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+        conn.close()
+
+        return jsonify({"success": True, "output": output, "id": new_id})
     except Exception as e:
         print(f"[LAB READING ERROR] {e}")
         return jsonify({"error": str(e)}), 500
@@ -589,6 +616,26 @@ def lab_feedback():
         data.get("rating", 0),
         _json.dumps(data.get("tags", []), ensure_ascii=False),
         data.get("note", "")
+    ))
+    conn.commit()
+    conn.close()
+    return jsonify({"success": True})
+
+
+@app.route("/api/lab/feedback/<int:entry_id>", methods=["POST"])
+def lab_feedback_update(entry_id):
+    """Mevcut feedback kaydını güncelle (rating/tags/note)."""
+    if not _lab_authed():
+        return jsonify({"error": "Yetkisiz erişim."}), 401
+    data = request.json or {}
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute("""
+        UPDATE lab_feedback SET rating=?, tags=?, note=? WHERE id=?
+    """, (
+        data.get("rating", 0),
+        _json.dumps(data.get("tags", []), ensure_ascii=False),
+        data.get("note", ""),
+        entry_id
     ))
     conn.commit()
     conn.close()
