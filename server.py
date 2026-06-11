@@ -567,7 +567,7 @@ def terms():
 <title>Kullanım Koşulları — Zuhal Teyze</title>{LEGAL_STYLE}</head><body>
 <a href="/" class="back">← Zuhal Teyze'ye dön</a>
 <h1>Kullanım Koşulları</h1>
-<p>Son güncelleme: Haziran 2025</p>
+<p>Son güncelleme: Haziran 2026</p>
 <h2>1. Hizmet Hakkında</h2>
 <p>Zuhal Teyze (zuhalteyze.live), geleneksel horary astroloji tekniklerine dayanan yapay zeka destekli yorum servisidir. Sunulan içerikler tamamen eğlence amaçlıdır; tıbbi, hukuki veya finansal tavsiye niteliği taşımaz.</p>
 <h2>2. Sorumluluk Sınırlaması</h2>
@@ -590,7 +590,7 @@ def privacy():
 <title>Gizlilik Politikası — Zuhal Teyze</title>{LEGAL_STYLE}</head><body>
 <a href="/" class="back">← Zuhal Teyze'ye dön</a>
 <h1>Gizlilik Politikası</h1>
-<p>Son güncelleme: Haziran 2025</p>
+<p>Son güncelleme: Haziran 2026</p>
 <h2>Topladığımız Veriler</h2>
 <p>Platform yalnızca şu verileri toplar: e-posta adresi (giriş için) ve soru zamanı. Bu uygulama şu an deneme aşamasındadır ve tamamen ücretsizdir; herhangi bir ödeme sistemi aktif değildir.</p>
 <h2>Verilerin Kullanımı</h2>
