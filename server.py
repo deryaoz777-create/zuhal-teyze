@@ -492,7 +492,7 @@ def faq():
 <p>Klasik gelenekte önerilmez. Cevabı beğenmediğiniz için değil, gerçekten bir şeyler değiştiğinde yeniden sorulabilir. Aynı soruyu arka arkaya sormak tutarsız veya yanıltıcı haritalar üretir.</p>
 
 <h2>Verilerimi nasıl kullanıyorsunuz?</h2>
-<p>E-posta adresiniz yalnızca giriş için kullanılır. Sorularınız anonim olarak hizmet kalitesini geliştirmek amacıyla incelenebilir. Detay için <a href="/privacy">Gizlilik Politikası</a>na bakabilirsiniz.</p>
+<p>E-posta adresiniz yalnızca giriş için kullanılır. Detay için <a href="/privacy">Gizlilik Politikası</a>na bakabilirsiniz.</p>
 
 </body></html>"""
 
@@ -592,9 +592,9 @@ def privacy():
 <h1>Gizlilik Politikası</h1>
 <p>Son güncelleme: Haziran 2025</p>
 <h2>Topladığımız Veriler</h2>
-<p>Platform yalnızca şu verileri toplar: e-posta adresi (giriş için), sorulan astroloji soruları ve soru zamanı. Ödeme işlemleri Paddle tarafından yürütülür; kart bilgileri Zuhal Teyze'ye iletilmez.</p>
+<p>Platform yalnızca şu verileri toplar: e-posta adresi (giriş için) ve soru zamanı. Bu uygulama şu an deneme aşamasındadır ve tamamen ücretsizdir; herhangi bir ödeme sistemi aktif değildir.</p>
 <h2>Verilerin Kullanımı</h2>
-<p>E-posta adresiniz yalnızca kimlik doğrulama ve hizmet bildirimleri için kullanılır. Sorularınız hizmet kalitesini geliştirmek amacıyla anonim olarak analiz edilebilir. Verileriniz üçüncü taraflarla paylaşılmaz veya satılmaz.</p>
+<p>E-posta adresiniz yalnızca kimlik doğrulama ve hizmet bildirimleri için kullanılır. Verileriniz üçüncü taraflarla paylaşılmaz veya satılmaz.</p>
 <h2>Çerezler ve Oturumlar</h2>
 <p>Platform, oturum yönetimi için çerez kullanır. Tarayıcı ayarlarınızdan çerezleri devre dışı bırakabilirsiniz; ancak bu durumda giriş yapamazsınız.</p>
 <h2>Veri Saklama</h2>
