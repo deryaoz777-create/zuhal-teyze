@@ -441,6 +441,84 @@ def paddle_config():
     })
 
 
+
+@app.route("/faq")
+def faq():
+    return f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sıkça Sorulan Sorular — Zuhal Teyze</title>
+<meta name="description" content="Horary astroloji nedir? Zuhal Teyze nasıl çalışır? Tüm sorularınızın cevabı burada.">
+{LEGAL_STYLE}</head><body>
+<a href="/" class="back">← Zuhal Teyze'ye dön</a>
+<h1>Sıkça Sorulan Sorular</h1>
+
+<h2>Horary astroloji nedir?</h2>
+<p>Horary astroloji, bir sorunun sorulduğu tam ana ait gökyüzü haritasını yorumlayan kadim bir astroloji dalıdır. Modern astrolojiden farklı olarak doğum haritasına ihtiyaç duymaz — sorunun kendisi, sorulan an ve yer yeterlidir. Yüzyıllar önce William Lilly ve diğer klasik astrologlar tarafından sistematize edilen bu yöntem, belirli teknik kurallara dayanır: gezegenlerin konumları, birbirleriyle yaptıkları açılar, ev lordları ve reception analizi bir araya gelerek soruya yanıt verir.</p>
+
+<h2>Zuhal Teyze nasıl çalışır?</h2>
+<p>Sorunuzu girdiğiniz anda sistem, o anki gökyüzü konumunuzu hesaplar ve Regiomontanus ev sistemiyle bir horary haritası oluşturur. Bu harita, John Frawley'nin "The Horary Textbook" ve William Lilly geleneğine dayanan kurallarla analiz edilir. Combust gezegenler, void of course Ay, reception ilişkileri ve aspect'ler otomatik olarak değerlendirilir. Yorum yapay zeka tarafından üretilir; ancak teknik analiz gerçek horary metodolojisine dayanır.</p>
+
+<h2>Sonuçlar ne kadar doğru?</h2>
+<p>Horary astroloji, doğru uygulandığında şaşırtıcı kesinlikte sonuçlar verebilen bir sistemdir — ancak bu, her soruya her zaman net bir cevap geleceği anlamına gelmez. Bazı haritalar "radical" değildir (yorumlanmaya uygun değildir), bazılarında Ay void of course'dır. Bu uygulama güçlü bir başlangıç noktası sunar, ancak karmaşık ve hayat değiştirici kararlar için gerçek bir uzmanla çalışmanızı öneririz.</p>
+
+<h2>Soru nasıl sorulmalı?</h2>
+<p>Horary'de soru kalitesi yorumun kalitesini doğrudan etkiler. İyi bir soru: spesifik, samimi ve o an gerçekten merak ettiğiniz bir şey olmalıdır. "Hayatım nasıl gidecek?" gibi geniş sorular yerine "Mert ile ilişkim ilerler mi?" veya "Bu iş teklifini kabul etsem mi?" gibi tek bir konuya odaklanan sorular tercih edilmelidir. Soruyu soran kişinin o an gerçekten o konuyu merak etmesi gerekir — astroloji test etmek için sorulan sorular genellikle net yanıt vermez.</p>
+
+<h2>Aynı soruyu tekrar sorabilir miyim?</h2>
+<p>Horary geleneğinde aynı soruyu tekrar sormak önerilmez. Cevabı beğenmediğiniz için değil, gerçekten bir şeyler değiştiğine inandığınızda yeniden sorulabilir. Birden fazla kez sorulan aynı soru genellikle tutarsız veya yanıltıcı sonuçlar verir.</p>
+
+<h2>Kredi sistemi nasıl işliyor?</h2>
+<p>İlk sorunuz ücretsizdir, herhangi bir kayıt gerekmez. İkinci sorudan itibaren email ile giriş yapmanız gerekir — size 6 haneli bir doğrulama kodu gönderilir. Yeni üyelere 3 soru kredisi tanımlanır. Ek kredi satın almak için ödeme sayfasını kullanabilirsiniz.</p>
+
+<h2>Verilerimi nasıl kullanıyorsunuz?</h2>
+<p>E-posta adresiniz yalnızca kimlik doğrulama için kullanılır. Sorularınız hizmet geliştirme amacıyla anonim olarak analiz edilebilir. Detaylı bilgi için <a href="/privacy">Gizlilik Politikamıza</a> bakabilirsiniz.</p>
+
+<h2>Gerçek bir astrologla çalışmak istiyorum</h2>
+<p>Bu uygulama güçlü bir araçtır, ancak her önüne gelen astrolog horary okuyamaz. Gerçek bir horary yorumu için Frawley geleneğinde uzmanlaşmış bir astrolog gerekir. Detaylı, kişiselleştirilmiş horary yorumu için <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr profilime</a> göz atabilirsiniz.</p>
+
+</body></html>"""
+
+
+@app.route("/contact")
+def contact():
+    return f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>İletişim — Zuhal Teyze</title>
+<meta name="description" content="Zuhal Teyze ile iletişime geçin. Destek, profesyonel horary okuma ve iş birlikleri için.">
+{LEGAL_STYLE}
+<style>
+.contact-card{{background:#efe9d8;border-radius:8px;padding:1.5rem;margin:1rem 0}}
+.contact-card h3{{color:#2e1f6e;font-size:1rem;margin-bottom:.5rem}}
+.contact-card p{{font-size:14px;margin:0}}
+.contact-card a{{color:#2e1f6e;font-weight:500}}
+.tag{{display:inline-block;font-size:11px;background:#2e1f6e;color:#f5e8b8;padding:2px 8px;border-radius:3px;margin-bottom:.5rem;letter-spacing:.05em}}
+</style></head><body>
+<a href="/" class="back">← Zuhal Teyze'ye dön</a>
+<h1>İletişim</h1>
+
+<div class="contact-card">
+  <span class="tag">DESTEK</span>
+  <h3>Teknik sorun veya ödeme ile ilgili</h3>
+  <p>Email: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</div>
+
+<div class="contact-card">
+  <span class="tag">PROFESYONEL YORUM</span>
+  <h3>Detaylı horary okuma</h3>
+  <p>Kişiselleştirilmiş, derinlemesine horary yorumu için:<br>
+  <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Fiverr — Horary Derya</a></p>
+</div>
+
+<div class="contact-card">
+  <span class="tag">İŞ BİRLİĞİ</span>
+  <h3>Ortaklık ve iş birliği teklifleri</h3>
+  <p>Email: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+</div>
+
+<p style="margin-top:2rem;font-size:13px;color:#9e8c6a;">Yanıt süresi genellikle 24-48 saattir.</p>
+</body></html>"""
+
+
 # ─────────────────────────────────────────
 # LEGAL PAGES
 # ─────────────────────────────────────────
