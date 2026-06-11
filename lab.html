@@ -281,6 +281,7 @@
     <div class="col-right">
       <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('feedback')">Geçmiş <span class="badge" id="hist-badge">0</span></button>
+        <span onclick="loadHistory()" style="cursor:pointer;color:var(--muted);font-size:12px;padding:0 4px" title="Yenile">↻</span>
         <button class="tab-btn" onclick="switchTab('reviews')">Kullanıcılar <span class="badge" id="review-badge">0</span></button>
       </div>
       <div class="tab-pane active" id="tab-feedback">
@@ -424,10 +425,11 @@ async function runReading() {
     const data = await res.json();
     if (data.success) {
       currentOutput = data.output;
+      currentEntryId = data.id || null;
       area.textContent = currentOutput;
       document.getElementById('feedback-bar').classList.add('visible');
       dot.style.background = '#1d9e75';
-      loadHistory(); // otomatik kayıt oldu, geçmişi güncelle
+      setTimeout(loadHistory, 300); // küçük delay ile yenile
     } else {
       area.innerHTML = `<span style="color:var(--red)">Hata: ${data.error}</span>`;
       dot.style.background = '#e24b4a';
@@ -495,9 +497,11 @@ function resetFeedback() {
 async function loadHistory() {
   try {
     const res = await fetch('/api/lab/history');
+    if (!res.ok) { console.warn('[Lab] history fetch:', res.status); return; }
     const data = await res.json();
+    console.log('[Lab] history count:', data.length);
     renderHistory(data);
-  } catch(e) {}
+  } catch(e) { console.error('[Lab] loadHistory error:', e); }
 }
 
 function renderHistory(data) {

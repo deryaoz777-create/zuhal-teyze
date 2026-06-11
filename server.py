@@ -618,6 +618,17 @@ def lab():
     return send_from_directory(".", "lab.html")
 
 
+@app.route("/api/lab/debug")
+def lab_debug():
+    """DB path ve tablo bilgisi — sadece lab auth ile."""
+    if not _lab_authed():
+        return jsonify({"error": "Yetkisiz"}), 401
+    conn = sqlite3.connect(DB_PATH)
+    count = conn.execute("SELECT COUNT(*) FROM lab_feedback").fetchone()[0]
+    conn.close()
+    return jsonify({"db_path": DB_PATH, "lab_feedback_count": count})
+
+
 @app.route("/api/lab/auth", methods=["POST"])
 def lab_auth():
     data = request.json or {}

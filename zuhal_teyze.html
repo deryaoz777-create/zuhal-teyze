@@ -106,7 +106,140 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .particle{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:particleRise var(--dur,4s) ease-in-out infinite;animation-delay:var(--delay,0s);}
 @keyframes particleRise{0%{transform:translateY(0) translateX(0);opacity:0}20%{opacity:.8}100%{transform:translateY(-120px) translateX(var(--dx,15px));opacity:0}}
 </style>
-<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js">
+
+// ─── SHARE / STORY ───
+let viralLines = {free:'', authed:''};
+
+function extractViral(text){
+  if(!text) return '';
+  const lines = text.split('\n');
+  for(let i=lines.length-1;i>=0;i--){
+    const l=lines[i].trim();
+    if(l.startsWith('--') && lines[i+1]){
+      return lines[i+1].trim();
+    }
+    if(l.startsWith('--') && l.length > 3){
+      return l.replace(/^--\s*/,'').trim();
+    }
+  }
+  // fallback: son anlamlı satır
+  const meaningful = lines.filter(l=>l.trim().length>20);
+  return meaningful[meaningful.length-1]||'';
+}
+
+function showShareBar(which, text){
+  const bar = document.getElementById('share-bar-'+which);
+  const viralEl = document.getElementById('share-viral-'+which);
+  const viral = extractViral(text);
+  viralLines[which] = viral;
+  viralEl.textContent = viral ? '"' + viral + '"' : '— zuhalteyze.live —';
+  bar.classList.add('show');
+}
+
+function copyViral(which){
+  const text = viralLines[which] + '\n\nzuhalteyze.live';
+  navigator.clipboard.writeText(text).then(()=>{
+    const t=document.getElementById('copy-toast-'+which);
+    t.textContent='✓ kopyalandı';
+    setTimeout(()=>t.textContent='',2000);
+  });
+}
+
+function shareNative(which){
+  const viral = viralLines[which];
+  const shareData = {
+    title: 'Zuhal Teyze',
+    text: (viral||'Zuhal Teyze konuştu') + '\n\nzuhalteyze.live',
+    url: 'https://zuhalteyze.live'
+  };
+  if(navigator.share){
+    navigator.share(shareData).catch(()=>{});
+  } else {
+    copyViral(which);
+    const t=document.getElementById('copy-toast-'+which);
+    t.textContent='Link kopyalandı (paylaşım desteklenmiyor)';
+    setTimeout(()=>t.textContent='',3000);
+  }
+}
+
+function shareStory(which){
+  const viral = viralLines[which] || 'Yıldızlar biliyor.';
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080; canvas.height = 1920;
+  const ctx = canvas.getContext('2d');
+
+  // Arka plan gradient
+  const grad = ctx.createLinearGradient(0,0,1080,1920);
+  grad.addColorStop(0,'#0d0a1e');
+  grad.addColorStop(.5,'#1a0d35');
+  grad.addColorStop(1,'#0a0518');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,1080,1920);
+
+  // Yıldızlar
+  ctx.fillStyle = '#ffffff';
+  for(let i=0;i<120;i++){
+    const x=Math.random()*1080, y=Math.random()*1920;
+    const r=Math.random()*2+.5;
+    const colors=['#a880ff','#80c8ff','#ff80c8','#ffffff'];
+    ctx.fillStyle = colors[Math.floor(Math.random()*colors.length)];
+    ctx.globalAlpha = Math.random()*.8+.2;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // Dekoratif çizgi
+  ctx.strokeStyle = 'rgba(160,130,255,.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(120,780); ctx.lineTo(960,780); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(120,1140); ctx.lineTo(960,1140); ctx.stroke();
+
+  // ✦ ornament
+  ctx.fillStyle = 'rgba(160,130,255,.7)';
+  ctx.font = '40px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✦', 540, 760);
+  ctx.fillText('✦', 540, 1160);
+
+  // ZUHAL TEYZE başlık
+  ctx.fillStyle = '#a880ff';
+  ctx.font = '500 56px Georgia, serif';
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = '8px';
+  ctx.fillText('ZUHAL TEYZE', 540, 900);
+
+  // Alt başlık
+  ctx.fillStyle = 'rgba(160,130,255,.5)';
+  ctx.font = '28px Georgia, serif';
+  ctx.fillText('CHAOS LAB · HORARY', 540, 960);
+
+  // Viral satır — kelime sarmalama
+  ctx.fillStyle = 'rgba(220,200,255,.9)';
+  ctx.font = 'italic 42px Georgia, serif';
+  const words = viral.split(' ');
+  let lines = [], line = '';
+  for(const w of words){
+    const test = line ? line+' '+w : w;
+    if(ctx.measureText(test).width > 800){ lines.push(line); line=w; }
+    else line=test;
+  }
+  if(line) lines.push(line);
+  const startY = 960 + (1140-960)/2 - (lines.length-1)*52/2;
+  lines.forEach((l,i)=>ctx.fillText(l, 540, startY+i*52));
+
+  // Site URL
+  ctx.fillStyle = 'rgba(160,130,255,.4)';
+  ctx.font = '28px Georgia, serif';
+  ctx.fillText('zuhalteyze.live', 540, 1780);
+
+  // İndir
+  const a = document.createElement('a');
+  a.download = 'zuhal-teyze-story.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+</script>
 </head>
 <body>
 <div class="moon-deco">☽</div>
@@ -130,6 +263,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="divider"></div>
       <div class="label">Zuhal Teyze diyor ki</div>
       <div class="response-text" id="rt-free"></div>
+    </div>
+    <div class="share-bar" id="share-bar-free">
+      <div class="share-viral" id="share-viral-free" onclick="copyViral('free')" title="Kopyala">— ✦ —</div>
+      <div class="share-btns">
+        <button class="share-btn" onclick="shareStory('free')">📱 Story Oluştur</button>
+        <button class="share-btn" onclick="shareNative('free')">↗ Paylaş</button>
+      </div>
+      <div class="copy-toast" id="copy-toast-free"></div>
     </div>
     <button class="btn" id="btn-free" onclick="askFree()">SORMAK İSTİYORUM</button>
   </div>
@@ -176,6 +317,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="divider"></div>
       <div class="label">Zuhal Teyze diyor ki</div>
       <div class="response-text" id="rt"></div>
+    </div>
+    <div class="share-bar" id="share-bar-authed">
+      <div class="share-viral" id="share-viral-authed" onclick="copyViral('authed')" title="Kopyala">— ✦ —</div>
+      <div class="share-btns">
+        <button class="share-btn" onclick="shareStory('authed')">📱 Story Oluştur</button>
+        <button class="share-btn" onclick="shareNative('authed')">↗ Paylaş</button>
+      </div>
+      <div class="copy-toast" id="copy-toast-authed"></div>
     </div>
     <button class="btn" id="ask-btn" onclick="ask()">SORMAK İSTİYORUM</button>
     <button class="btn btn-secondary" onclick="logout()">çıkış yap</button>
@@ -300,7 +449,7 @@ function ask(){
       if(d.auth_required){ showWall(); return; }
       if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
       else{ rt.className='response-text'; const raw2=d.interpretation||'Yıldızlar şu an sessiz.';
-        rt.textContent=raw2.replace(/\*\*(.+?)\*\*/g,'$1').replace(/#{1,6}\s*/g,'').replace(/\*(.+?)\*/g,'$1'); if(d.credits_remaining!==undefined) document.getElementById('credits-count').textContent=d.credits_remaining; }
+        rt.textContent=raw2.replace(/\*\*(.+?)\*\*/g,'$1').replace(/#{1,6}\s*/g,'').replace(/\*(.+?)\*/g,'$1'); if(d.credits_remaining!==undefined) document.getElementById('credits-count').textContent=d.credits_remaining; const cleanedA=rt.textContent; showShareBar('authed', cleanedA); }
       setTimeout(()=>rt.classList.add('visible'),30);
       btn.disabled=false; btn.textContent='YENİDEN SOR';
       tag.style.opacity=0; setTimeout(()=>{tag.textContent=tags[Math.floor(Math.random()*tags.length)];tag.style.opacity=1;},400);
