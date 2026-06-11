@@ -699,7 +699,105 @@ a{color:#2e1f6e}
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400&display=swap" rel="stylesheet">
 """
 
-@app.route("/en/faq")
+@app.route("/en/learn")
+def en_learn():
+    return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What Is Horary Astrology? A Plain Guide — Auntie Zuhal</title>
+<meta name="description" content="A plain, honest guide to horary astrology — how it works, how to ask a question, what the chart tells you, and why it is not like modern astrology. Free horary readings at zuhalteyze.live/en.">
+<link rel="canonical" href="https://zuhalteyze.live/en/learn">
+<link rel="alternate" hreflang="en" href="https://zuhalteyze.live/en/learn">
+<meta property="og:title" content="What Is Horary Astrology? A Plain Guide — Auntie Zuhal">
+<meta property="og:description" content="How horary astrology works, in plain language. William Lilly, house lords, void of course Moon, and how to ask a question the stars can actually answer.">
+<meta property="og:url" content="https://zuhalteyze.live/en/learn">
+<meta name="google-site-verification" content="hhgkCOajijszpcMpIxFkPTokjYTPS7CzDhsG1L1aqJA">
+{EN_LEGAL_STYLE}
+<style>
+body{{max-width:760px}}
+.cta-box{{background:#2e1f2e;color:#e6d3ae;border-radius:8px;padding:1.5rem 1.8rem;margin:2.5rem 0;text-align:center}}
+.cta-box p{{color:#c9a876;margin-bottom:1rem;font-size:15px;font-style:italic}}
+.cta-btn{{display:inline-block;background:transparent;border:1px solid rgba(201,168,118,.6);color:#c9a876;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.15em;padding:12px 28px;text-decoration:none;border-radius:4px;transition:all .2s}}
+.cta-btn:hover{{background:rgba(201,168,118,.12);color:#e6d3ae}}
+.toc{{background:#f0ead8;border-radius:6px;padding:1.2rem 1.6rem;margin:1.5rem 0;font-size:14px}}
+.toc h3{{color:#2e1f6e;font-size:.85rem;letter-spacing:.1em;margin-bottom:.75rem}}
+.toc ol{{padding-left:1.2rem;color:#4a3a2a;line-height:2}}
+.toc a{{color:#2e1f6e;text-decoration:none}}
+.toc a:hover{{text-decoration:underline}}
+blockquote{{border-left:3px solid #2e1f6e;margin:1.5rem 0;padding:.75rem 1.2rem;background:#f0ead8;color:#4a3a2a;font-style:italic;font-size:15px}}
+</style>
+</head><body>
+<a href="/en" class="back">← Try Auntie Zuhal free</a>
+<h1>What Is Horary Astrology?</h1>
+<p style="color:#9e8c6a;font-size:13px;margin-bottom:1.5rem">A plain guide — no prior knowledge of astrology required</p>
+
+<div class="toc">
+  <h3>IN THIS GUIDE</h3>
+  <ol>
+    <li><a href="#what">What horary astrology is</a></li>
+    <li><a href="#differ">How it differs from modern astrology</a></li>
+    <li><a href="#chart">What the chart contains</a></li>
+    <li><a href="#rules">The core rules</a></li>
+    <li><a href="#question">How to ask a good question</a></li>
+    <li><a href="#limits">What horary cannot do</a></li>
+    <li><a href="#try">Try a free reading</a></li>
+  </ol>
+</div>
+
+<h2 id="what">What horary astrology is</h2>
+<p>Horary astrology answers a specific question by reading the sky chart cast for the exact moment the question is sincerely asked. The word <em>horary</em> comes from the Latin <em>hora</em> — hour. This is an astrology of moments, not of lifetimes.</p>
+<p>You do not need a birth chart. You do not need to know your rising sign. The chart belongs to the question itself: the moment of asking, the place of asking, and the sincerity behind it. That is enough.</p>
+<p>The tradition is old. Persian astrologers practised it in the medieval period. It was systematised in English by <strong>William Lilly</strong>, whose 1647 masterwork <em>Christian Astrology</em> remains the primary reference. In the late twentieth century, <strong>John Frawley</strong> revived and clarified the tradition for contemporary practitioners. Auntie Zuhal follows this line.</p>
+
+<h2 id="differ">How it differs from modern astrology</h2>
+<p>Modern astrology — the kind found in newspaper columns and most apps — is primarily natal astrology. It studies character and life themes through the birth chart. It tends toward psychological language: archetypes, patterns, inner journeys.</p>
+<p>Horary is different in almost every respect:</p>
+<p><strong>It answers questions, not describes personalities.</strong> "Will this relationship last?" has a yes or no answer in horary. Not a meditation on your attachment style.</p>
+<p><strong>It uses only the seven classical planets.</strong> Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn. Uranus, Neptune, and Pluto — discovered after the tradition was formed — are not used. They have no assigned rulerships, no tested meanings. Auntie Zuhal does not use them.</p>
+<p><strong>It uses Regiomontanus houses.</strong> Not Placidus, not whole sign. The Regiomontanus system was standard for horary for centuries and is what the rules were built for.</p>
+<p><strong>It is technical before it is intuitive.</strong> A horary chart is read through a set of specific rules. The astrologer does not simply "feel" the chart. They identify house lords, check their condition, examine whether they form an applying aspect, and determine whether that aspect perfects before either planet changes sign. This produces a judgment.</p>
+
+<h2 id="chart">What the chart contains</h2>
+<p>A horary chart divides the sky into twelve houses, each governing an area of life. The <strong>first house</strong> represents the person asking. The house of the matter in question — the <strong>seventh</strong> for relationships and open enemies, the <strong>tenth</strong> for career, the <strong>fourth</strong> for home and property, and so on — represents what is being asked about.</p>
+<p>Each house has a <strong>lord</strong>: the planet that rules the sign on its cusp. The lord of the first house is "you" in the chart. The lord of the seventh house is the other person, or the matter being asked about. The chart is read by examining the relationship between these significators.</p>
+<p>The <strong>Moon</strong> carries special weight. She co-significates the querent, shows recent events, and her last aspect before leaving her current sign often describes the outcome. A void of course Moon — one that makes no further applying aspects before changing sign — traditionally indicates "nothing will come of the matter." This is not always negative: sometimes nothing happening is exactly the answer.</p>
+
+<h2 id="rules">The core rules</h2>
+<p><strong>Combustion.</strong> A planet within approximately 8 degrees of the Sun is said to be combust — weakened, obscured, unable to act effectively. Within 17 minutes of arc, the planet is <em>cazimi</em>, in the heart of the Sun, which is a position of exceptional strength. The difference matters.</p>
+
+<p><strong>Essential dignity.</strong> Each planet is stronger or weaker depending on which sign it occupies. A planet in its own sign (domicile) or exaltation acts with confidence and effectiveness. A planet in its detriment or fall is weakened and cannot easily help the person it signifies. The <a href="/tablo">Ptolemy dignities table</a> shows these placements in full.</p>
+
+<p><strong>Reception.</strong> Two planets may be in each other's signs — mutual reception — or one may be in a sign where the other has dignity. Reception modifies the meaning of an aspect considerably. A difficult aspect between two planets in mutual reception is far less severe than the same aspect without it.</p>
+
+<p><strong>Aspect and perfection.</strong> For an outcome to occur, the significators must form an applying aspect that perfects — completes — before either planet changes sign. A separating aspect describes what has already happened. An applying aspect describes what is coming. Whether the aspect actually perfects, or is frustrated by a change of sign or an intervening planet, determines the answer.</p>
+
+<blockquote>"The chart does not lie. It only tells you what you already, at some level, know." — a horary principle Auntie Zuhal is quite convinced of.</blockquote>
+
+<h2 id="question">How to ask a good question</h2>
+<p>The quality of the question directly affects the quality of the chart. A horary question should be:</p>
+<p><strong>Specific.</strong> Not "how will my life go?" but "will I get this particular job?" Not "what about my relationship?" but "will he come back?" One subject, one question.</p>
+<p><strong>Sincere.</strong> You must genuinely want to know. A question asked to test the system, or out of idle curiosity, tends to produce an ambiguous or unreadable chart. The tradition holds that the chart reflects the mind of the querent — if the mind is not truly engaged, neither is the chart.</p>
+<p><strong>Present tense.</strong> "Should I move to Berlin?" is better than "will I ever live abroad?" The question must describe a real decision or genuine uncertainty you face right now.</p>
+<p>Include context if you have it: the date and time you are asking, your location, and any relevant details about the situation. The more precisely the chart can be cast, the more precisely it can be read.</p>
+
+<h2 id="limits">What horary cannot do</h2>
+<p>Horary is not infallible. An automated system — even one built carefully on correct technical foundations — is not a substitute for an experienced human astrologer. Real horary judgment requires years of practice, a feel for context, and the ability to weigh competing testimonies in a chart. Auntie Zuhal is a laboratory: useful, educational, often surprisingly accurate, and always honest about what it is.</p>
+<p>For life-changing decisions — significant medical, legal, or financial matters — please consult a real classical astrologer. For English-language in-depth readings, <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" rel="noopener">Horary Derya on Fiverr</a> offers detailed personal interpretations in the Frawley tradition.</p>
+
+<h2 id="try">Try a free reading</h2>
+
+<div class="cta-box">
+  <p>You have read enough. Now ask something you genuinely want to know.</p>
+  <a href="/en" class="cta-btn">ASK AUNTIE ZUHAL — FREE</a>
+</div>
+
+<p style="font-size:12px;color:#9e8c6a;margin-top:2rem">
+  Further reading: William Lilly, <em>Christian Astrology</em> (1647) — available free online. John Frawley, <em>The Horary Textbook</em> (2005). See also the <a href="/tablo">classical dignities table</a> used in every reading.
+</p>
+
+</body></html>"""
+
+
+
 def en_faq():
     return f"""<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -993,6 +1091,7 @@ def sitemap():
     urls = [
         ("", "1.0",  "daily"),
         ("/en", "1.0",  "daily"),
+        ("/en/learn", "0.9", "monthly"),
         ("/faq", "0.8", "weekly"),
         ("/en/faq", "0.8", "weekly"),
         ("/tablo", "0.7", "monthly"),
