@@ -986,7 +986,61 @@ td.deg{font-size:10px;color:rgba(201,168,118,.5)}
 </body></html>"""
 
 
-@app.route("/lab")
+@app.route("/sitemap.xml")
+def sitemap():
+    from flask import Response
+    base = "https://zuhalteyze.live"
+    urls = [
+        ("", "1.0",  "daily"),
+        ("/en", "1.0",  "daily"),
+        ("/faq", "0.8", "weekly"),
+        ("/en/faq", "0.8", "weekly"),
+        ("/tablo", "0.7", "monthly"),
+        ("/contact", "0.5", "monthly"),
+        ("/en/contact", "0.5", "monthly"),
+        ("/terms", "0.3", "monthly"),
+        ("/en/terms", "0.3", "monthly"),
+        ("/privacy", "0.3", "monthly"),
+        ("/en/privacy", "0.3", "monthly"),
+    ]
+    xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n'
+    xml += '        xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+    for path, priority, freq in urls:
+        xml += f"""  <url>
+    <loc>{base}{path}</loc>
+    <changefreq>{freq}</changefreq>
+    <priority>{priority}</priority>
+  </url>\n"""
+    xml += '</urlset>'
+    return Response(xml, mimetype="application/xml")
+
+
+@app.route("/robots.txt")
+def robots():
+    from flask import Response
+    txt = """User-agent: *
+Allow: /
+Allow: /en
+Allow: /faq
+Allow: /en/faq
+Allow: /tablo
+Allow: /contact
+Allow: /en/contact
+Allow: /terms
+Allow: /en/terms
+Allow: /privacy
+Allow: /en/privacy
+Allow: /sitemap.xml
+Disallow: /lab
+Disallow: /api/
+
+Sitemap: https://zuhalteyze.live/sitemap.xml
+"""
+    return Response(txt, mimetype="text/plain")
+
+
+
 def lab():
     return send_from_directory(".", "lab.html")
 
