@@ -40,6 +40,59 @@ print(f"[STARTUP] RESEND_API_KEY {'tanımlı' if RESEND_API_KEY else 'YOK'}")
 
 init_db()
 
+# Rate limiting ayarları — Railway'de env variable ile override edilebilir
+FREE_DAILY_PER_IP  = int(os.environ.get("FREE_DAILY_PER_IP", "1"))   # IP başına günlük max ücretsiz soru
+FREE_DAILY_GLOBAL  = int(os.environ.get("FREE_DAILY_GLOBAL", "80"))  # Tüm platformda günlük max ücretsiz soru
+
+# Rate limit tablosunu oluştur (database.py'de yoksa burada halledelim)
+def _ensure_rate_table():
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS free_rate (
+            ip       TEXT NOT NULL,
+            day      TEXT NOT NULL,
+            count    INTEGER DEFAULT 1,
+            PRIMARY KEY (ip, day)
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+_ensure_rate_table()
+
+def _check_free_rate(ip: str) -> tuple[bool, str]:
+    """True = izin ver. False = blokla, mesajla birlikte."""
+    today = datetime.date.today().isoformat()
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    # IP kontrolü
+    row = conn.execute(
+        "SELECT count FROM free_rate WHERE ip=? AND day=?", (ip, today)
+    ).fetchone()
+    ip_count = row["count"] if row else 0
+    if ip_count >= FREE_DAILY_PER_IP:
+        conn.close()
+        return False, "Bugünlük ücretsiz sorunuzu kullandınız. Devam etmek için giriş yapın."
+
+    # Global günlük cap
+    total = conn.execute(
+        "SELECT SUM(count) as t FROM free_rate WHERE day=?", (today,)
+    ).fetchone()["t"] or 0
+    if total >= FREE_DAILY_GLOBAL:
+        conn.close()
+        return False, "Bugünlük kapasite doldu. Lütfen giriş yaparak devam edin."
+
+    # Sayacı artır
+    conn.execute("""
+        INSERT INTO free_rate (ip, day, count) VALUES (?, ?, 1)
+        ON CONFLICT(ip, day) DO UPDATE SET count = count + 1
+    """, (ip, today))
+    conn.commit()
+    conn.close()
+    return True, ""
+
+
 
 
 def _lab_session_valid(token):
@@ -264,6 +317,13 @@ def api_zuhal_free():
     """İlk ücretsiz soru — auth gerekmez."""
     if not ANTHROPIC_API_KEY:
         return jsonify({"error": "Sunucu yapılandırma hatası."}), 500
+
+    # IP rate limiting
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr or "unknown").split(",")[0].strip()
+    allowed, msg = _check_free_rate(ip)
+    if not allowed:
+        return jsonify({"error": msg, "auth_required": True}), 429
+
     data = request.json or {}
     question = data.get("question", "").strip()
     lat = float(data.get("lat", DEFAULT_LAT))
