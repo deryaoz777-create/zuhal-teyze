@@ -506,6 +506,63 @@ def calc_combust_cazimi(planet, sun):
     return None
 
 
+def calc_moon_phase(moon: "PlanetPosition", sun: "PlanetPosition") -> dict:
+    """
+    Ay fazını hesapla.
+    Faz açısı: Ay'ın Güneş'ten ileri olduğu açı (0-360°).
+    0° = Yeni Ay, 180° = Dolunay.
+    Ayrıca Ay'ın Güneş'e yaklaşıp yaklaşmadığını (karanlık/balsamic) da döndürür.
+    """
+    # Ay'ın Güneş'ten ilerisi (saat yönü tersine)
+    phase_angle = (moon.longitude - sun.longitude) % 360
+
+    # Faz ismi
+    if phase_angle < 3.5 or phase_angle > 356.5:
+        phase_name = "yeni_ay"
+        phase_tr = "Yeni Ay"
+    elif phase_angle < 45:
+        phase_name = "hilal_baslangiç"
+        phase_tr = "İnce Hilal (Başlangıç)"
+    elif phase_angle < 90:
+        phase_name = "ilk_dördün_öncesi"
+        phase_tr = "Büyüyen Ay"
+    elif phase_angle < 93:
+        phase_name = "ilk_dördün"
+        phase_tr = "İlk Dördün"
+    elif phase_angle < 135:
+        phase_name = "kavs_büyüyen"
+        phase_tr = "Dolmakta"
+    elif phase_angle < 177:
+        phase_name = "dolunay_öncesi"
+        phase_tr = "Dolunay Yakını"
+    elif phase_angle < 183:
+        phase_name = "dolunay"
+        phase_tr = "Dolunay"
+    elif phase_angle < 270:
+        phase_name = "azalan"
+        phase_tr = "Azalan Ay"
+    elif phase_angle < 315:
+        phase_name = "son_dördün"
+        phase_tr = "Son Dördün"
+    elif phase_angle < 350:
+        phase_name = "balsamic"
+        phase_tr = "Balsamic (Karanlık Ay)"
+    else:
+        phase_name = "karanlık"
+        phase_tr = "Karanlık Ay"
+
+    # Ay Güneş'e yaklaşıyor mu? (balsamic/karanlık faz)
+    approaching_sun = is_applying(moon, sun)
+
+    return {
+        "phase_angle": round(phase_angle, 2),
+        "phase_name": phase_name,
+        "phase_tr": phase_tr,
+        "approaching_sun": approaching_sun,  # True = Yeni Ay'a yaklaşıyor (balsamic)
+        "is_dark_moon": phase_angle > 315 or approaching_sun,  # Karanlık Ay bölgesi
+    }
+
+
 def get_star_longitude(star_key: str, jd: float) -> float:
     """J2000 boylama precession ekleyerek güncel tropik boylamı döndür."""
     j2000_lon = FIXED_STARS_J2000[star_key]["lon"]
@@ -869,18 +926,37 @@ def _build_moon_aspects(chart: HorarChart) -> list:
 
 
 def _build_combust_lines(chart: HorarChart) -> list:
-    """Combust/Cazimi — ortak."""
+    """Combust/Cazimi — ortak. Ay combust ise faz bilgisi de eklenir."""
     sun = chart.planets.get("sun")
+    moon = chart.planets.get("moon")
     combust_lines = []
     for pname, planet in chart.planets.items():
         if pname == "sun":
             continue
         status = calc_combust_cazimi(planet, sun) if sun else None
         if status:
-            desc = {"cazimi": "CAZİMİ (Güneşin kalbinde — paradoks güç)", 
-                    "combust": "COMBUST (Güneşte yanmış — zayıflık, görünmezlik)",
-                    "under_sun_beams": "Güneş ışınları altında (zayıf)"}.get(status, status)
-            combust_lines.append(f"  {PLANET_TR[pname]}: {desc}")
+            desc = {
+                "cazimi": "CAZİMİ (Güneşin kalbinde — paradoks güç)",
+                "combust": "COMBUST (Güneşte yanmış — zayıflık, görünmezlik)",
+                "under_sun_beams": "Güneş ışınları altında (zayıf)",
+            }.get(status, status)
+
+            # Ay combust veya under_sun_beams ise faz bilgisi ekle
+            if pname == "moon" and status in ("combust", "under_sun_beams") and sun and moon:
+                phase = calc_moon_phase(moon, sun)
+                if phase["approaching_sun"]:
+                    phase_note = (
+                        f" | Faz: {phase['phase_tr']} — Ay Güneş'e yaklaşıyor "
+                        f"(faz açısı: {phase['phase_angle']}°)"
+                    )
+                else:
+                    phase_note = (
+                        f" | Faz: {phase['phase_tr']} — Yeni Ay'dan yeni çıkmış "
+                        f"(faz açısı: {phase['phase_angle']}°)"
+                    )
+                combust_lines.append(f"  {desc}{phase_note}")
+            else:
+                combust_lines.append(f"  {PLANET_TR[pname]}: {desc}")
     return combust_lines
 
 
@@ -1012,7 +1088,10 @@ Taban tabana zıt — MUAZZAM güçlü. Dokunulmaz. Sakın zayıf sayma. "O Gün
 COMBUST (0°17' – 8°) — KİMİN COMBUST OLDUĞU KRİTİK:
 - L1 combust ise: Soran görünmez, sesini duyuramıyor. "Sen zaten onun dünyasında yoksun — zaten gitmişsin sayılırsın." Aspect varsa: niyet var ama güç yok.
 - L7 combust ise: Sorulan kişi erişilmez, kendi sorunlarında kaybolmuş. BU SANA DAİR DEĞİL. "Bu adam Güneş'te yanıyor — seni görmek istese bile kapasitesi yok şu an."
-- Ay combust ise: Soranın duyguları bastırılmış. "Ne hissettiğini bile bilmiyorsun şu an."
+- Ay combust ise — FAZA GÖRE OKU (combust satırında faz bilgisi verilmiştir):
+  * Ay Güneş'e yaklaşıyorsa (Balsamic/Karanlık Ay): Bir döngü kapanıyor. Soranın sezgisi bastırılmış değil — içe çekilmiş. Karar verme değil, bırakma ve bekleme vakti. "Ay tekrar aydınlanana kadar yol görünmez — ama bu sessizlik içinde cevap zaten şekilleniyor." Belirsizliğe dayanmak bu aşamada güçlülerin işidir.
+  * Ay Güneş'ten yeni çıkmışsa: Tohum toprakta, ışık henüz yok ama yön değişmiş. Aceleci davranma. "Sabır şu an iradeyle aynı şey."
+  * Her iki durumda: Soranın şu anki bulanıklığı geçici — Ay'ın fazıyla bağlantılı. Bunu "zayıflık" değil "zamanlama" olarak çerçevele.
 - Combust + kötü essential dignity: Çift zayıflık. "Hem yanmış hem düşmüş."
 - Combust + applying aspect: Paradoks. "Geliyor ama eli boş."
 
@@ -1188,8 +1267,11 @@ CAZİMİ (0°17' içinde): MUAZZAM güçlü. Sakın zayıf sayma.
 COMBUST (0°17' – 8°) — KİMİN combust olduğu kritik:
 - L1 combust: Soran görünmez, sesini duyuramıyor. "Haykırıyor ama duyulmuyor."
 - Quesited'in lordu combust: O konu/kişi şu an erişilmez, aşırı yüklü. "Oraya ulaşamıyorsun — şu an onun kapısı kapalı."
-- Ay combust: Soranın sezgisi ve duygusu bastırılmış.
-- Combust + kötü dignity: Çift zayıflık.
+- Ay combust — FAZA GÖRE OKU (combust satırında faz bilgisi verilmiştir):
+  * Ay Güneş'e yaklaşıyorsa (Balsamic/Karanlık Ay): Bir döngünün sona erdiği an. Karar verme değil, bırakma vakti. Sezgiler değil, sessizlik konuşuyor. "İçine dön. Ay tekrar aydınlandığında yol kendiliğinden görünür." Belirsizliğe dayanmak — bu aşamada güçlülerin yapabildiği tek şey.
+  * Ay Güneş'ten yeni ayrılmışsa (Yeni Ay'dan çıkış): Tohum toprakta, ışık henüz yok ama süreç başladı. Acele etme — yön var ama henüz görünmüyor. "Sabır şu an iradeyle aynı şey."
+  * Her iki durumda: Büyük kararlar için bekleme tavsiyesi — ama bunu "yapma" değil, "zamanlama" meselesi olarak çerçevele.
+- Ay combust + kötü dignity: Hem karanlık hem güçsüz. "Bu toprak şu an ekilemez."
 - Combust + applying aspect: "Geliyor ama eli boş."
 
 UNDER SUN BEAMS (8° – 17°): Hafifçe değin, dramatize etme.
