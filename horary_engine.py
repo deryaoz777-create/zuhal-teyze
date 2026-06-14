@@ -230,7 +230,14 @@ def aspect_between(lon1: float, lon2: float, orb: float = 7.0) -> Optional[str]:
     diff = abs(lon1 - lon2) % 360
     if diff > 180:
         diff = 360 - diff
-    orbs = {"conjunction": 7, "sextile": 6, "square": 7, "trine": 7, "opposition": 7}
+    # Aspect'e özgü standart orb'lar, ancak üst sınır olarak orb parametresini kullan
+    orbs = {
+        "conjunction": min(orb, 7),
+        "sextile":     min(orb, 6),
+        "square":      min(orb, 7),
+        "trine":       min(orb, 7),
+        "opposition":  min(orb, 7),
+    }
     if diff < orbs["conjunction"]:
         return "conjunction"
     if abs(diff - 60) < orbs["sextile"]:
@@ -245,15 +252,36 @@ def aspect_between(lon1: float, lon2: float, orb: float = 7.0) -> Optional[str]:
 
 
 def is_applying(planet_a: PlanetPosition, planet_b: PlanetPosition) -> bool:
+    """
+    planet_a, planet_b ile olan mevcut aspect'e yaklaşıyor mu?
+    Tam açı noktasına ulaşmak için < 180° hareket gerekiyorsa: uygulayan.
+    """
     diff_now = abs(planet_a.longitude - planet_b.longitude) % 360
     if diff_now > 180:
         diff_now = 360 - diff_now
-    future_a = planet_a.longitude + planet_a.speed
-    future_b = planet_b.longitude + planet_b.speed
-    diff_future = abs(future_a - future_b) % 360
-    if diff_future > 180:
-        diff_future = 360 - diff_future
-    return diff_future < diff_now
+
+    # En yakın açı hedefini bul
+    target = min([0, 60, 90, 120, 180], key=lambda t: abs(diff_now - t))
+
+    # planet_a için iki tam açı noktası
+    exact_plus  = (planet_b.longitude + target) % 360
+    exact_minus = (planet_b.longitude - target) % 360
+
+    # Hareket yönüne göre kalan derece
+    if planet_a.speed >= 0:
+        # Direkt: longitude artıyor
+        degs_to_plus  = (exact_plus  - planet_a.longitude) % 360
+        degs_to_minus = (exact_minus - planet_a.longitude) % 360
+    else:
+        # Retrograd: longitude azalıyor
+        degs_to_plus  = (planet_a.longitude - exact_plus)  % 360
+        degs_to_minus = (planet_a.longitude - exact_minus) % 360
+
+    degs_to_exact = min(degs_to_plus, degs_to_minus)
+
+    # < 180° → tam açıya ulaşmamış = uygulayan
+    # >= 180° → tam açıyı geçmiş = ayrılan
+    return degs_to_exact < 180
 
 
 def calc_combust_cazimi(planet, sun):
@@ -272,26 +300,28 @@ def calc_combust_cazimi(planet, sun):
 
 
 def calc_void_of_course(moon, planets, house_cusps):
+    """
+    Ay, mevcut burcundan çıkmadan önce herhangi bir gezegene tam açı yapacak mı?
+    Yaparsa VOC değil; yapmazsa VOC.
+    is_applying kullanmıyor — Ay'ın önündeki tam açı noktalarını direkt kontrol eder.
+    """
     moon_sign_end = (int(moon.longitude / 30) + 1) * 30
     degrees_to_sign_end = moon_sign_end - moon.longitude
 
     for pname, planet in planets.items():
         if pname == "moon":
             continue
-        if not is_applying(moon, planet):
-            continue
-        asp = aspect_between(moon.longitude, planet.longitude, orb=10)
-        if not asp:
-            continue
-        asp_degrees = {"conjunction": 0, "sextile": 60, "square": 90, "trine": 120, "opposition": 180}
-        target = asp_degrees[asp]
-        diff = abs(moon.longitude - planet.longitude) % 360
-        if diff > 180:
-            diff = 360 - diff
-        degrees_to_asp = abs(diff - target)
-        if degrees_to_asp < degrees_to_sign_end:
-            return False
-    return True
+        for target in [0, 60, 90, 120, 180]:
+            for direction in [1, -1]:
+                if target == 0 and direction == -1:
+                    continue  # kavuşum için tek nokta
+                exact_lon = (planet.longitude + direction * target) % 360
+                # Ay'ın ilerleyerek bu noktaya ulaşması için gereken derece
+                degs_needed = (exact_lon - moon.longitude) % 360
+                if 0.001 < degs_needed < degrees_to_sign_end:
+                    return False  # Bu aspect burç değiştirmeden önce tamamlanacak → VOC değil
+
+    return True  # Hiç aspect yok → VOC
 
 
 def calc_refrenation(planet_a, planet_b):
