@@ -107,6 +107,212 @@ SIGN_ELEMENT = {
     8: "fire", 9: "earth", 10: "air", 11: "water",
 }
 
+# ─────────────────────────────────────────
+# SABİT YILDIZLAR — Frawley / Lilly geleneği
+# J2000.0 tropik boylamları (derece ondalık)
+# Precession: ~50.29"/yıl → runtime'da eklenir
+# ─────────────────────────────────────────
+
+FIXED_STARS_J2000 = {
+    "Algol": {
+        "lon": 56.167,   # 26°10' Boğa
+        "nature": "Saturn/Mars",
+        "malefic": True,
+        "tr": "Algol (Şeytan'ın Kafası)",
+        "frawley_tr": (
+            "En güçlü malefik sabit yıldız. Kesme, koparma, şiddet, kalabalığın öfkesi. "
+            "Bir significatöre konjunkt düşüyorsa sonuç sertleşir — haritadaki en kötü işaret olabilir."
+        ),
+    },
+    "Alcyone": {
+        "lon": 59.967,   # 29°58' Boğa (Pleiades)
+        "nature": "Moon/Mars",
+        "malefic": True,
+        "tr": "Alcyone (Pleiades)",
+        "frawley_tr": (
+            "Pleiades yıldız kümesinin parlağı. Keder, gözyaşı, yas, kayıp. "
+            "Özellikle gözler ve görme ile ilgili; çoğu kaynakta körlük imgesini taşır."
+        ),
+    },
+    "Aldebaran": {
+        "lon": 69.783,   # 9°47' İkizler
+        "nature": "Mars",
+        "malefic": False,
+        "tr": "Aldebaran (Doğu'nun Bekçisi)",
+        "frawley_tr": (
+            "Dört Kraliyet Yıldızından biri — Doğu'nun Bekçisi. Onur, cesaret, liderlik, başarı. "
+            "Jüpiter veya Güneş ile birliktelik: yüksek başarı. Malefik ile: rütbe kazanılıp yitirilir. "
+            "Antares'in karşısında; ikisi aynı haritada aktifse çatışma veya denge."
+        ),
+    },
+    "Rigel": {
+        "lon": 76.833,   # 16°50' İkizler
+        "nature": "Jupiter/Saturn",
+        "malefic": False,
+        "tr": "Rigel",
+        "frawley_tr": (
+            "Parlak, refah getiren yıldız. Eğitim, yükselme, zenginlik. Genel olarak olumlu."
+        ),
+    },
+    "Bellatrix": {
+        "lon": 80.950,   # 20°57' İkizler
+        "nature": "Mars/Mercury",
+        "malefic": False,
+        "tr": "Bellatrix",
+        "frawley_tr": (
+            "Hızlı başarı ama kısa ömürlü şöhret. Savaşçı kadın arketipi. "
+            "Kazanım olur ama kalıcı olmayabilir."
+        ),
+    },
+    "Capella": {
+        "lon": 81.850,   # 21°51' İkizler
+        "nature": "Mercury/Mars",
+        "malefic": False,
+        "tr": "Capella",
+        "frawley_tr": (
+            "Zenginlik ve onur, yabancı işlerle veya seyahatle başarı. Genel olarak olumlu."
+        ),
+    },
+    "Betelgeuse": {
+        "lon": 88.750,   # 28°45' İkizler
+        "nature": "Mars/Mercury",
+        "malefic": False,
+        "tr": "Betelgeuse",
+        "frawley_tr": (
+            "Cesaret, askeri onur, kalıcı ün. Güneş ile birliktelik: büyük şöhret. "
+            "Mars doğasında — enerjik, sert, başarılı."
+        ),
+    },
+    "Sirius": {
+        "lon": 104.083,  # 14°05' Yengeç
+        "nature": "Jupiter/Mars",
+        "malefic": False,
+        "tr": "Sirius (Büyük Köpek)",
+        "frawley_tr": (
+            "Gökyüzünün en parlak yıldızı. Büyük şöhret, servet, güç — ama aşırılık ve yakıcılık da getirir. "
+            "Güneş ile konjunkt: muhteşem ama tüketici. Para ve kariyer sorularında çok güçlü olumlu işaret."
+        ),
+    },
+    "Castor": {
+        "lon": 110.233,  # 20°14' Yengeç
+        "nature": "Mercury",
+        "malefic": True,
+        "tr": "Castor",
+        "frawley_tr": (
+            "Ani talihsizlik, istikrarsızlık. Zeka ve hız var ama güvenilirlik yok. "
+            "Sonuç beklenmedik dönüşler içerebilir."
+        ),
+    },
+    "Pollux": {
+        "lon": 113.217,  # 23°13' Yengeç
+        "nature": "Mars",
+        "malefic": True,
+        "tr": "Pollux",
+        "frawley_tr": (
+            "İkizlerin kötü yarısı. Zalimlik, yıkıcı güç, sertlik. "
+            "Bir significatöre konjunkt düşüyorsa sonuç sert ve acımasız olabilir."
+        ),
+    },
+    "Procyon": {
+        "lon": 115.783,  # 25°47' Yengeç
+        "nature": "Mercury/Mars",
+        "malefic": True,
+        "tr": "Procyon (Küçük Köpek)",
+        "frawley_tr": (
+            "Hızlı yükseliş ama ani düşüş. Köpek doğası: sadık ama saldırgan. "
+            "Kısa vadeli kazanım, uzun vadede güvensizlik."
+        ),
+    },
+    "Regulus": {
+        "lon": 149.833,  # 29°50' Aslan (2026'da erken Başak'ta)
+        "nature": "Jupiter/Mars",
+        "malefic": False,
+        "tr": "Regulus (Kuzey'in Bekçisi)",
+        "frawley_tr": (
+            "Dört Kraliyet Yıldızının en güçlüsü — Kuzey'in Bekçisi. Büyük başarı, liderlik, asalet, kraliyet. "
+            "Kritik uyarı: intikam alınırsa her şey bir anda kaybolur. "
+            "Yöneticiler ve önemli figürler için belirleyici."
+        ),
+    },
+    "Spica": {
+        "lon": 173.833,  # 23°50' Başak
+        "nature": "Venus/Mercury",
+        "malefic": False,
+        "tr": "Spica",
+        "frawley_tr": (
+            "En şanslı sabit yıldız. Korunan başarı, artistik yetenek, güzellik, iyilik, hediyeler. "
+            "Neredeyse her zaman olumlu — significatöre konjunkt düşüyorsa büyük artı."
+        ),
+    },
+    "Vindemiatrix": {
+        "lon": 189.933,  # 9°56' Terazi
+        "nature": "Saturn/Mercury",
+        "malefic": True,
+        "tr": "Vindemiatrix (Üzüm Bağı)",
+        "frawley_tr": (
+            "Partner kaybı, dul kalma, hayal kırıklığı. İlişki ve ortaklık sorularında özellikle dikkat. "
+            "Verim kesen, biten, koparılan şeylerin yıldızı."
+        ),
+    },
+    "Arcturus": {
+        "lon": 204.233,  # 24°14' Terazi
+        "nature": "Jupiter/Mars",
+        "malefic": False,
+        "tr": "Arcturus",
+        "frawley_tr": (
+            "Yabancı ülkelerle ya da seyahatle kazanım. Bağımsız yollardan başarı. Genel olarak olumlu."
+        ),
+    },
+    "Antares": {
+        "lon": 249.767,  # 9°46' Yay
+        "nature": "Mars/Jupiter",
+        "malefic": False,
+        "tr": "Antares (Batı'nın Bekçisi)",
+        "frawley_tr": (
+            "Dört Kraliyet Yıldızından biri — Batı'nın Bekçisi. Güç, liderlik, cesaret — ama inatçılık ve aşırılık. "
+            "Aldebaran'ın karşısındaki denklemi. Güçlü ama frenlenemez enerji."
+        ),
+    },
+    "Vega": {
+        "lon": 285.317,  # 15°19' Oğlak
+        "nature": "Venus/Mercury",
+        "malefic": False,
+        "tr": "Vega",
+        "frawley_tr": (
+            "Sihir, şiir, müzik, sanatsal deha. Yıldız olma potansiyeli. "
+            "Yaratıcı ve ruhsal konularda özellikle güçlü olumlu işaret."
+        ),
+    },
+    "Deneb Algedi": {
+        "lon": 293.550,  # 23°33' Oğlak
+        "nature": "Saturn/Jupiter",
+        "malefic": False,
+        "tr": "Deneb Algedi",
+        "frawley_tr": (
+            "Hukuk, sorumluluk, yönetim, adalet. Ciddi meselelerde kararlı ve yapıcı etki."
+        ),
+    },
+    "Fomalhaut": {
+        "lon": 333.867,  # 3°52' Balık
+        "nature": "Venus/Mercury",
+        "malefic": False,
+        "tr": "Fomalhaut (Güney'in Bekçisi)",
+        "frawley_tr": (
+            "Dört Kraliyet Yıldızından biri — Güney'in Bekçisi. Büyüklük, eminence, ruhsal başarı. "
+            "Spica kadar güçlü olmasa da belirgin biçimde olumlu."
+        ),
+    },
+    "Achernar": {
+        "lon": 345.317,  # 15°19' Balık
+        "nature": "Jupiter",
+        "malefic": False,
+        "tr": "Achernar",
+        "frawley_tr": (
+            "Dini başarı, kraliyet iyiliği, ödül. Ruhsal veya kurumsal onay gerektiren konularda olumlu."
+        ),
+    },
+}
+
 
 @dataclass
 class PlanetPosition:
@@ -134,6 +340,7 @@ class HorarChart:
     asc: float = 0.0
     mc: float = 0.0
     is_daytime: bool = True
+    jd: float = 0.0  # Julian Day — sabit yıldız hesabı için gerekli
 
 
 # ─────────────────────────────────────────
@@ -299,6 +506,77 @@ def calc_combust_cazimi(planet, sun):
     return None
 
 
+def get_star_longitude(star_key: str, jd: float) -> float:
+    """J2000 boylama precession ekleyerek güncel tropik boylamı döndür."""
+    j2000_lon = FIXED_STARS_J2000[star_key]["lon"]
+    years = (jd - 2451545.0) / 365.25
+    precession = years * 50.2888 / 3600  # derece cinsinden
+    return (j2000_lon + precession) % 360
+
+
+def get_fixed_star_conjunctions(chart: "HorarChart", jd: float, orb: float = 1.5) -> list:
+    """
+    Haritadaki gezegenleri ve ASC/MC'yi sabit yıldızlarla karşılaştır.
+    orb: tipik horary için 1.5° (Frawley ~1° kullanır, Royal Stars için biraz daha geniş)
+    Döndürür: [{"planet": ..., "star_key": ..., "orb_deg": ..., "star_data": ...}, ...]
+    """
+    conjunctions = []
+
+    # Gezegenleri kontrol et
+    for pname, planet in chart.planets.items():
+        for star_key, star_data in FIXED_STARS_J2000.items():
+            star_lon = get_star_longitude(star_key, jd)
+            diff = abs(planet.longitude - star_lon) % 360
+            if diff > 180:
+                diff = 360 - diff
+            if diff <= orb:
+                conjunctions.append({
+                    "point": PLANET_TR.get(pname, pname),
+                    "point_glyph": PLANET_GLYPHS.get(pname, ""),
+                    "star_key": star_key,
+                    "star_lon": star_lon,
+                    "orb_deg": round(diff, 2),
+                    "star_data": star_data,
+                })
+
+    # ASC kontrol et
+    for label, lon in [("ASC", chart.asc), ("MC", chart.mc)]:
+        for star_key, star_data in FIXED_STARS_J2000.items():
+            star_lon = get_star_longitude(star_key, jd)
+            diff = abs(lon - star_lon) % 360
+            if diff > 180:
+                diff = 360 - diff
+            if diff <= orb:
+                conjunctions.append({
+                    "point": label,
+                    "point_glyph": "⬆" if label == "ASC" else "⬆MC",
+                    "star_key": star_key,
+                    "star_lon": star_lon,
+                    "orb_deg": round(diff, 2),
+                    "star_data": star_data,
+                })
+
+    # Orb'a göre sırala (en yakın önce)
+    conjunctions.sort(key=lambda x: x["orb_deg"])
+    return conjunctions
+
+
+def _build_fixed_star_lines(chart: "HorarChart", jd: float) -> list:
+    """Prompt'a eklenecek sabit yıldız satırlarını oluştur."""
+    conjunctions = get_fixed_star_conjunctions(chart, jd)
+    if not conjunctions:
+        return []
+    lines = []
+    for c in conjunctions:
+        sd = c["star_data"]
+        warn = "⚠️ " if sd["malefic"] else "✦ "
+        lines.append(
+            f"  {warn}{c['point_glyph']} {c['point']} — {sd['tr']} ({c['orb_deg']}° orb)\n"
+            f"    Doğa: {sd['nature']} | {sd['frawley_tr']}"
+        )
+    return lines
+
+
 def calc_void_of_course(moon, planets, house_cusps):
     """
     Ay, mevcut burcundan çıkmadan önce herhangi bir gezegene tam açı yapacak mı?
@@ -405,6 +683,7 @@ def check_antiscia_aspect(p1, p2):
 def calc_chart(question: str, dt: datetime.datetime, lat: float, lon: float) -> HorarChart:
     chart = HorarChart(question=question, dt=dt, lat=lat, lon=lon)
     jd = datetime_to_jd(dt)
+    chart.jd = jd
 
     cusps, ascmc = swe.houses(jd, lat, lon, b'R')
     chart.houses = list(cusps)
@@ -662,6 +941,7 @@ def build_iliski_prompt(chart: HorarChart) -> str:
     house_lines    = _build_house_lines(chart)
     special_lines  = _build_special_lines(chart, lord1, lord7)
     moon_voc       = calc_void_of_course(moon, chart.planets, chart.houses)
+    fixed_star_lines = _build_fixed_star_lines(chart, chart.jd)
 
     reception_lines = []
     if lord1 != lord7:
@@ -812,6 +1092,9 @@ RESEPSIYON ANALİZİ (L1 ↔ L7):
 ÖZEL DURUMLAR:
 {chr(10).join(special_lines) if special_lines else "  Yok"}
 
+SABİT YILDIZLAR (gezegen/ASC/MC konjunksiyon, orb ≤1.5°):
+{chr(10).join(fixed_star_lines) if fixed_star_lines else "  Aktif sabit yıldız konjunksiyonu yok"}
+
 ---
 
 Şimdi bu haritayı oku. Formatı takip et. Son söz ve viral satır zorunlu.
@@ -861,6 +1144,9 @@ def build_frawley_prompt(chart: HorarChart) -> str:
 
     # Özel durumlar
     special_lines = _build_special_lines(chart, lord1, lord_house2) if lord_house2 else []
+
+    # Sabit yıldızlar
+    fixed_star_lines = _build_fixed_star_lines(chart, chart.jd)
 
     prompt = f"""Sen Zuhal Teyze'sin. John Frawley'nin "The Horary Textbook" ve William Lilly geleneğine dayanan klasik horary astrolojisinde derinleşmiş bir astrologsun. Dış gezegenler seni ilgilendirmiyor — sadece 7 klasik gezegen.
 
@@ -965,6 +1251,9 @@ RESEPSIYON:
 ÖZEL DURUMLAR:
 {chr(10).join(special_lines) if special_lines else "  Yok"}
 
+SABİT YILDIZLAR (gezegen/ASC/MC konjunksiyon, orb ≤1.5°):
+{chr(10).join(fixed_star_lines) if fixed_star_lines else "  Aktif sabit yıldız konjunksiyonu yok"}
+
 ---
 
 Şimdi bu haritayı oku. Formatı takip et. Viral satır zorunlu.
@@ -1055,6 +1344,21 @@ def chart_to_dict(chart: HorarChart) -> dict:
                     }.get(asp, 0)), 2),
                 })
 
+    # Sabit yıldız konjunksiyonları
+    fixed_stars_out = []
+    for c in get_fixed_star_conjunctions(chart, chart.jd):
+        sd = c["star_data"]
+        fixed_stars_out.append({
+            "point": c["point"],
+            "star_key": c["star_key"],
+            "star_tr": sd["tr"],
+            "nature": sd["nature"],
+            "malefic": sd["malefic"],
+            "orb": c["orb_deg"],
+            "star_lon": round(c["star_lon"], 4),
+            "frawley_tr": sd["frawley_tr"],
+        })
+
     return {
         "question": chart.question,
         "datetime": chart.dt.isoformat(),
@@ -1066,6 +1370,7 @@ def chart_to_dict(chart: HorarChart) -> dict:
         "planets": planets_out,
         "houses": houses_out,
         "aspects": aspects_out,
+        "fixed_stars": fixed_stars_out,
     }
 
 
