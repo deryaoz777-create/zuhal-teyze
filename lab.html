@@ -3,623 +3,687 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Zuhal Teyze — Lab</title>
+<title>ZT Lab</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
+
   :root {
-    --bg: #0e0c14;
-    --bg2: #16121f;
-    --bg3: #1e1830;
-    --border: #2e2545;
-    --border2: #3d3160;
-    --text: #e8e0f0;
-    --text2: #9b8fa8;
-    --text3: #6b5c7a;
-    --gold: #c4a882;
-    --gold2: #ba7517;
-    --green: #1d9e75;
-    --red: #e24b4a;
-    --orange: #ef9f27;
+    --bg:        #0e0a14;
+    --surface:   #17111f;
+    --border:    #2e1f3e;
+    --accent:    #7c4dbb;
+    --gold:      #c8a96e;
+    --gold-dim:  #7a6240;
+    --text:      #d4c9e8;
+    --text-dim:  #7a6e8a;
+    --red:       #c04a4a;
+    --green:     #4a8c5c;
+    --mono:      'JetBrains Mono', monospace;
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-         background: var(--bg); color: var(--text); min-height: 100vh; }
 
-  /* ── PASSWORD GATE ── */
-  #gate {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; flex-direction: column; gap: 16px;
-  }
-  #gate h1 { font-size: 13px; letter-spacing: 0.2em; color: var(--text3); text-transform: uppercase; }
-  #gate input {
-    background: var(--bg2); border: 0.5px solid var(--border);
-    color: var(--text); padding: 10px 14px; border-radius: 6px;
-    font-size: 14px; width: 240px; text-align: center; outline: none;
-  }
-  #gate input:focus { border-color: var(--border2); }
-  #gate button {
-    background: var(--bg3); border: 0.5px solid var(--border2);
-    color: var(--gold); padding: 9px 24px; border-radius: 6px;
-    font-size: 13px; cursor: pointer; letter-spacing: 0.05em;
-  }
-  #gate button:hover { background: #251a35; }
-  #gate-err { font-size: 12px; color: var(--red); }
-
-  /* ── MAIN LAYOUT ── */
-  #app { display: none; }
-  #app.visible { display: flex; flex-direction: column; height: 100vh; }
-  .topbar {
-    padding: 10px 20px; border-bottom: 0.5px solid var(--border);
-    display: flex; align-items: center; gap: 12px; flex-shrink: 0;
-  }
-  .topbar-title { font-size: 12px; letter-spacing: 0.15em; color: var(--text3); text-transform: uppercase; }
-  .topbar-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
-  .topbar-stats { margin-left: auto; font-size: 11px; color: var(--text3); display: flex; gap: 16px; }
-  .stat-val { color: var(--gold); font-weight: 500; }
-
-  .workspace {
-    display: grid; grid-template-columns: 320px 1fr 280px;
-    flex: 1; overflow: hidden;
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IM Fell English', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
   }
 
-  /* ── LEFT: INPUT ── */
-  .col-left {
-    border-right: 0.5px solid var(--border);
-    display: flex; flex-direction: column; overflow: hidden;
+  /* ── LOGIN ── */
+  #login-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    flex-direction: column;
+    gap: 1.5rem;
   }
-  .col-header {
-    padding: 11px 14px; border-bottom: 0.5px solid var(--border);
-    font-size: 11px; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .col-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
-  label { font-size: 10px; color: var(--text3); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 4px; }
-  textarea, input[type=text] {
-    width: 100%; background: var(--bg2); border: 0.5px solid var(--border);
-    color: var(--text); border-radius: 5px; padding: 8px 10px;
-    font-family: inherit; font-size: 12px; resize: vertical; outline: none;
-  }
-  textarea:focus, input[type=text]:focus { border-color: var(--border2); }
-  #q-input { min-height: 56px; }
-  #chart-input { min-height: 90px; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; }
-  .prompt-toggle { display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; }
-  .prompt-toggle input { accent-color: var(--green); }
-  .prompt-toggle span { font-size: 11px; color: var(--text2); }
-  #sys-wrap { display: none; }
-  #sys-wrap.open { display: block; }
-  #sys-input { min-height: 160px; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; }
-  .run-btn {
-    margin: 0 14px 14px; padding: 10px; background: var(--bg3);
-    border: 0.5px solid var(--border2); border-radius: 6px;
-    color: var(--gold); font-size: 13px; font-weight: 500; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    transition: background 0.15s; letter-spacing: 0.03em; flex-shrink: 0;
-  }
-  .run-btn:hover:not(:disabled) { background: #251a35; }
-  .run-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-  /* ── MIDDLE: OUTPUT ── */
-  .col-mid {
-    display: flex; flex-direction: column; border-right: 0.5px solid var(--border);
+  #login-screen h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 0.25em;
   }
-  .output-area {
-    flex: 1; padding: 18px 20px; overflow-y: auto;
-    font-size: 13px; line-height: 1.8; color: var(--text); white-space: pre-wrap;
-  }
-  .placeholder { color: var(--text3); font-style: italic; font-size: 13px; }
-  .typing::after { content: '▋'; animation: blink 0.8s step-end infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
 
-  /* ── FEEDBACK BAR ── */
-  .feedback-bar {
-    border-top: 0.5px solid var(--border); padding: 12px 16px;
-    background: var(--bg2); display: none; flex-direction: column; gap: 10px;
-    flex-shrink: 0;
+  #login-screen p {
+    color: var(--text-dim);
+    font-style: italic;
+    font-size: 0.9rem;
   }
-  .feedback-bar.visible { display: flex; }
-  .fb-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
-  .stars { display: flex; gap: 4px; }
-  .star { font-size: 20px; cursor: pointer; color: var(--text3); line-height: 1; transition: color 0.1s; }
-  .star.on { color: var(--gold2); }
-  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
-  .tag {
-    font-size: 10px; padding: 3px 9px; border: 0.5px solid var(--border);
-    border-radius: 20px; cursor: pointer; color: var(--text2); background: var(--bg);
-    transition: all 0.12s; text-transform: lowercase;
-  }
-  .tag.on { background: #0d2e20; border-color: #2d9e70; color: #5dcaa5; }
-  #fb-note { font-size: 12px; min-height: 36px; flex: 1; min-width: 160px; }
-  .save-btn {
-    padding: 7px 16px; background: var(--bg); border: 0.5px solid var(--border2);
-    border-radius: 5px; font-size: 12px; cursor: pointer; color: var(--gold);
-    white-space: nowrap; transition: background 0.12s;
-  }
-  .save-btn:hover { background: var(--bg3); }
 
-  /* ── RIGHT: HISTORY ── */
-  .col-right { display: flex; flex-direction: column; overflow: hidden; }
-  .hist-list { flex: 1; overflow-y: auto; }
+  .login-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* ── LAYOUT ── */
+  #app {
+    display: none;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    flex-direction: column;
+  }
+
+  header {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+  }
+
+  header span {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+
+  /* ── FORM ── */
+  .question-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .row { display: flex; gap: 0.75rem; align-items: flex-end; }
+
+  label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  textarea,
+  input[type="number"] {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'IM Fell English', serif;
+    font-size: 15px;
+    padding: 0.6rem 0.8rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  input:focus, textarea:focus { border-color: var(--accent); }
+
+  textarea { resize: vertical; min-height: 60px; }
+
+  .coord-row { display: flex; gap: 0.5rem; }
+  .coord-row > div { flex: 1; }
+
+  button {
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    padding: 0.7rem 1.5rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  button:hover { background: #9060d0; }
+  button:disabled { background: var(--border); cursor: not-allowed; }
+  button.secondary { background: transparent; border: 1px solid var(--border); color: var(--text-dim); }
+  button.secondary:hover { border-color: var(--accent); color: var(--text); }
+
+  /* ── OUTPUT ── */
+  #output-section { display: none; flex-direction: column; gap: 1rem; }
+
+  .reading-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.5rem 1.75rem;
+    white-space: pre-wrap;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  /* ── CHART DATA PANEL ── */
+  .chart-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .chart-toggle:hover { color: var(--gold); }
+
+  .toggle-icon { transition: transform 0.2s; }
+  .chart-toggle.open .toggle-icon { transform: rotate(90deg); }
+
+  #chart-panel {
+    display: none;
+    background: #0b0810;
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    overflow-x: auto;
+  }
+
+  #chart-panel.visible { display: block; }
+
+  .chart-section { margin-bottom: 1.25rem; }
+  .chart-section:last-child { margin-bottom: 0; }
+
+  .section-title {
+    color: var(--gold-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3rem;
+  }
+
+  table { border-collapse: collapse; width: 100%; }
+  th {
+    text-align: left;
+    color: var(--text-dim);
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 0.2rem 0.6rem; color: var(--text); }
+  tr:hover td { background: rgba(124, 77, 187, 0.08); }
+
+  .dig-domicile { color: #6ab04c; }
+  .dig-exaltation { color: #a8d8a8; }
+  .dig-detriment { color: var(--red); }
+  .dig-fall { color: #e67e50; }
+  .dig-peregrine { color: var(--text-dim); }
+  .retro { color: var(--red); }
+  .malefic-star { color: var(--red); }
+  .benefic-star { color: var(--gold); }
+  .voc-badge {
+    background: var(--red);
+    color: #fff;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── HISTORY ── */
+  #history-section { border-top: 1px solid var(--border); padding-top: 1rem; }
+
+  .hist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .hist-header h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+  }
+
+  .hist-list { display: flex; flex-direction: column; gap: 0.4rem; }
+
   .hist-item {
-    padding: 10px 14px; border-bottom: 0.5px solid var(--border);
-    cursor: pointer; transition: background 0.1s;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    display: flex;
+    gap: 0.75rem;
+    align-items: baseline;
   }
-  .hist-item:hover { background: var(--bg2); }
-  .hist-item.active { background: var(--bg3); }
-  .hist-q { font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .hist-meta { font-size: 10px; color: var(--text3); margin-top: 3px; display: flex; gap: 8px; align-items: center; }
-  .hist-stars { color: var(--gold2); letter-spacing: -1px; }
-  .hist-tags { color: var(--text3); font-size: 9px; }
-  .empty-hist { padding: 16px 14px; font-size: 12px; color: var(--text3); font-style: italic; }
 
-  /* scrollbars */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .hist-item:hover { border-color: var(--accent); }
 
+  .hist-date { color: var(--text-dim); font-size: 0.75rem; font-family: var(--mono); white-space: nowrap; }
+  .hist-q { color: var(--text); font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+
+  .hist-rating { font-family: var(--mono); font-size: 0.75rem; }
+  .r1 { color: var(--red); }
+  .r2 { color: #e67e50; }
+  .r3 { color: var(--gold); }
+  .r4 { color: var(--green); }
+  .r5 { color: #6ab04c; }
+
+  /* ── SPINNER ── */
   .spinner {
-    width: 13px; height: 13px; border: 1.5px solid var(--border2);
-    border-top-color: var(--gold); border-radius: 50%;
-    animation: spin 0.65s linear infinite;
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  .badge { font-size: 10px; background: var(--bg3); border: 0.5px solid var(--border); border-radius: 10px; padding: 1px 7px; color: var(--text3); }
-  .tabs { display: flex; border-bottom: 0.5px solid var(--border); flex-shrink: 0; }
-  .tab-btn { padding: 9px 14px; font-size: 11px; color: var(--text3); cursor: pointer; border-bottom: 1.5px solid transparent; margin-bottom: -0.5px; background: none; border-top: none; border-left: none; border-right: none; }
-  .tab-btn:hover { color: var(--text2); }
-  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
-  .tab-pane { display: none; flex: 1; overflow-y: auto; }
-  .tab-pane.active { display: block; }
-  .review-item { padding: 10px 14px; border-bottom: 0.5px solid var(--border); cursor: pointer; }
-  .review-item:hover { background: var(--bg2); }
-  .review-item.active { background: var(--bg3); }
-  .review-q { font-size: 11px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .review-meta { font-size: 10px; color: var(--text3); margin-top: 3px; display: flex; gap: 8px; }
-  .status-pending { color: var(--orange); }
-  .status-reviewed { color: var(--green); }
-  .review-detail { padding: 14px 16px; display: none; flex-direction: column; gap: 10px; border-top: 0.5px solid var(--border); background: var(--bg2); flex-shrink: 0; max-height: 300px; overflow-y: auto; }
-  .review-detail.visible { display: flex; }
-  .review-output { font-size: 12px; color: var(--text2); line-height: 1.65; white-space: pre-wrap; }
-  .review-note-input { font-size: 12px; min-height: 60px; }
-  .review-actions { display: flex; gap: 8px; }
-  .btn-sm { padding: 6px 12px; font-size: 11px; background: var(--bg); border: 0.5px solid var(--border2); border-radius: 4px; color: var(--gold); cursor: pointer; }
-  .btn-sm:hover { background: var(--bg3); }
-  .btn-dismiss { border-color: var(--border); color: var(--text3); }
+  /* ── FEEDBACK ROW ── */
+  .feedback-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .rating-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    letter-spacing: 0;
+    text-transform: none;
+    transition: all 0.15s;
+  }
+
+  .rating-btn:hover, .rating-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(200,169,110,0.08); }
+
+  .note-input { flex: 1; min-width: 200px; }
+
+  /* ── MISC ── */
+  .error-msg { color: var(--red); font-size: 0.85rem; font-style: italic; padding: 0.5rem 0; }
 </style>
 </head>
 <body>
 
-<!-- PASSWORD GATE -->
-<div id="gate">
-  <h1>Zuhal Teyze Lab</h1>
-  <input type="password" id="pw-input" placeholder="şifre" onkeydown="if(event.key==='Enter')login()">
-  <button onclick="login()">Gir</button>
-  <span id="gate-err"></span>
+<!-- LOGIN -->
+<div id="login-screen">
+  <h1>ZUHAL TEYZE — LAB</h1>
+  <p>Şifre ile giriş yap.</p>
+  <div class="login-box">
+    <div>
+      <label>Şifre</label>
+      <input type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+    <button onclick="doLogin()">Giriş</button>
+    <div id="login-error" class="error-msg" style="display:none"></div>
+  </div>
 </div>
 
-<!-- MAIN APP -->
+<!-- APP -->
 <div id="app">
-  <div class="topbar">
-    <div class="topbar-dot" id="status-dot"></div>
-    <span class="topbar-title">Zuhal Teyze · Test Lab</span>
-    <div class="topbar-stats">
-      <span>toplam test <span class="stat-val" id="stat-total">0</span></span>
-      <span>ort. puan <span class="stat-val" id="stat-avg">—</span></span>
+  <header>
+    <h1>ZT LAB</h1>
+    <span id="header-time"></span>
+  </header>
+
+  <!-- SORU FORMU -->
+  <div class="question-area">
+    <div>
+      <label>Soru</label>
+      <input type="text" id="q-input" placeholder="Soruyu buraya gir…" onkeydown="if(event.key==='Enter') submitQuestion()">
+    </div>
+    <div class="coord-row">
+      <div>
+        <label>Enlem</label>
+        <input type="number" id="lat-input" value="41.64" step="0.01">
+      </div>
+      <div>
+        <label>Boylam</label>
+        <input type="number" id="lon-input" value="41.63" step="0.01">
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <button id="submit-btn" onclick="submitQuestion()">Sor</button>
+      </div>
     </div>
   </div>
 
-  <div class="workspace">
+  <!-- OUTPUT -->
+  <div id="output-section">
+    <div id="reading-box" class="reading-box"></div>
 
-    <!-- LEFT: INPUT -->
-    <div class="col-left">
-      <div class="col-header">Girdi</div>
-      <div class="col-body">
-        <div>
-          <label>Soru</label>
-          <textarea id="q-input" placeholder="Horary sorusu..."></textarea>
-        </div>
-        <div>
-          <label>Harita verisi</label>
-          <textarea id="chart-input" placeholder="ASC Boğa 14°, L1 Venüs Terazi 22°...&#10;veya boş bırak"></textarea>
-        </div>
-        <div>
-          <label class="prompt-toggle">
-            <input type="checkbox" id="show-sys"> <span>Sistem promptu</span>
-          </label>
-          <div id="sys-wrap">
-            <textarea id="sys-input"></textarea>
-          </div>
-        </div>
-      </div>
-      <button class="run-btn" id="run-btn" onclick="runReading()">
-        ✦ Yorum üret
-      </button>
+    <!-- Feedback -->
+    <div class="feedback-row" id="feedback-row" style="display:none">
+      <span style="color:var(--text-dim);font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase">Puan:</span>
+      <button class="rating-btn" onclick="setRating(1)">1 ✗</button>
+      <button class="rating-btn" onclick="setRating(2)">2 △</button>
+      <button class="rating-btn" onclick="setRating(3)">3 ○</button>
+      <button class="rating-btn" onclick="setRating(4)">4 ◉</button>
+      <button class="rating-btn" onclick="setRating(5)">5 ★</button>
+      <input type="text" class="note-input" id="note-input" placeholder="not ekle…" style="max-width:250px">
+      <button class="secondary" onclick="saveFeedback()">Kaydet</button>
     </div>
 
-    <!-- MIDDLE: OUTPUT + FEEDBACK -->
-    <div class="col-mid">
-      <div class="col-header">Çıktı</div>
-      <div class="output-area" id="output-area">
-        <span class="placeholder">Soru gir, "Yorum üret"e bas.</span>
-      </div>
-      <div class="feedback-bar" id="feedback-bar">
-        <div class="fb-row">
-          <div>
-            <label>Puan</label>
-            <div class="stars" id="stars">
-              <span class="star" data-v="1">★</span>
-              <span class="star" data-v="2">★</span>
-              <span class="star" data-v="3">★</span>
-              <span class="star" data-v="4">★</span>
-              <span class="star" data-v="5">★</span>
-            </div>
-          </div>
-          <div>
-            <label>Sorun</label>
-            <div class="tags" id="tags">
-              <span class="tag" data-v="ton">ton</span>
-              <span class="tag" data-v="teknik">teknik</span>
-              <span class="tag" data-v="yapı">yapı</span>
-              <span class="tag" data-v="combust">combust</span>
-              <span class="tag" data-v="reception">reception</span>
-              <span class="tag" data-v="eksik">eksik</span>
-              <span class="tag" data-v="uzun">fazla uzun</span>
-              <span class="tag" data-v="harika">★ harika</span>
-            </div>
-          </div>
-        </div>
-        <div class="fb-row">
-          <div style="flex:1">
-            <label>Not</label>
-            <textarea id="fb-note" placeholder="Ne çalıştı, ne çalışmadı..."></textarea>
-          </div>
-          <button class="save-btn" id="save-btn" onclick="saveFeedback()">Kaydet</button>
-        </div>
-      </div>
+    <!-- Chart Toggle -->
+    <div class="chart-toggle" id="chart-toggle" onclick="toggleChart()" style="display:none">
+      <span class="toggle-icon">▶</span>
+      <span>Ham Harita Verisi</span>
+      <span id="voc-badge-inline"></span>
     </div>
+    <div id="chart-panel"></div>
+  </div>
 
-    <!-- RIGHT: TABS -->
-    <div class="col-right">
-      <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('feedback')">Geçmiş <span class="badge" id="hist-badge">0</span></button>
-        <span onclick="loadHistory()" style="cursor:pointer;color:var(--muted);font-size:12px;padding:0 4px" title="Yenile">↻</span>
-        <button class="tab-btn" onclick="switchTab('reviews')">Kullanıcılar <span class="badge" id="review-badge">0</span></button>
-      </div>
-      <div class="tab-pane active" id="tab-feedback">
-        <div class="hist-list" id="hist-list">
-          <div class="empty-hist">Henüz kayıt yok.</div>
-        </div>
-      </div>
-      <div class="tab-pane" id="tab-reviews">
-        <div id="review-list">
-          <div class="empty-hist">Henüz gönderim yok.</div>
-        </div>
-      </div>
-      <div class="review-detail" id="review-detail">
-        <div class="field-label">Soru</div>
-        <div id="rv-question" style="font-size:12px;color:var(--text2);"></div>
-        <div class="field-label" style="margin-top:6px;">Zuhal Teyze yorumu</div>
-        <div class="review-output" id="rv-output"></div>
-        <div class="field-label" style="margin-top:6px;">Notun</div>
-        <textarea class="review-note-input" id="rv-note" placeholder="Geri bildirim, düzeltme, not..."></textarea>
-        <div class="review-actions">
-          <button class="btn-sm" onclick="saveReview('reviewed')">✓ İncelendi</button>
-          <button class="btn-sm btn-dismiss" onclick="saveReview('dismissed')">Yoksay</button>
-        </div>
-      </div>
+  <!-- HISTORY -->
+  <div id="history-section" style="display:none">
+    <div class="hist-header">
+      <h3>Geçmiş</h3>
+      <button class="secondary" onclick="loadHistory()" style="padding:0.3rem 0.8rem;font-size:0.7rem">Yenile</button>
     </div>
-
+    <div class="hist-list" id="hist-list"></div>
   </div>
 </div>
 
 <script>
-const DEFAULT_PROMPT = `Sen Zuhal Teyze'sin. John Frawley'nin The Horary Textbook'una ve William Lilly geleneğine dayanan bir horary astroloji yorumcususun.
+let currentEntryId = null;
+let currentRating  = 0;
+let chartData      = null;
 
-Ses:
-- Doğrudan, özlü, bazen sert ama asla zalim değil
-- "Zaten biliyordun ama sormak zorundaydın" enerjisi
-- Kanka gibi konuşur — bilge ama lafı dolandırmaz
-- Teknik detayları yoruma doğal örer
-- Her konuda otoriter ama ilişki ve güç dinamiklerinde özellikle keskin
-- Kadını güçlendiren, ama erkeği de anlayan — sistemi eleştirir, kişiyi değil
-- "Decentering" enerjisi: odağını al, kendine bak
+// ── AUTH ──────────────────────────────────
 
-Yapma:
-- "Bu haritada X gezegeni Y'yi temsil eder" diye ayrı blok açma
-- Ders verir gibi konuşma, vaaz verme
-- Aşırı yumuşat veya olumla
-- Belirsiz kal
-
-Her yorumun SONUNDA tek bir satır bırak — çift tire ile ayrılmış:
---
-[Ekrana alınabilecek keskin bir cümle. Context olmadan da anlam ifade etmeli. Paylaşılabilir.]
-
-Format: Kısa giriş (max 2 cümle) → teknik bulgular + yorum birlikte akar → net yargı → -- → paylaşılabilir satır.`;
-
-let rating = 0;
-let activeTags = new Set();
-let currentOutput = '';
-let currentQuestion = '';
-let currentChartData = '';
-let history = [];
-
-document.getElementById('sys-input').value = DEFAULT_PROMPT;
-
-document.getElementById('show-sys').addEventListener('change', function() {
-  document.getElementById('sys-wrap').classList.toggle('open', this.checked);
-});
-
-document.querySelectorAll('.star').forEach(s => {
-  s.addEventListener('click', () => {
-    rating = parseInt(s.dataset.v);
-    document.querySelectorAll('.star').forEach((x, i) => x.classList.toggle('on', i < rating));
-  });
-});
-
-document.querySelectorAll('.tag').forEach(t => {
-  t.addEventListener('click', () => {
-    const v = t.dataset.v;
-    activeTags.has(v) ? activeTags.delete(v) : activeTags.add(v);
-    t.classList.toggle('on', activeTags.has(v));
-  });
-});
-
-async function login() {
-  const pw = document.getElementById('pw-input').value;
-  const err = document.getElementById('gate-err');
+async function doLogin() {
+  const pwd = document.getElementById('pwd-input').value;
+  const err = document.getElementById('login-error');
+  err.style.display = 'none';
   try {
     const res = await fetch('/api/lab/auth', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: pw })
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({password: pwd})
     });
-    if (res.ok) {
-      document.getElementById('gate').style.display = 'none';
-      document.getElementById('app').classList.add('visible');
-      loadHistory();
-    } else {
-      err.textContent = 'Yanlış şifre.';
-    }
-  } catch(e) {
-    err.textContent = 'Bağlantı hatası.';
-  }
+    const d = await res.json();
+    if (!res.ok) { err.textContent = d.error || 'Hata'; err.style.display = 'block'; return; }
+    showApp();
+  } catch(e) { err.textContent = 'Sunucu hatası'; err.style.display = 'block'; }
 }
 
-async function checkAuth() {
-  const res = await fetch('/api/lab/history');
-  if (res.ok) {
-    document.getElementById('gate').style.display = 'none';
-    document.getElementById('app').classList.add('visible');
-    const data = await res.json();
-    renderHistory(data);
-  }
+function showApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  const app = document.getElementById('app');
+  app.style.display = 'flex';
+  tickClock();
+  setInterval(tickClock, 1000);
+  loadHistory();
 }
 
-async function runReading() {
-  const q = document.getElementById('q-input').value.trim();
-  const chart = document.getElementById('chart-input').value.trim();
-  const sys = document.getElementById('sys-input').value.trim() || DEFAULT_PROMPT;
+function tickClock() {
+  const now = new Date();
+  const s = now.toLocaleTimeString('tr-TR', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('header-time').textContent = s;
+}
 
-  if (!q) { document.getElementById('q-input').focus(); return; }
+// ── SUBMIT ───────────────────────────────
 
-  const btn = document.getElementById('run-btn');
+async function submitQuestion() {
+  const q   = document.getElementById('q-input').value.trim();
+  const lat = parseFloat(document.getElementById('lat-input').value);
+  const lon = parseFloat(document.getElementById('lon-input').value);
+  if (!q) return;
+
+  const btn = document.getElementById('submit-btn');
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div> yorumlanıyor...';
+  btn.innerHTML = '<span class="spinner"></span>';
 
-  const dot = document.getElementById('status-dot');
-  dot.style.background = '#ef9f27';
+  const outputSec   = document.getElementById('output-section');
+  const readingBox  = document.getElementById('reading-box');
+  const feedbackRow = document.getElementById('feedback-row');
+  const chartToggle = document.getElementById('chart-toggle');
 
-  const area = document.getElementById('output-area');
-  area.innerHTML = '<span class="placeholder typing">Zuhal Teyze düşünüyor</span>';
-  document.getElementById('feedback-bar').classList.remove('visible');
-
-  currentQuestion = q;
-  currentChartData = chart;
-  currentOutput = '';
+  outputSec.style.display   = 'flex';
+  readingBox.textContent     = 'Harita hesaplanıyor…';
+  feedbackRow.style.display  = 'none';
+  chartToggle.style.display  = 'none';
+  document.getElementById('chart-panel').classList.remove('visible');
+  chartToggle.classList.remove('open');
+  currentEntryId = null;
+  currentRating  = 0;
+  chartData      = null;
+  document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
 
   try {
     const res = await fetch('/api/lab/reading', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question: q, chart_data: chart, system_prompt: sys })
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({question: q, lat, lon})
     });
-    const data = await res.json();
-    if (data.success) {
-      currentOutput = data.output;
-      currentEntryId = data.id || null;
-      area.textContent = currentOutput;
-      document.getElementById('feedback-bar').classList.add('visible');
-      dot.style.background = '#1d9e75';
-      setTimeout(loadHistory, 300); // küçük delay ile yenile
+    const d = await res.json();
+    if (!res.ok || !d.success) {
+      readingBox.textContent = '⚠ ' + (d.error || 'Hata oluştu.');
     } else {
-      area.innerHTML = `<span style="color:var(--red)">Hata: ${data.error}</span>`;
-      dot.style.background = '#e24b4a';
+      readingBox.textContent = d.output;
+      currentEntryId = d.id;
+      feedbackRow.style.display = 'flex';
+
+      if (d.chart_json && Object.keys(d.chart_json).length > 0) {
+        chartData = d.chart_json;
+        renderChartPanel(chartData);
+        chartToggle.style.display  = 'flex';
+        const vocBadge = document.getElementById('voc-badge-inline');
+        const isVoc = checkVoc(chartData);
+        vocBadge.innerHTML = isVoc ? '<span class="voc-badge">VOC</span>' : '';
+      }
+
+      loadHistory();
     }
   } catch(e) {
-    area.innerHTML = `<span style="color:var(--red)">Hata: ${e.message}</span>`;
-    dot.style.background = '#e24b4a';
+    readingBox.textContent = '⚠ Sunucu hatası: ' + e.message;
   }
 
   btn.disabled = false;
-  btn.innerHTML = '✦ Yorum üret';
+  btn.textContent = 'Sor';
 }
 
-let currentEntryId = null;
+// ── CHART PANEL ──────────────────────────
+
+function toggleChart() {
+  const panel  = document.getElementById('chart-panel');
+  const toggle = document.getElementById('chart-toggle');
+  panel.classList.toggle('visible');
+  toggle.classList.toggle('open');
+}
+
+function checkVoc(cj) {
+  // Basit kontrol: fixed_stars veya prompt üzerinden — engine VOC bilgisi json'da yok,
+  // ama "voc" anahtar kelimesi çıktıda aranabilir. Burada placeholder.
+  return false;
+}
+
+function dignityClass(d) {
+  if (!d) return '';
+  if (d.includes('domicile')) return 'dig-domicile';
+  if (d.includes('exalt'))    return 'dig-exaltation';
+  if (d.includes('detriment'))return 'dig-detriment';
+  if (d.includes('fall'))     return 'dig-fall';
+  return 'dig-peregrine';
+}
+
+function renderChartPanel(cj) {
+  const panel = document.getElementById('chart-panel');
+
+  // ── GEZEGEN TABLOSU
+  let html = '';
+  html += `<div class="chart-section">`;
+  html += `<div class="section-title">Gezegen Pozisyonları — ${cj.datetime ? cj.datetime.replace('T',' ').slice(0,16) : ''} | ${cj.is_daytime ? 'Gündüz' : 'Gece'}</div>`;
+  html += `<table><thead><tr>
+    <th>Gezegen</th><th>Derece</th><th>Burç</th><th>Ev</th><th>Dignity</th><th>Puan</th><th>Hız</th>
+  </tr></thead><tbody>`;
+
+  const planets = cj.planets || {};
+  for (const [key, p] of Object.entries(planets)) {
+    const retro = p.retrograde ? '<span class="retro"> ℞</span>' : '';
+    const dc = dignityClass(p.essential_dignity || '');
+    const deg = typeof p.sign_degree === 'number' ? p.sign_degree.toFixed(1) : '—';
+    const spd = typeof p.speed === 'number' ? (p.speed > 0 ? '+' : '') + p.speed.toFixed(3) : '—';
+    html += `<tr>
+      <td>${p.name || key}</td>
+      <td>${deg}°</td>
+      <td>${p.sign || '—'}</td>
+      <td>${p.house || '—'}</td>
+      <td class="${dc}">${p.essential_dignity || 'peregrine'}</td>
+      <td>${p.dignity_score ?? '—'}</td>
+      <td>${spd}${retro}</td>
+    </tr>`;
+  }
+  html += `</tbody></table></div>`;
+
+  // ── ASPECTLERs
+  const aspects = cj.aspects || [];
+  if (aspects.length > 0) {
+    html += `<div class="chart-section">`;
+    html += `<div class="section-title">Aspectler</div>`;
+    html += `<table><thead><tr><th>A</th><th>Açı</th><th>B</th><th>Orb</th><th>Durum</th></tr></thead><tbody>`;
+    for (const a of aspects) {
+      const status = a.applying ? '<span style="color:var(--green)">→ yaklaşıyor</span>'
+                                : '<span style="color:var(--text-dim)">← uzaklaşıyor</span>';
+      html += `<tr>
+        <td>${a.planet_a || '?'}</td>
+        <td>${a.aspect || '?'}</td>
+        <td>${a.planet_b || '?'}</td>
+        <td>${typeof a.orb === 'number' ? a.orb.toFixed(2) + '°' : '—'}</td>
+        <td>${status}</td>
+      </tr>`;
+    }
+    html += `</tbody></table></div>`;
+  }
+
+  // ── SABİT YILDIZLAR
+  const stars = cj.fixed_stars || [];
+  if (stars.length > 0) {
+    html += `<div class="chart-section">`;
+    html += `<div class="section-title">Aktif Sabit Yıldızlar</div>`;
+    html += `<table><thead><tr><th>Nokta</th><th>Yıldız</th><th>Orb</th><th>Doğa</th></tr></thead><tbody>`;
+    for (const s of stars) {
+      const cls = s.malefic ? 'malefic-star' : 'benefic-star';
+      html += `<tr>
+        <td>${s.point || '?'}</td>
+        <td class="${cls}">${s.star_tr || s.star_key}</td>
+        <td>${s.orb}°</td>
+        <td>${s.nature || '—'}</td>
+      </tr>`;
+    }
+    html += `</tbody></table></div>`;
+  }
+
+  // ── EV BAŞLANGIÇLARI
+  const houses = cj.houses || [];
+  if (houses.length > 0) {
+    html += `<div class="chart-section">`;
+    html += `<div class="section-title">Ev Başlangıçları (Regiomontanus)</div>`;
+    html += `<table><thead><tr><th>Ev</th><th>Burç</th><th>Derece</th></tr></thead><tbody>`;
+    houses.forEach((h, i) => {
+      const deg = typeof h.degree === 'number' ? h.degree.toFixed(1) : '—';
+      html += `<tr><td>${i+1}</td><td>${h.sign || '—'}</td><td>${deg}°</td></tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+
+  panel.innerHTML = html;
+}
+
+// ── FEEDBACK ─────────────────────────────
+
+function setRating(n) {
+  currentRating = n;
+  document.querySelectorAll('.rating-btn').forEach((b, i) => {
+    b.classList.toggle('active', i + 1 === n);
+  });
+}
 
 async function saveFeedback() {
-  if (!currentOutput) return;
-  const btn = document.getElementById('save-btn');
-  btn.textContent = 'kaydediliyor...';
-  btn.disabled = true;
-
-  try {
-    if (currentEntryId) {
-      // Mevcut kaydı güncelle
-      await fetch('/api/lab/feedback/' + currentEntryId, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          rating: rating,
-          tags: [...activeTags],
-          note: document.getElementById('fb-note').value.trim()
-        })
-      });
-    } else {
-      // Yeni kayıt
-      await fetch('/api/lab/feedback', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question: currentQuestion, chart_data: currentChartData,
-          system_prompt: document.getElementById('sys-input').value,
-          output: currentOutput, rating, tags: [...activeTags],
-          note: document.getElementById('fb-note').value.trim()
-        })
-      });
-    }
-    resetFeedback();
-    loadHistory();
-    btn.textContent = '✓ Kaydedildi';
-    setTimeout(() => { btn.textContent = 'Kaydet'; btn.disabled = false; }, 1500);
-  } catch(e) {
-    btn.textContent = 'Hata!';
-    btn.disabled = false;
-  }
+  if (!currentEntryId) return;
+  const note = document.getElementById('note-input').value;
+  await fetch(`/api/lab/feedback/${currentEntryId}`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({rating: currentRating, tags: [], note})
+  });
+  loadHistory();
 }
 
-function resetFeedback() {
-  rating = 0;
-  activeTags.clear();
-  document.querySelectorAll('.star').forEach(s => s.classList.remove('on'));
-  document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-  document.getElementById('fb-note').value = '';
-}
+// ── HISTORY ──────────────────────────────
 
 async function loadHistory() {
   try {
     const res = await fetch('/api/lab/history');
-    if (!res.ok) { console.warn('[Lab] history fetch:', res.status); return; }
-    const data = await res.json();
-    console.log('[Lab] history count:', data.length);
-    renderHistory(data);
-  } catch(e) { console.error('[Lab] loadHistory error:', e); }
-}
+    if (!res.ok) return;
+    const rows = await res.json();
+    const list = document.getElementById('hist-list');
+    const sec  = document.getElementById('history-section');
 
-function renderHistory(data) {
-  history = data;
-  const list = document.getElementById('hist-list');
-  document.getElementById('hist-badge').textContent = data.length;
+    if (!rows.length) { sec.style.display = 'none'; return; }
 
-  const ratings = data.filter(h => h.rating > 0).map(h => h.rating);
-  const avg = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) : '—';
-  document.getElementById('stat-total').textContent = data.length;
-  document.getElementById('stat-avg').textContent = avg;
-
-  if (data.length === 0) {
-    list.innerHTML = '<div class="empty-hist">Henüz kayıt yok.</div>';
-    return;
-  }
-  list.innerHTML = '';
-  data.forEach(h => {
-    const div = document.createElement('div');
-    div.className = 'hist-item';
-    const stars = h.rating ? '★'.repeat(h.rating) + '☆'.repeat(5 - h.rating) : '☆☆☆☆☆';
-    const tags = h.tags.length ? h.tags.join(', ') : '';
-    div.innerHTML = `
-      <div class="hist-q">${h.question}</div>
-      <div class="hist-meta">
-        <span class="hist-stars">${stars}</span>
-        <span>${h.date}</span>
-        ${tags ? `<span class="hist-tags">${tags}</span>` : ''}
-      </div>
-    `;
-    div.onclick = () => loadEntry(h, div);
-    list.appendChild(div);
-  });
-}
-
-function loadEntry(h, el) {
-  document.querySelectorAll('.hist-item').forEach(x => x.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('q-input').value = h.question;
-  const area = document.getElementById('output-area');
-  area.textContent = h.output;
-  currentOutput = h.output;
-  currentQuestion = h.question;
-  document.getElementById('feedback-bar').classList.add('visible');
-  if (h.note) document.getElementById('fb-note').value = h.note;
-  // restore rating
-  rating = h.rating || 0;
-  document.querySelectorAll('.star').forEach((s, i) => s.classList.toggle('on', i < rating));
-  // restore tags
-  activeTags = new Set(h.tags || []);
-  document.querySelectorAll('.tag').forEach(t => t.classList.toggle('on', activeTags.has(t.dataset.v)));
-}
-
-function switchTab(tab) {
-  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', ['feedback','reviews'][i] === tab));
-  document.getElementById('tab-feedback').classList.toggle('active', tab === 'feedback');
-  document.getElementById('tab-reviews').classList.toggle('active', tab === 'reviews');
-  if (tab === 'reviews') loadReviews();
-}
-
-let currentReviewId = null;
-
-async function loadReviews() {
-  try {
-    const res = await fetch('/api/lab/reviews');
-    const data = await res.json();
-    renderReviews(data);
+    sec.style.display = 'block';
+    list.innerHTML = rows.slice(0, 30).map(r => {
+      const ratingLabel = r.rating ? `<span class="hist-rating r${r.rating}">${r.rating}★</span>` : '';
+      return `<div class="hist-item" onclick="showHistItem(${r.id})">
+        <span class="hist-date">${r.date}</span>
+        <span class="hist-q">${escHtml(r.question)}</span>
+        ${ratingLabel}
+      </div>`;
+    }).join('');
   } catch(e) {}
 }
 
-function renderReviews(data) {
-  const list = document.getElementById('review-list');
-  const pending = data.filter(r => r.status === 'pending').length;
-  document.getElementById('review-badge').textContent = pending || data.length;
-  if (data.length === 0) {
-    list.innerHTML = '<div class="empty-hist">Henüz gönderim yok.</div>';
-    return;
+async function showHistItem(id) {
+  try {
+    const res = await fetch('/api/lab/history');
+    const rows = await res.json();
+    const r = rows.find(x => x.id === id);
+    if (!r) return;
+    document.getElementById('reading-box').textContent = r.output;
+    document.getElementById('output-section').style.display = 'flex';
+    document.getElementById('feedback-row').style.display = 'flex';
+    document.getElementById('chart-toggle').style.display = 'none';
+    currentEntryId = r.id;
+    currentRating  = r.rating || 0;
+    document.getElementById('note-input').value = r.note || '';
+    document.querySelectorAll('.rating-btn').forEach((b, i) => {
+      b.classList.toggle('active', i + 1 === currentRating);
+    });
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  } catch(e) {}
+}
+
+function escHtml(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── STARTUP ──────────────────────────────
+
+// Cookie kontrol — zaten giriş yapıldıysa direkt aç
+(function() {
+  if (document.cookie.includes('zt_lab=')) {
+    showApp();
   }
-  list.innerHTML = '';
-  data.forEach(r => {
-    const div = document.createElement('div');
-    div.className = 'review-item';
-    div.innerHTML = `
-      <div class="review-q">${r.question}</div>
-      <div class="review-meta">
-        <span class="status-${r.status}">${r.status === 'pending' ? '● bekliyor' : r.status === 'reviewed' ? '✓ incelendi' : '— yoksayıldı'}</span>
-        <span>${r.date}</span>
-      </div>
-    `;
-    div.onclick = () => openReview(r, div);
-    list.appendChild(div);
-  });
-}
-
-function openReview(r, el) {
-  document.querySelectorAll('.review-item').forEach(x => x.classList.remove('active'));
-  el.classList.add('active');
-  currentReviewId = r.id;
-  document.getElementById('rv-question').textContent = r.question;
-  document.getElementById('rv-output').textContent = r.output;
-  document.getElementById('rv-note').value = r.astrologer_note || '';
-  document.getElementById('review-detail').classList.add('visible');
-}
-
-async function saveReview(status) {
-  if (!currentReviewId) return;
-  const note = document.getElementById('rv-note').value.trim();
-  await fetch(`/api/lab/reviews/${currentReviewId}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status, note })
-  });
-  document.getElementById('review-detail').classList.remove('visible');
-  currentReviewId = null;
-  loadReviews();
-}
-
-checkAuth();
+})();
 </script>
 </body>
 </html>

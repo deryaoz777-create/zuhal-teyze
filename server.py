@@ -17,7 +17,7 @@ from database import (
     use_credit, log_question
 )
 from horary_engine import (
-    calc_chart, build_frawley_prompt, ask_claude,
+    calc_chart, build_frawley_prompt, ask_claude, chart_to_dict,
     PLANET_TR, SIGN_NAMES_TR, ESSENTIAL_DIGNITY_TABLE
 )
 
@@ -1233,6 +1233,7 @@ Sitemap: https://zuhalteyze.live/sitemap.xml
 
 
 
+@app.route("/lab")
 def lab():
     return send_from_directory(".", "lab.html")
 
@@ -1284,14 +1285,17 @@ def lab_reading():
             chart = calc_chart(question, dt, lat, lon)
             prompt = build_frawley_prompt(chart)
             output = ask_claude(prompt, ANTHROPIC_API_KEY)
+            chart_json = chart_to_dict(chart)
         else:
             # Custom prompt modu — sistem promptunu kullan
             if chart_data:
                 user_msg = f"Soru: {question}\n\nHarita verisi:\n{chart_data}"
+                chart_json = {}
             else:
                 # Haritayı hesapla, veri bölümünü ekle
                 chart = calc_chart(question, dt, lat, lon)
                 auto_prompt = build_frawley_prompt(chart)
+                chart_json = chart_to_dict(chart)
                 # Prompt yapısı: [sistem talimatı] --- [harita verisi] --- [kapanış]
                 # İkinci bölüm (index 1) harita verisidir
                 parts = auto_prompt.split("---")
@@ -1310,7 +1314,7 @@ def lab_reading():
         new_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
         conn.close()
 
-        return jsonify({"success": True, "output": output, "id": new_id})
+        return jsonify({"success": True, "output": output, "id": new_id, "chart_json": chart_json})
     except Exception as e:
         print(f"[LAB READING ERROR] {e}")
         return jsonify({"error": str(e)}), 500
