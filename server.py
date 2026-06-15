@@ -55,6 +55,12 @@ def _ensure_rate_table():
             PRIMARY KEY (ip, day)
         )
     """)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS lab_sessions (
+            token      TEXT PRIMARY KEY,
+            created_at TEXT
+        )
+    """)
     conn.commit()
     conn.close()
 

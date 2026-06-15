@@ -474,6 +474,7 @@ async function submitQuestion() {
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({question: q, lat, lon})
     });
+    if (res.status === 401) { forceLogout(); return; }
     const d = await res.json();
     if (!res.ok || !d.success) {
       readingBox.textContent = '⚠ ' + (d.error || 'Hata oluştu.');
@@ -674,6 +675,15 @@ async function showHistItem(id) {
 
 function escHtml(s) {
   return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function forceLogout() {
+  // Cookie'yi sil, login ekranını göster
+  document.cookie = 'zt_lab=; path=/; max-age=0';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-error').textContent = 'Oturum süresi dolmuş, tekrar giriş yap.';
+  document.getElementById('login-error').style.display = 'block';
 }
 
 // ── STARTUP ──────────────────────────────
