@@ -131,7 +131,7 @@ def _lab_authed():
 def _call_claude_raw(system_prompt, user_message):
     """Anthropic API'yi doğrudan çağır (lab için)."""
     payload = _json.dumps({
-        "model": "claude-opus-4-5-20251101",
+        "model": "claude-sonnet-4-6",
         "max_tokens": 1024,
         "system": system_prompt,
         "messages": [{"role": "user", "content": user_message}]

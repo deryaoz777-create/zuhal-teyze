@@ -460,7 +460,7 @@ function askFree(){
   btn.disabled=true; btn.textContent='· · ·';
   savedAnswer='';
   getLocation((lat,lon)=>{
-    fetch('/api/zuhal/free',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,lat,lon})})
+    fetch('/api/zuhal/free',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,lat,lon,lang:'en'})})
     .then(r=>r.json()).then(d=>{
       stopLoading();
       if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
@@ -513,7 +513,7 @@ function ask(){
   startLoading(rt);
   btn.disabled=true; btn.textContent='· · ·';
   getLocation((lat,lon)=>{
-    fetch('/api/zuhal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,lat,lon})})
+    fetch('/api/zuhal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,lat,lon,lang:'en'})})
     .then(r=>r.json()).then(d=>{
       stopLoading();
       if(d.auth_required){ showWall(); return; }
