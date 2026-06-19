@@ -284,6 +284,9 @@ def api_zuhal():
 
     data = request.json or {}
     question = data.get("question", "").strip()
+    lang = data.get("lang", "tr")
+    if lang not in ("tr", "en"):
+        lang = "tr"
     if not question:
         return jsonify({"error": "Soru boş olamaz."}), 400
 
@@ -293,7 +296,7 @@ def api_zuhal():
     try:
         dt = datetime.datetime.now()
         chart = calc_chart(question, dt, DEFAULT_LAT, DEFAULT_LON)
-        prompt = build_frawley_prompt(chart)
+        prompt = build_frawley_prompt(chart, lang=lang)
         interpretation = ask_claude(prompt, ANTHROPIC_API_KEY)
 
         # Credit kullan ve logla
@@ -334,12 +337,15 @@ def api_zuhal_free():
     question = data.get("question", "").strip()
     lat = float(data.get("lat", DEFAULT_LAT))
     lon = float(data.get("lon", DEFAULT_LON))
+    lang = data.get("lang", "tr")
+    if lang not in ("tr", "en"):
+        lang = "tr"
     if not question:
         return jsonify({"error": "Soru boş olamaz."}), 400
     try:
         dt = datetime.datetime.now()
         chart = calc_chart(question, dt, lat, lon)
-        prompt = build_frawley_prompt(chart)
+        prompt = build_frawley_prompt(chart, lang=lang)
         interpretation = ask_claude(prompt, ANTHROPIC_API_KEY)
         return jsonify({"success": True, "interpretation": interpretation})
     except Exception as e:
@@ -1279,6 +1285,9 @@ def lab_reading():
     system_prompt = data.get("system_prompt", "").strip()
     lat = float(data.get("lat", DEFAULT_LAT))
     lon = float(data.get("lon", DEFAULT_LON))
+    lang = data.get("lang", "tr")
+    if lang not in ("tr", "en"):
+        lang = "tr"
 
     if not question:
         return jsonify({"error": "Soru boş olamaz."}), 400
@@ -1289,7 +1298,7 @@ def lab_reading():
         if not system_prompt:
             # Tam horary engine — haritayı hesapla, build_frawley_prompt kullan
             chart = calc_chart(question, dt, lat, lon)
-            prompt = build_frawley_prompt(chart)
+            prompt = build_frawley_prompt(chart, lang=lang)
             output = ask_claude(prompt, ANTHROPIC_API_KEY)
             chart_json = chart_to_dict(chart)
         else:
@@ -1300,7 +1309,7 @@ def lab_reading():
             else:
                 # Haritayı hesapla, veri bölümünü ekle
                 chart = calc_chart(question, dt, lat, lon)
-                auto_prompt = build_frawley_prompt(chart)
+                auto_prompt = build_frawley_prompt(chart, lang=lang)
                 chart_json = chart_to_dict(chart)
                 # Prompt yapısı: [sistem talimatı] --- [harita verisi] --- [kapanış]
                 # İkinci bölüm (index 1) harita verisidir

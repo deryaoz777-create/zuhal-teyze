@@ -1000,10 +1000,12 @@ def _build_special_lines(chart: HorarChart, lord_a: str, lord_b: str) -> list:
 # İLİŞKİ PROMPT'U — ZUHAL TEYZE
 # ─────────────────────────────────────────
 
-def build_iliski_prompt(chart: HorarChart) -> str:
+def build_iliski_prompt(chart: HorarChart, lang: str = "tr") -> str:
     """
     İlişki soruları için Zuhal Teyze prompt'u.
     Decentering, bilge kadın enerjisi, combust detaylı kural, viral satır.
+    lang: "tr" veya "en" — kullanıcının soru dili. Teknik kural seti Türkçe
+    kalır (iç referans çerçevesi), ama çıktı dilini bu parametre belirler.
     """
     lord1  = get_house_ruler(chart, 1)
     lord7  = get_house_ruler(chart, 7)
@@ -1027,7 +1029,16 @@ def build_iliski_prompt(chart: HorarChart) -> str:
         if rec["mutual"]:
             reception_lines.append("✓ MUTUAL RECEPTION mevcut")
 
-    prompt = f"""Sen Zuhal Teyze'sin. John Frawley'nin "The Horary Textbook" ve William Lilly'nin "Christian Astrology" eserlerine dayanan klasik horary geleneğinde derinleşmiş bir astrologsun. Dış gezegenler (Uranüs, Neptün, Plüton) seni ilgilendirmiyor.
+    lang_directive = ""
+    closing_line = "Şimdi bu haritayı oku. Formatı takip et. Son söz ve viral satır zorunlu."
+    if lang == "en":
+        lang_directive = """## OUTPUT LANGUAGE — CRITICAL
+The user asked their question in English. Write your ENTIRE interpretation in natural, fluent English — every section, every line, including the KISA KARAR and SON SÖZ. The persona, safety, style and technical rules below are written in Turkish as your internal reference framework only — do not translate them literally and do not let any Turkish words leak into your answer. Use English planet and sign names (Moon, Mercury, Capricorn, Aquarius, etc.), not their Turkish equivalents. Keep the same section structure (short verdict, you, them, between you, the real question, closing line, viral line) but written entirely in English.
+
+"""
+        closing_line = "Now read this chart. Follow the format. The closing line and viral line are mandatory. Respond entirely in English — no Turkish."
+
+    prompt = f"""{lang_directive}Sen Zuhal Teyze'sin. John Frawley'nin "The Horary Textbook" ve William Lilly'nin "Christian Astrology" eserlerine dayanan klasik horary geleneğinde derinleşmiş bir astrologsun. Dış gezegenler (Uranüs, Neptün, Plüton) seni ilgilendirmiyor.
 
 ## KİMLİĞİN
 
@@ -1176,7 +1187,7 @@ SABİT YILDIZLAR (gezegen/ASC/MC konjunksiyon, orb ≤1.5°):
 
 ---
 
-Şimdi bu haritayı oku. Formatı takip et. Son söz ve viral satır zorunlu.
+{closing_line}
 """
     return prompt
 
@@ -1186,16 +1197,17 @@ SABİT YILDIZLAR (gezegen/ASC/MC konjunksiyon, orb ≤1.5°):
 # GENEL FRAWLEY PROMPT (İlişki dışı sorular)
 # ─────────────────────────────────────────
 
-def build_frawley_prompt(chart: HorarChart) -> str:
+def build_frawley_prompt(chart: HorarChart, lang: str = "tr") -> str:
     """
     Harita verisinden Claude için tam Frawley-bazlı horary prompt oluştur.
     İlişki soruları otomatik olarak build_iliski_prompt()'a yönlendirilir.
+    lang: "tr" veya "en" — kullanıcının soru dili.
     """
     q_data = detect_question_type(chart.question)
 
     # İlişki sorusu ise özel prompt kullan
     if q_data["type"] == "love":
-        return build_iliski_prompt(chart)
+        return build_iliski_prompt(chart, lang=lang)
 
     # Significatörleri belirle
     lord1 = get_house_ruler(chart, 1)
@@ -1227,7 +1239,16 @@ def build_frawley_prompt(chart: HorarChart) -> str:
     # Sabit yıldızlar
     fixed_star_lines = _build_fixed_star_lines(chart, chart.jd)
 
-    prompt = f"""Sen Zuhal Teyze'sin. John Frawley'nin "The Horary Textbook" ve William Lilly geleneğine dayanan klasik horary astrolojisinde derinleşmiş bir astrologsun. Dış gezegenler seni ilgilendirmiyor — sadece 7 klasik gezegen.
+    lang_directive = ""
+    closing_line = "Şimdi bu haritayı oku. Formatı takip et. Viral satır zorunlu."
+    if lang == "en":
+        lang_directive = """## OUTPUT LANGUAGE — CRITICAL
+The user asked their question in English. Write your ENTIRE interpretation in natural, fluent English — every section, every line, including the verdict and closing line. The persona, safety, style and technical rules below are written in Turkish as your internal reference framework only — do not translate them literally and do not let any Turkish words leak into your answer. Use English planet and sign names (Moon, Mercury, Capricorn, Aquarius, etc.), not their Turkish equivalents. Keep the same section structure (verdict, technical reading, context, closing line, viral line) but written entirely in English.
+
+"""
+        closing_line = "Now read this chart. Follow the format. The viral line is mandatory. Respond entirely in English — no Turkish."
+
+    prompt = f"""{lang_directive}Sen Zuhal Teyze'sin. John Frawley'nin "The Horary Textbook" ve William Lilly geleneğine dayanan klasik horary astrolojisinde derinleşmiş bir astrologsun. Dış gezegenler seni ilgilendirmiyor — sadece 7 klasik gezegen.
 
 ## KİMLİĞİN
 
@@ -1338,7 +1359,7 @@ SABİT YILDIZLAR (gezegen/ASC/MC konjunksiyon, orb ≤1.5°):
 
 ---
 
-Şimdi bu haritayı oku. Formatı takip et. Viral satır zorunlu.
+{closing_line}
 """
     return prompt
 
