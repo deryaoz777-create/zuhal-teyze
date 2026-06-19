@@ -1023,6 +1023,106 @@ def en_privacy():
 
 
 # ─────────────────────────────────────────
+# CASE STUDIES
+# ─────────────────────────────────────────
+
+@app.route("/cases")
+def cases_index():
+    return """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horary Case Studies — Real Questions, Real Charts | Zuhal Teyze</title>
+<meta name="description" content="Real horary astrology case studies with full charts. Classical Frawley/Lilly tradition. Career, relationships, medical questions — anonymised real readings.">
+<link rel="canonical" href="https://zuhalteyze.live/cases">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F5F0E8;color:#1A1218;font-family:'Outfit',sans-serif;font-weight:300}
+.hdr{background:#2D1B2E;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:500;color:#C9A84C;text-decoration:none}
+.nav a{font-size:.8rem;color:rgba(245,240,232,.6);text-decoration:none;margin-left:1.5rem;letter-spacing:.08em;text-transform:uppercase}
+.nav a:hover{color:#C9A84C}
+.hero{background:#2D1B2E;padding:3.5rem 2rem 3rem;text-align:center}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;color:#F5F0E8;margin-bottom:.75rem}
+.hero p{color:rgba(245,240,232,.55);font-size:.9rem;max-width:520px;margin:0 auto}
+.container{max-width:840px;margin:0 auto;padding:3rem 2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem}
+.card{background:white;border:1px solid rgba(201,168,76,.2);border-radius:10px;overflow:hidden;text-decoration:none;color:inherit;display:block;transition:box-shadow .2s}
+.card:hover{box-shadow:0 8px 32px rgba(45,27,46,.12)}
+.card-top{padding:1.5rem 1.75rem 1.25rem;border-bottom:1px solid rgba(201,168,76,.12)}
+.card-cat{font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:#C9A84C;margin-bottom:.6rem}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:500;color:#2D1B2E;line-height:1.3;margin-bottom:.5rem}
+.card-desc{font-size:.85rem;color:#7A6D72;line-height:1.6}
+.card-bottom{padding:1rem 1.75rem;display:flex;align-items:center;justify-content:space-between}
+.card-tags{display:flex;gap:.5rem;flex-wrap:wrap}
+.tag{font-size:.7rem;background:rgba(201,168,76,.1);color:#7B5EA7;padding:3px 8px;border-radius:3px;letter-spacing:.04em}
+.card-arrow{color:#C9A84C;font-size:1.1rem}
+footer{background:#1a1018;padding:1.5rem 2rem;text-align:center;font-size:.78rem;color:rgba(245,240,232,.25);margin-top:3rem}
+@media(max-width:600px){.nav{display:none}.grid{grid-template-columns:1fr}.container{padding:2rem 1.25rem}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a href="https://zuhalteyze.live" class="logo">Zuhal Teyze</a>
+  <nav class="nav">
+    <a href="/en">Home</a>
+    <a href="/en/learn">Learn</a>
+    <a href="/en/faq">FAQ</a>
+    <a href="/en/contact">Contact</a>
+  </nav>
+</header>
+<div class="hero">
+  <h1>Horary Case Studies</h1>
+  <p>Real questions. Real charts. Anonymised readings in the classical Frawley / Lilly tradition.</p>
+</div>
+<div class="container">
+  <div class="grid">
+    <a class="card" href="/cases/should-i-give-up-profession">
+      <div class="card-top">
+        <div class="card-cat">Career &amp; Profession</div>
+        <div class="card-title">Should I Give Up On This Profession?</div>
+        <div class="card-desc">Lord 1 Mars conjunct Pollux — a Computer Science professional asks whether to abandon their path. The warrior and the scholar.</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-tags"><span class="tag">Career</span><span class="tag">Fixed Star</span><span class="tag">Lord 10</span></div>
+        <span class="card-arrow">&#8599;</span>
+      </div>
+    </a>
+    <a class="card" href="/cases/will-i-meet-my-husband">
+      <div class="card-top">
+        <div class="card-cat">Relationships &amp; Marriage</div>
+        <div class="card-title">Will I Meet My Future Husband?</div>
+        <div class="card-desc">Jupiter retrograde in detriment, three barren signs, Bellatrix rising. The chart speaks clearly — but also hides a quiet hope.</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-tags"><span class="tag">Marriage</span><span class="tag">Retrograde</span><span class="tag">Barren Signs</span></div>
+        <span class="card-arrow">&#8599;</span>
+      </div>
+    </a>
+  </div>
+  <p style="margin-top:3rem;text-align:center;font-size:.85rem;color:#7A6D72;">
+    More cases added regularly. Have a question of your own?
+    <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" style="color:#7B5EA7">Ask Horary Derya on Fiverr &#8599;</a>
+  </p>
+</div>
+<footer>&copy; 2025 Zuhal Teyze &middot; zuhalteyze.live &middot; Classical Horary Astrology</footer>
+</body>
+</html>"""
+
+
+@app.route("/cases/should-i-give-up-profession")
+def case_profession():
+    return send_from_directory("cases", "profession.html")
+
+
+@app.route("/cases/will-i-meet-my-husband")
+def case_husband():
+    return send_from_directory("cases", "husband.html")
+
+
+# ─────────────────────────────────────────
 # LAB
 # ─────────────────────────────────────────
 
@@ -1200,6 +1300,9 @@ def sitemap():
         ("/faq", "0.8", "weekly"),
         ("/en/faq", "0.8", "weekly"),
         ("/tablo", "0.7", "monthly"),
+        ("/cases", "0.8", "monthly"),
+        ("/cases/should-i-give-up-profession", "0.8", "monthly"),
+        ("/cases/will-i-meet-my-husband", "0.8", "monthly"),
         ("/contact", "0.5", "monthly"),
         ("/en/contact", "0.5", "monthly"),
         ("/terms", "0.3", "monthly"),
