@@ -1022,6 +1022,108 @@ def en_privacy():
 </body></html>"""
 
 
+
+
+# ─────────────────────────────────────────
+# VAKALAR (TR)
+# ─────────────────────────────────────────
+
+@app.route("/vakalar")
+def vakalar_index():
+    return """<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horary Vaka İncelemeleri — Gerçek Sorular, Gerçek Haritalar | Zuhal Teyze</title>
+<meta name="description" content="Gerçek horary astroloji vakları, gerçek haritalar. Frawley/Lilly geleneği. Kariyer, ilişki, sağlık soruları — anonimleştirilmiş gerçek okumalar.">
+<link rel="canonical" href="https://zuhalteyze.live/vakalar">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F5F0E8;color:#1A1218;font-family:'Outfit',sans-serif;font-weight:300}
+.hdr{background:#2D1B2E;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:500;color:#C9A84C;text-decoration:none}
+.nav a{font-size:.8rem;color:rgba(245,240,232,.6);text-decoration:none;margin-left:1.5rem;letter-spacing:.08em;text-transform:uppercase}
+.nav a:hover{color:#C9A84C}
+.hero{background:#2D1B2E;padding:3.5rem 2rem 3rem;text-align:center}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:500;color:#F5F0E8;margin-bottom:.75rem}
+.hero p{color:rgba(245,240,232,.55);font-size:.9rem;max-width:520px;margin:0 auto}
+.container{max-width:840px;margin:0 auto;padding:3rem 2rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.5rem}
+.card{background:white;border:1px solid rgba(201,168,76,.2);border-radius:10px;overflow:hidden;text-decoration:none;color:inherit;display:block;transition:box-shadow .2s}
+.card:hover{box-shadow:0 8px 32px rgba(45,27,46,.12)}
+.card-top{padding:1.5rem 1.75rem 1.25rem;border-bottom:1px solid rgba(201,168,76,.12)}
+.card-cat{font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:#C9A84C;margin-bottom:.6rem}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:500;color:#2D1B2E;line-height:1.3;margin-bottom:.5rem}
+.card-desc{font-size:.85rem;color:#7A6D72;line-height:1.6}
+.card-bottom{padding:1rem 1.75rem;display:flex;align-items:center;justify-content:space-between}
+.card-tags{display:flex;gap:.5rem;flex-wrap:wrap}
+.tag{font-size:.7rem;background:rgba(201,168,76,.1);color:#7B5EA7;padding:3px 8px;border-radius:3px;letter-spacing:.04em}
+.card-arrow{color:#C9A84C;font-size:1.1rem}
+footer{background:#1a1018;padding:1.5rem 2rem;text-align:center;font-size:.78rem;color:rgba(245,240,232,.25);margin-top:3rem}
+@media(max-width:600px){.nav{display:none}.grid{grid-template-columns:1fr}.container{padding:2rem 1.25rem}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a href="https://zuhalteyze.live" class="logo">Zuhal Teyze</a>
+  <nav class="nav">
+    <a href="/">Ana Sayfa</a>
+    <a href="/ogren">Öğren</a>
+    <a href="/faq">SSS</a>
+    <a href="/contact">İletişim</a>
+  </nav>
+</header>
+<div class="hero">
+  <h1>Horary Vaka İncelemeleri</h1>
+  <p>Gerçek sorular. Gerçek haritalar. Frawley / Lilly geleneğiyle anonimleştirilmiş okumalar.</p>
+</div>
+<div class="container">
+  <div class="grid">
+    <a class="card" href="/vakalar/meslegimi-birakayim-mi">
+      <div class="card-top">
+        <div class="card-cat">Kariyer &amp; Meslek</div>
+        <div class="card-title">Meslekten Vazgeçmeli miyim?</div>
+        <div class="card-desc">Lord 1 Mars sabit yıldız Pollux'ta — bir bilgisayar mühendisi mesleki yolundan vazgeçip geçmeyeceğini soruyor. Savaşçı ve âlim.</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-tags"><span class="tag">Kariyer</span><span class="tag">Sabit Yıldız</span><span class="tag">Lord 10</span></div>
+        <span class="card-arrow">&#8599;</span>
+      </div>
+    </a>
+    <a class="card" href="/vakalar/kocami-bulacak-miyim">
+      <div class="card-top">
+        <div class="card-cat">İlişki &amp; Evlilik</div>
+        <div class="card-title">Kocamla Tanışacak mıyım?</div>
+        <div class="card-desc">Jüpiter zararda ve geri harekette, üç kısır burç, Bellatrix kavuşumu. Harita açıkça konuşuyor — ama sessizce bir umut da saklıyor.</div>
+      </div>
+      <div class="card-bottom">
+        <div class="card-tags"><span class="tag">Evlilik</span><span class="tag">Geri Hareket</span><span class="tag">Kısır Burçlar</span></div>
+        <span class="card-arrow">&#8599;</span>
+      </div>
+    </a>
+  </div>
+  <p style="margin-top:3rem;text-align:center;font-size:.85rem;color:#7A6D72;">
+    Yeni vakalar düzenli ekleniyor. Kendi sorunuz mu var?
+    <a href="https://www.fiverr.com/s/LdwmRpA" target="_blank" style="color:#7B5EA7">Fiverr&#39;da Horary Derya &#8599;</a>
+  </p>
+</div>
+<footer>&copy; 2025 Zuhal Teyze &middot; zuhalteyze.live &middot; Klasik Horary Astroloji</footer>
+</body>
+</html>"""
+
+
+@app.route("/vakalar/meslegimi-birakayim-mi")
+def vaka_meslek():
+    return send_from_directory("cases", "meslek.html")
+
+
+@app.route("/vakalar/kocami-bulacak-miyim")
+def vaka_esim():
+    return send_from_directory("cases", "esim.html")
+
+
 # ─────────────────────────────────────────
 # CASE STUDIES
 # ─────────────────────────────────────────
@@ -1300,6 +1402,9 @@ def sitemap():
         ("/faq", "0.8", "weekly"),
         ("/en/faq", "0.8", "weekly"),
         ("/tablo", "0.7", "monthly"),
+        ("/vakalar", "0.8", "monthly"),
+        ("/vakalar/meslegimi-birakayim-mi", "0.8", "monthly"),
+        ("/vakalar/kocami-bulacak-miyim", "0.8", "monthly"),
         ("/cases", "0.8", "monthly"),
         ("/cases/should-i-give-up-profession", "0.8", "monthly"),
         ("/cases/will-i-meet-my-husband", "0.8", "monthly"),
