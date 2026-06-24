@@ -17,7 +17,7 @@
 <meta name="google-site-verification" content="hhgkCOajijszpcMpIxFkPTokjYTPS7CzDhsG1L1aqJA">
 <meta name="twitter:description" content="Hayatınızdaki her soruyu yıldızlara sorun. Klasik horary — ücretsiz.">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:radial-gradient(ellipse 90% 60% at 70% -10%, rgba(217,118,106,.12), transparent 60%),radial-gradient(ellipse 70% 80% at 10% 100%, rgba(29,85,96,.16), transparent 55%),linear-gradient(160deg,#3a1f2e 0%,#241019 45%,#160a10 100%) fixed;font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;position:relative}
@@ -93,6 +93,24 @@ textarea:focus,input:focus{border-color:rgba(232,154,139,.65);box-shadow:0 0 10p
 footer{margin-top:2.5rem;position:relative;z-index:1}
 footer a{font-size:11px;color:rgba(201,168,118,.32);text-decoration:none;letter-spacing:.05em}
 footer a:hover{color:rgba(201,168,118,.65)}
+.pay-overlay{position:fixed;inset:0;background:rgba(15,6,11,.88);backdrop-filter:blur(5px);z-index:200;display:none;align-items:center;justify-content:center;padding:1.25rem}
+.pay-overlay.show{display:flex}
+.pay-modal{width:100%;max-width:400px;background:rgba(46,18,30,.97);border:1px solid rgba(201,168,118,.3);border-radius:10px;padding:1.75rem 1.5rem}
+.pay-title{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.16em;color:rgba(201,168,118,.9);text-align:center;margin-bottom:.35rem}
+.pay-sub{font-size:13px;color:rgba(230,211,174,.4);font-style:italic;text-align:center;margin-bottom:1.4rem;line-height:1.55}
+.pay-pkgs{display:flex;flex-direction:column;gap:.65rem}
+.pay-pkg{background:rgba(217,118,106,.06);border:1px solid rgba(201,168,118,.18);border-radius:7px;padding:.9rem 1.1rem;cursor:pointer;transition:all .22s;display:flex;justify-content:space-between;align-items:center;position:relative;overflow:hidden}
+.pay-pkg::after{content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,118,.1),transparent);pointer-events:none}
+.pay-pkg:hover{background:rgba(217,118,106,.15);border-color:rgba(201,168,118,.48);box-shadow:0 0 16px rgba(201,168,118,.14)}
+.pay-pkg:hover::after{animation:shimmer .6s ease-in-out}
+.pay-pkg.loading{opacity:.55;pointer-events:none}
+.pay-pkg-left{display:flex;flex-direction:column;gap:.25rem}
+.pay-pkg-name{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;color:rgba(230,211,174,.85)}
+.pay-pkg-credits{font-size:12px;color:rgba(201,168,118,.48);font-style:italic}
+.pay-pkg-price{font-family:'Cinzel',serif;font-size:15px;background:linear-gradient(135deg,#c9a876,#d9766a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.06em}
+.pay-err{min-height:16px;margin-top:.85rem;font-size:12px;color:#ff9180;text-align:center;font-style:italic}
+.pay-close{display:block;margin-top:1.1rem;text-align:center;font-size:11px;color:rgba(201,168,118,.28);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.pay-close:hover{color:rgba(201,168,118,.6)}
 </style>
 </head>
 <body>
@@ -346,7 +364,7 @@ footer a:hover{color:rgba(201,168,118,.65)}
         <span class="user-email" id="user-email"></span>
         <span class="credits-info">Kalan: <span class="credits-count" id="credits-count">—</span></span>
       </div>
-      <button class="btn btn-sm" id="btn-buy" onclick="openCheckout()">✦ 10 Soru Satın Al — $4.99</button>
+      <button class="btn btn-sm" id="btn-buy" onclick="openCheckout()">✦ KREDİ SATIN AL</button>
       <div id="carry-wrap" style="display:none">
         <div class="divider"></div>
         <div class="response-text visible" id="carry-answer" style="font-size:16px"></div>
@@ -393,6 +411,39 @@ footer a:hover{color:rgba(201,168,118,.65)}
     </div>
   </footer>
 </div>
+<!-- Payment Modal -->
+<div class="pay-overlay" id="pay-overlay" onclick="if(event.target===this)closePay()">
+  <div class="pay-modal">
+    <div class="pay-title">✦ &nbsp;KREDİ SATIN AL&nbsp; ✦</div>
+    <div class="pay-sub">Her soru tek kullanımlık bir horary okumadır.<br>Kredi satın al, istediğin zaman sor.</div>
+    <div class="pay-pkgs">
+      <div class="pay-pkg" id="pkg-3q" onclick="goPay('3q')">
+        <div class="pay-pkg-left">
+          <div class="pay-pkg-name">3 SORU</div>
+          <div class="pay-pkg-credits">3 horary okuma</div>
+        </div>
+        <div class="pay-pkg-price">$5</div>
+      </div>
+      <div class="pay-pkg" id="pkg-5q" onclick="goPay('5q')">
+        <div class="pay-pkg-left">
+          <div class="pay-pkg-name">5 SORU</div>
+          <div class="pay-pkg-credits">5 horary okuma</div>
+        </div>
+        <div class="pay-pkg-price">$8</div>
+      </div>
+      <div class="pay-pkg" id="pkg-10q" onclick="goPay('10q')">
+        <div class="pay-pkg-left">
+          <div class="pay-pkg-name">10 SORU</div>
+          <div class="pay-pkg-credits">10 horary okuma · en iyi değer</div>
+        </div>
+        <div class="pay-pkg-price">$10</div>
+      </div>
+    </div>
+    <div class="pay-err" id="pay-err"></div>
+    <span class="pay-close" onclick="closePay()">vazgeç</span>
+  </div>
+</div>
+
 <script>
 
 const PHRASES = ["Sabrınızı... yıldızlar acele etmez.","Görüyorum, görüyorum...","Saturnus düşünüyor.","Bu soruyu zaten biliyordun.","Hmm. İlginç bir soru."];
@@ -424,7 +475,6 @@ window.onload=function(){
     if(d.logged_in) showAuthed(d.email,d.credits,false);
     else showFree();
   }).catch(()=>showFree());
-  initPaddle();
   createStars();
 };
 
@@ -608,19 +658,30 @@ function shareStory(which){
   a.href=c.toDataURL('image/png'); a.click();
 }
 
-// Paddle
-async function initPaddle(){
-  try{
-    const cfg=await fetch('/api/paddle/config').then(r=>r.json());
-    if(cfg.env==='sandbox') Paddle.Environment.set('sandbox');
-    Paddle.Initialize({token:cfg.client_token});
-    window._paddlePrice=cfg.price_id;
-  }catch(e){ console.warn('Paddle:',e); }
-}
+// Lemon Squeezy Checkout
 function openCheckout(){
-  const email=document.getElementById('user-email').textContent;
-  if(!window._paddlePrice){ alert('Ödeme sistemi yüklenemedi.'); return; }
-  Paddle.Checkout.open({items:[{priceId:window._paddlePrice,quantity:1}],customer:{email},customData:{email},settings:{displayMode:'overlay',theme:'dark'}});
+  document.getElementById('pay-err').textContent='';
+  document.getElementById('pay-overlay').classList.add('show');
+}
+function closePay(){
+  document.getElementById('pay-overlay').classList.remove('show');
+  document.getElementById('pay-err').textContent='';
+  ['3q','5q','10q'].forEach(v=>document.getElementById('pkg-'+v).classList.remove('loading'));
+}
+async function goPay(variant){
+  const pkg=document.getElementById('pkg-'+variant);
+  const err=document.getElementById('pay-err');
+  err.textContent='';
+  pkg.classList.add('loading');
+  try{
+    const r=await fetch('/api/checkout/url?variant='+variant);
+    const d=await r.json();
+    if(d.url){ window.location.href=d.url; }
+    else{ err.textContent='Bağlantı hatası, tekrar deneyin.'; pkg.classList.remove('loading'); }
+  }catch(e){
+    err.textContent='Bağlantı hatası, tekrar deneyin.';
+    pkg.classList.remove('loading');
+  }
 }
 
 // Stars
