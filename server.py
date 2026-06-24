@@ -9,12 +9,16 @@ import json as _json
 import sqlite3
 import secrets
 import urllib.request
+import urllib.parse
 import random
+import hmac
+import hashlib
 import resend
 from database import (
     init_db, get_or_create_user, create_magic_token,
     verify_magic_token, create_session, get_user_by_session,
-    use_credit, log_question
+    use_credit, log_question,
+    add_credits, is_payment_processed, mark_payment_processed
 )
 from horary_engine import (
     calc_chart, build_frawley_prompt, ask_claude, chart_to_dict,
@@ -26,6 +30,18 @@ app = Flask(__name__, static_folder=".")
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "")
 BASE_URL = os.environ.get("BASE_URL", "https://zuhal-teyze-production.up.railway.app")
+
+LS_WEBHOOK_SECRET = os.environ.get("LS_WEBHOOK_SECRET", "")
+VARIANT_CREDITS = {
+    int(os.environ.get("LS_VARIANT_3Q",  "0")): 3,
+    int(os.environ.get("LS_VARIANT_5Q",  "0")): 5,
+    int(os.environ.get("LS_VARIANT_10Q", "0")): 10,
+}
+LS_CHECKOUT_URLS = {
+    "3q":  os.environ.get("LS_CHECKOUT_3Q",  ""),
+    "5q":  os.environ.get("LS_CHECKOUT_5Q",  ""),
+    "10q": os.environ.get("LS_CHECKOUT_10Q", ""),
+}
 
 resend.api_key = RESEND_API_KEY
 
@@ -1451,6 +1467,145 @@ Sitemap: https://zuhalteyze.live/sitemap.xml
 """
     return Response(txt, mimetype="text/plain")
 
+
+# ─────────────────────────────────────────
+# LEMON SQUEEZY WEBHOOK
+# ─────────────────────────────────────────
+
+@app.route("/api/webhook/lemonsqueezy", methods=["POST"])
+def webhook_lemonsqueezy():
+    """Lemon Squeezy ödeme bildirimi — başarılı her siparişte credit yükler."""
+
+    payload_bytes = request.get_data()
+
+    # İmza doğrula
+    signature = request.headers.get("X-Signature", "")
+    if not LS_WEBHOOK_SECRET:
+        print("[LS WEBHOOK] LS_WEBHOOK_SECRET tanımlı değil!")
+        return jsonify({"error": "Webhook secret eksik"}), 500
+
+    expected_sig = hmac.new(
+        LS_WEBHOOK_SECRET.encode("utf-8"),
+        payload_bytes,
+        hashlib.sha256
+    ).hexdigest()
+
+    if not hmac.compare_digest(expected_sig, signature):
+        print(f"[LS WEBHOOK] İmza geçersiz.")
+        return jsonify({"error": "Geçersiz imza"}), 401
+
+    try:
+        payload = _json.loads(payload_bytes)
+    except Exception:
+        return jsonify({"error": "JSON parse hatası"}), 400
+
+    # Sadece order_created işle
+    event_name = payload.get("meta", {}).get("event_name", "")
+    if event_name != "order_created":
+        print(f"[LS WEBHOOK] Atlandı: {event_name}")
+        return jsonify({"ok": True, "skipped": event_name}), 200
+
+    data_attrs = payload.get("data", {}).get("attributes", {})
+    order_id   = str(payload.get("data", {}).get("id", ""))
+    status     = data_attrs.get("status", "")
+    email      = (data_attrs.get("user_email") or "").strip().lower()
+
+    # custom_data'da email varsa onu tercih et
+    custom_email = (
+        payload.get("meta", {}).get("custom_data", {}).get("user_email", "")
+    ).strip().lower()
+    if custom_email:
+        email = custom_email
+
+    variant_id = data_attrs.get("first_order_item", {}).get("variant_id")
+
+    print(f"[LS WEBHOOK] order={order_id} status={status} email={email} variant={variant_id}")
+
+    if status != "paid":
+        return jsonify({"ok": True, "skipped": f"status={status}"}), 200
+
+    if not email or "@" not in email:
+        return jsonify({"error": "Email yok"}), 400
+
+    # Idempotency
+    if is_payment_processed(order_id):
+        print(f"[LS WEBHOOK] Duplicate: {order_id}")
+        return jsonify({"ok": True, "duplicate": True}), 200
+
+    # Credit miktarı
+    credits_to_add = VARIANT_CREDITS.get(variant_id, 0)
+    if credits_to_add == 0:
+        print(f"[LS WEBHOOK] ⚠️  Bilinmeyen variant_id={variant_id}, 3 credit verildi.")
+        credits_to_add = 3
+
+    new_total = add_credits(email, credits_to_add)
+    mark_payment_processed(order_id, email, credits_to_add, variant_id)
+    print(f"[LS WEBHOOK] ✓ {email} → +{credits_to_add} credit (toplam: {new_total})")
+
+    # Bildirim emaili
+    try:
+        resend.Emails.send({
+            "from": "Zuhal Teyze <noreply@zuhalteyze.live>",
+            "to": email,
+            "reply_to": "deryaoz777@gmail.com",
+            "subject": "Zuhal Teyze — Krediniz yüklendi ✨",
+            "html": f"""
+            <div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;
+                        padding:2rem;background:#f5f0e8;">
+                <h2 style="font-family:'Cinzel',serif;color:#2e1f6e;
+                            text-align:center;letter-spacing:.1em;">ZUHAL TEYZE</h2>
+                <p style="color:#4a3a2a;font-size:17px;line-height:1.7;font-style:italic;">
+                    Gözüm, ödemen geldi. Hesabına <strong>{credits_to_add} soru hakkı</strong>
+                    yüklendi. Toplam kredin: <strong>{new_total}</strong>.
+                </p>
+                <div style="text-align:center;margin:2rem 0;">
+                    <a href="https://zuhalteyze.live"
+                       style="background:#2e1f6e;color:#f5e8b8;padding:14px 32px;
+                              text-decoration:none;font-family:sans-serif;
+                              font-size:14px;letter-spacing:2px;border-radius:4px;">
+                        SORUNU SOR
+                    </a>
+                </div>
+            </div>
+            """
+        })
+    except Exception as e:
+        print(f"[LS WEBHOOK] Bildirim emaili gönderilemedi: {e}")
+
+    return jsonify({"ok": True, "credits_added": credits_to_add, "new_total": new_total}), 200
+
+
+# ─────────────────────────────────────────
+# CHECKOUT URL
+# ─────────────────────────────────────────
+
+@app.route("/api/checkout/url", methods=["GET"])
+def checkout_url():
+    """
+    Frontend'e Lemon Squeezy checkout URL'i döndürür.
+    Kullanım: /api/checkout/url?variant=3q | 5q | 10q
+    """
+    session_token = request.cookies.get("zt_session", "")
+    user = get_user_by_session(session_token) if session_token else None
+
+    variant = request.args.get("variant", "").lower()
+    base_url = LS_CHECKOUT_URLS.get(variant)
+
+    if not base_url:
+        return jsonify({"error": f"Bilinmeyen paket: {variant}"}), 400
+
+    if user:
+        sep = "&" if "?" in base_url else "?"
+        email_enc = urllib.parse.quote(user["email"])
+        checkout_full = (
+            f"{base_url}{sep}"
+            f"checkout[email]={email_enc}"
+            f"&checkout[custom][user_email]={email_enc}"
+        )
+    else:
+        checkout_full = base_url
+
+    return jsonify({"url": checkout_full})
 
 
 @app.route("/lab")

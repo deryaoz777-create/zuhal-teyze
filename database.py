@@ -95,6 +95,18 @@ def init_db():
         )
     """)
 
+    # ── LEMON SQUEEZY ÖDEMELER ─────────────────
+    c.execute("""
+        CREATE TABLE IF NOT EXISTS payments (
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id      TEXT UNIQUE NOT NULL,
+            email         TEXT NOT NULL,
+            credits_added INTEGER NOT NULL,
+            variant_id    INTEGER,
+            processed_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
     conn.commit()
     conn.close()
     print("[DB] Tablolar hazır.")
@@ -191,6 +203,57 @@ def log_question(user_id: int, question: str):
     conn = get_db()
     c = conn.cursor()
     c.execute("INSERT INTO question_log (user_id, question) VALUES (?, ?)", (user_id, question))
+    conn.commit()
+    conn.close()
+
+
+# ─────────────────────────────────────────
+# LEMON SQUEEZY ÖDEME FONKSİYONLARI
+# ─────────────────────────────────────────
+
+def add_credits(email: str, amount: int) -> int:
+    """
+    Kullanıcıya credit ekle (yoksa oluştur).
+    Güncel credit sayısını döndürür.
+    """
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT id FROM users WHERE email = ?", (email,))
+    row = c.fetchone()
+    if not row:
+        c.execute("INSERT INTO users (email, credits) VALUES (?, 0)", (email,))
+        conn.commit()
+    c.execute("UPDATE users SET credits = credits + ? WHERE email = ?", (amount, email))
+    conn.commit()
+    c.execute("SELECT credits FROM users WHERE email = ?", (email,))
+    new_total = c.fetchone()["credits"]
+    conn.close()
+    return new_total
+
+
+def is_payment_processed(order_id: str) -> bool:
+    """
+    Bu order_id daha önce işlendi mi?
+    Aynı webhook iki kez gelirse çift credit verilmesini önler.
+    """
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("SELECT id FROM payments WHERE order_id = ?", (order_id,))
+    exists = c.fetchone() is not None
+    conn.close()
+    return exists
+
+
+def mark_payment_processed(order_id: str, email: str, credits_added: int, variant_id: int = None):
+    """
+    Ödemeyi işlenmiş olarak işaretle.
+    """
+    conn = get_db()
+    c = conn.cursor()
+    c.execute(
+        "INSERT OR IGNORE INTO payments (order_id, email, credits_added, variant_id) VALUES (?, ?, ?, ?)",
+        (order_id, email, credits_added, variant_id)
+    )
     conn.commit()
     conn.close()
 
