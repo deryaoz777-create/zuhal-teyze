@@ -434,10 +434,46 @@ def house_of_longitude(lon: float, house_cusps: list) -> int:
 
 
 def aspect_between(lon1: float, lon2: float, orb: float = 7.0) -> Optional[str]:
+    """
+    Klasik horary (Frawley/Lilly): iki gezegen arasındaki aspekti döndürür.
+
+    TEMEL KURAL: Aspekt ancak iki gezegenin bulunduğu BURÇLAR birbirleriyle
+    o aspekt ilişkisindeyse oluşabilir.
+
+    Frawley (The Horary Textbook, s.85):
+    "Aspects can be made only if the signs the planets occupy are themselves
+    in that aspect. Taurus is in trine to Capricorn. A planet at 29 Taurus
+    is trine a planet at 29 Capricorn. It is NOT trine a planet at 0 Aquarius."
+
+    Yani: Akrep'teki Ay, Yengeç'teki Jüpiter'e asla KARE yapamaz — çünkü
+    Akrep ve Yengeç kare değil, TRINE ilişkisindedir. Açısal fark 90°'ye
+    yakın olsa bile bu bir kare aspekti değildir.
+    """
+    sign1 = int(lon1 / 30) % 12
+    sign2 = int(lon2 / 30) % 12
+    sign_diff = abs(sign1 - sign2)
+    if sign_diff > 6:
+        sign_diff = 12 - sign_diff
+
+    # Bu iki burç hangi major aspekt ilişkisinde?
+    SIGN_ASPECTS = {
+        0: ("conjunction", 0),
+        2: ("sextile",     60),
+        3: ("square",      90),
+        4: ("trine",       120),
+        6: ("opposition",  180),
+    }
+    sign_asp = SIGN_ASPECTS.get(sign_diff)
+    if sign_asp is None:
+        return None  # 1 veya 5 burç arayla (quincunx vb.) — klasik horary'de aspekt yok
+
+    asp_name, target = sign_asp
+
+    # Açısal fark orb içinde mi?
     diff = abs(lon1 - lon2) % 360
     if diff > 180:
         diff = 360 - diff
-    # Aspect'e özgü standart orb'lar, ancak üst sınır olarak orb parametresini kullan
+
     orbs = {
         "conjunction": min(orb, 7),
         "sextile":     min(orb, 6),
@@ -445,16 +481,10 @@ def aspect_between(lon1: float, lon2: float, orb: float = 7.0) -> Optional[str]:
         "trine":       min(orb, 7),
         "opposition":  min(orb, 7),
     }
-    if diff < orbs["conjunction"]:
-        return "conjunction"
-    if abs(diff - 60) < orbs["sextile"]:
-        return "sextile"
-    if abs(diff - 90) < orbs["square"]:
-        return "square"
-    if abs(diff - 120) < orbs["trine"]:
-        return "trine"
-    if abs(diff - 180) < orbs["opposition"]:
-        return "opposition"
+
+    if abs(diff - target) < orbs[asp_name]:
+        return asp_name
+
     return None
 
 
