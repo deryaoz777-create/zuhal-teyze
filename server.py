@@ -448,10 +448,10 @@ def auth_code_verify():
 
     user = get_or_create_user(email)
 
-    # Email doğrulamasında minimum 3 kredi garantile
-    if user["credits"] < 3:
+    # Email doğrulamasında minimum 1 kredi garantile (hoş geldin bonusu)
+    if user["credits"] < 1:
         conn3 = sqlite3.connect(DB_PATH)
-        conn3.execute("UPDATE users SET credits = 3 WHERE id = ?", (user["id"],))
+        conn3.execute("UPDATE users SET credits = 1 WHERE id = ?", (user["id"],))
         conn3.commit()
         conn3.close()
         user = get_or_create_user(email)
