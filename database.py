@@ -26,7 +26,7 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT UNIQUE NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            credits INTEGER DEFAULT 3
+            credits INTEGER DEFAULT 1
         )
     """)
 
@@ -118,7 +118,7 @@ def get_or_create_user(email: str) -> dict:
     c.execute("SELECT * FROM users WHERE email = ?", (email,))
     user = c.fetchone()
     if not user:
-        c.execute("INSERT INTO users (email, credits) VALUES (?, 3)", (email,))
+        c.execute("INSERT INTO users (email, credits) VALUES (?, 1)", (email,))
         conn.commit()
         c.execute("SELECT * FROM users WHERE email = ?", (email,))
         user = c.fetchone()

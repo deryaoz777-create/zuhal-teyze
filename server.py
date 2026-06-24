@@ -60,6 +60,9 @@ init_db()
 FREE_DAILY_PER_IP  = int(os.environ.get("FREE_DAILY_PER_IP", "1"))   # IP başına günlük max ücretsiz soru
 FREE_DAILY_GLOBAL  = int(os.environ.get("FREE_DAILY_GLOBAL", "80"))  # Tüm platformda günlük max ücretsiz soru
 
+# Admin — tüm limitler bypass, kredi harcamaz
+ADMIN_EMAILS = set(e.strip().lower() for e in os.environ.get("ADMIN_EMAILS", "").split(",") if e.strip())
+
 # Rate limit tablosunu oluştur (database.py'de yoksa burada halledelim)
 def _ensure_rate_table():
     conn = sqlite3.connect(DB_PATH)
@@ -82,8 +85,12 @@ def _ensure_rate_table():
 
 _ensure_rate_table()
 
-def _check_free_rate(ip: str) -> tuple[bool, str]:
+def _check_free_rate(ip: str, email: str = "") -> tuple[bool, str]:
     """True = izin ver. False = blokla, mesajla birlikte."""
+    # Admin bypass
+    if email and email.lower() in ADMIN_EMAILS:
+        return True, ""
+
     today = datetime.date.today().isoformat()
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -274,7 +281,7 @@ def auth_me():
     return jsonify({
         "logged_in": True,
         "email": user["email"],
-        "credits": user["credits"]
+        "credits": "∞" if user["email"].lower() in ADMIN_EMAILS else user["credits"]
     })
 
 
@@ -294,8 +301,10 @@ def api_zuhal():
     if not user:
         return jsonify({"error": "Oturum süresi dolmuş. Lütfen tekrar giriş yapın.", "auth_required": True}), 401
 
-    # Credit kontrolü
-    if user["credits"] <= 0:
+    is_admin = user["email"].lower() in ADMIN_EMAILS
+
+    # Credit kontrolü (admin bypass)
+    if not is_admin and user["credits"] <= 0:
         return jsonify({"error": "Krediniz kalmadı. Yeni paket alın.", "no_credits": True}), 402
 
     data = request.json or {}
@@ -315,8 +324,9 @@ def api_zuhal():
         prompt = build_frawley_prompt(chart, lang=lang)
         interpretation = ask_claude(prompt, ANTHROPIC_API_KEY)
 
-        # Credit kullan ve logla
-        use_credit(user["id"])
+        # Credit kullan ve logla (admin harcamaz)
+        if not is_admin:
+            use_credit(user["id"])
         log_question(user["id"], question)
 
         # Güncel credit sayısını al
@@ -325,7 +335,7 @@ def api_zuhal():
         return jsonify({
             "success": True,
             "interpretation": interpretation,
-            "credits_remaining": updated_user["credits"]
+            "credits_remaining": "∞" if is_admin else updated_user["credits"]
         })
 
     except Exception as e:
@@ -447,14 +457,6 @@ def auth_code_verify():
     conn.close()
 
     user = get_or_create_user(email)
-
-    # Email doğrulamasında minimum 1 kredi garantile (hoş geldin bonusu)
-    if user["credits"] < 1:
-        conn3 = sqlite3.connect(DB_PATH)
-        conn3.execute("UPDATE users SET credits = 1 WHERE id = ?", (user["id"],))
-        conn3.commit()
-        conn3.close()
-        user = get_or_create_user(email)
 
     session_token = create_session(user["id"])
     resp = jsonify({"success": True, "email": user["email"], "credits": user["credits"]})

@@ -68,7 +68,7 @@ HOUSE_MEANINGS_TR = {
     7: "Eş, partner, rakip, dava",
     8: "Ölüm, ortağın parası, gizli şeyler",
     9: "Uzak yolculuklar, din, hukuk",
-    10: "Kariyer, patron, ün, devlet",
+    10: "Kariyer, patron, ün, devlet, anne",
     11: "Dilekler, dostlar, iyilik",
     12: "Gizli düşmanlar, hapis, büyü",
 }
@@ -932,6 +932,14 @@ QUESTION_TYPES = {
                 "houses": [1, 9], "desc": "Yolculuk/Taşınma"},
     "property":{"keywords": ["ev","daire","kira","satın","mülk","taşınmaz"],
                 "houses": [1, 4], "desc": "Mülk/Ev"},
+    "mother":  {"keywords": ["anne","annem","annesini","annesi","annemin","anneme","anneyle","annemi","validem"],
+                "houses": [1, 10], "desc": "Anne (Ev 10)"},
+    "father":  {"keywords": ["baba","babam","babasını","babası","babamın","babama","babayla","babamı"],
+                "houses": [1, 4], "desc": "Baba (Ev 4)"},
+    "sibling": {"keywords": ["kardeş","kardeşim","kardeşimle","abla","ablam","abi","abim","erkek kardeş","kız kardeş"],
+                "houses": [1, 3], "desc": "Kardeş (Ev 3)"},
+    "child":   {"keywords": ["çocuğum","oğlum","kızım","çocuk","bebeğim","torun"],
+                "houses": [1, 5], "desc": "Çocuk (Ev 5)"},
     "general": {"keywords": [], "houses": [1], "desc": "Genel Soru"},
 }
 
