@@ -460,35 +460,77 @@ def aspect_between(lon1: float, lon2: float, orb: float = 7.0) -> Optional[str]:
 
 def is_applying(planet_a: PlanetPosition, planet_b: PlanetPosition) -> bool:
     """
-    planet_a, planet_b ile olan mevcut aspect'e yaklaşıyor mu?
-    Tam açı noktasına ulaşmak için < 180° hareket gerekiyorsa: uygulayan.
+    planet_a, planet_b ile olan MEVCUT aspekte yaklaşıyor mu?
+
+    Klasik horary kuralı: aspect_between() tarafından tespit edilmiş açıya
+    planet_a daha mı yaklaşıyor, yoksa uzaklaşıyor mu?
+
+    Kritik: iki exact nokta vardır (planet_b ± target). Mevcut aspektin
+    hangi noktaya karşılık geldiğini bulmak için planet_a'ya en yakın olanı
+    seç — karşı tarafın 14 gün sonraki aspektini "yaklaşıyor" diye alma.
     """
     diff_now = abs(planet_a.longitude - planet_b.longitude) % 360
     if diff_now > 180:
         diff_now = 360 - diff_now
 
-    # En yakın açı hedefini bul
     target = min([0, 60, 90, 120, 180], key=lambda t: abs(diff_now - t))
 
-    # planet_a için iki tam açı noktası
     exact_plus  = (planet_b.longitude + target) % 360
     exact_minus = (planet_b.longitude - target) % 360
 
-    # Hareket yönüne göre kalan derece
-    if planet_a.speed >= 0:
-        # Direkt: longitude artıyor
-        degs_to_plus  = (exact_plus  - planet_a.longitude) % 360
-        degs_to_minus = (exact_minus - planet_a.longitude) % 360
+    # Mevcut konuma EN YAKIN exact noktayı seç (çevrimsel mesafe)
+    def circ_dist(a: float, b: float) -> float:
+        d = abs(a - b) % 360
+        return min(d, 360 - d)
+
+    if circ_dist(planet_a.longitude, exact_plus) <= circ_dist(planet_a.longitude, exact_minus):
+        relevant_exact = exact_plus
     else:
-        # Retrograd: longitude azalıyor
-        degs_to_plus  = (planet_a.longitude - exact_plus)  % 360
-        degs_to_minus = (planet_a.longitude - exact_minus) % 360
+        relevant_exact = exact_minus
 
-    degs_to_exact = min(degs_to_plus, degs_to_minus)
+    # planet_a, relevant_exact'e ulaşmak için ne kadar yol kat etmeli?
+    if planet_a.speed >= 0:
+        degs_to_exact = (relevant_exact - planet_a.longitude) % 360
+    else:
+        degs_to_exact = (planet_a.longitude - relevant_exact) % 360
 
-    # < 180° → tam açıya ulaşmamış = uygulayan
-    # >= 180° → tam açıyı geçmiş = ayrılan
+    # < 180° → henüz geçmemiş = uygulayan (applying)
+    # ≥ 180° → geçmiş = ayrılan (separating)
     return degs_to_exact < 180
+
+
+def will_perfect_in_sign(planet_a: PlanetPosition, planet_b: PlanetPosition) -> bool:
+    """
+    Klasik horary burç sınırı kuralı:
+    planet_a, planet_b ile olan aspekti kendi burcu içinde tamamlayacak mı?
+
+    Lilly / Frawley: Aspect, planet_a burç değiştirmeden önce exact olmayacaksa
+    HAYIRDIR — "frustration by change of sign." Applying olsa bile geçersizdir.
+
+    Separating aspektler için False döner (zaten geçti, perfekte olmayacak).
+    """
+    if not is_applying(planet_a, planet_b):
+        return False
+
+    diff_now = abs(planet_a.longitude - planet_b.longitude) % 360
+    if diff_now > 180:
+        diff_now = 360 - diff_now
+
+    target = min([0, 60, 90, 120, 180], key=lambda t: abs(diff_now - t))
+
+    exact_plus  = (planet_b.longitude + target) % 360
+    exact_minus = (planet_b.longitude - target) % 360
+
+    def circ_dist(a: float, b: float) -> float:
+        d = abs(a - b) % 360
+        return min(d, 360 - d)
+
+    relevant_exact = (exact_plus
+                      if circ_dist(planet_a.longitude, exact_plus) <= circ_dist(planet_a.longitude, exact_minus)
+                      else exact_minus)
+
+    # Exact noktası planet_a ile aynı burçta mı?
+    return int(planet_a.longitude / 30) == int(relevant_exact / 30)
 
 
 def calc_combust_cazimi(planet, sun):
@@ -665,6 +707,8 @@ def calc_refrenation(planet_a, planet_b):
         return False
     if not is_applying(planet_a, planet_b):
         return False
+    if not will_perfect_in_sign(planet_a, planet_b):
+        return False  # Aspect zaten burç sınırında frustrate olacak
     if not planet_a.retrograde and abs(planet_a.speed) < 0.1:
         return True
     return False
@@ -678,8 +722,11 @@ def calc_translation_of_light(p1_name, p2_name, planets):
     for tname, translator in planets.items():
         if tname in [p1_name, p2_name]:
             continue
-        sep_from_p1 = aspect_between(translator.longitude, p1.longitude) and not is_applying(translator, p1)
-        app_to_p2 = aspect_between(translator.longitude, p2.longitude) and is_applying(translator, p2)
+        sep_from_p1 = (aspect_between(translator.longitude, p1.longitude)
+                       and not is_applying(translator, p1))
+        app_to_p2   = (aspect_between(translator.longitude, p2.longitude)
+                       and is_applying(translator, p2)
+                       and will_perfect_in_sign(translator, p2))
         if sep_from_p1 and app_to_p2:
             return PLANET_TR.get(tname, tname)
     return None
@@ -695,8 +742,12 @@ def calc_collection_of_light(p1_name, p2_name, planets):
         collector = planets.get(cname)
         if not collector or cname in [p1_name, p2_name]:
             continue
-        app_to_p1 = aspect_between(collector.longitude, p1.longitude) and is_applying(collector, p1)
-        app_to_p2 = aspect_between(collector.longitude, p2.longitude) and is_applying(collector, p2)
+        app_to_p1 = (aspect_between(collector.longitude, p1.longitude)
+                     and is_applying(collector, p1)
+                     and will_perfect_in_sign(collector, p1))
+        app_to_p2 = (aspect_between(collector.longitude, p2.longitude)
+                     and is_applying(collector, p2)
+                     and will_perfect_in_sign(collector, p2))
         if app_to_p1 and app_to_p2:
             return PLANET_TR.get(cname, cname)
     return None
@@ -709,6 +760,8 @@ def calc_prohibition(p1_name, p2_name, planets):
         return None
     if not is_applying(p1, p2):
         return None
+    if not will_perfect_in_sign(p1, p2):
+        return None  # p1→p2 zaten olmayacak, prohibition irrelevant
     deg_p1_to_p2 = abs(p1.longitude - p2.longitude) % 360
     if deg_p1_to_p2 > 180:
         deg_p1_to_p2 = 360 - deg_p1_to_p2
@@ -716,7 +769,7 @@ def calc_prohibition(p1_name, p2_name, planets):
         if pname in [p1_name, p2_name]:
             continue
         asp_to_p2 = aspect_between(prohibitor.longitude, p2.longitude)
-        if asp_to_p2 and is_applying(prohibitor, p2):
+        if asp_to_p2 and is_applying(prohibitor, p2) and will_perfect_in_sign(prohibitor, p2):
             deg_proh_to_p2 = abs(prohibitor.longitude - p2.longitude) % 360
             if deg_proh_to_p2 > 180:
                 deg_proh_to_p2 = 360 - deg_proh_to_p2
@@ -890,7 +943,13 @@ def _build_planet_summary(chart: HorarChart) -> list:
 
 
 def _build_aspect_lines(chart: HorarChart) -> list:
-    """Aspect matrisi — her iki prompt için ortak."""
+    """
+    Aspect matrisi — klasik horary burç sınırı kuralı ile.
+
+    Applying aspect yalnızca daha hızlı gezegen exact noktasına kendi
+    burcu içinde ulaşabilecekse gösterilir (Lilly: frustration by sign change).
+    Separating aspect geçmiş olayı gösterir — her zaman dahil edilir.
+    """
     aspect_lines = []
     planet_names = list(chart.planets.keys())
     for i in range(len(planet_names)):
@@ -898,30 +957,52 @@ def _build_aspect_lines(chart: HorarChart) -> list:
             pa = chart.planets[planet_names[i]]
             pb = chart.planets[planet_names[j]]
             asp = aspect_between(pa.longitude, pb.longitude)
-            if asp:
-                applying = is_applying(pa, pb)
-                app_str = "→ yaklaşıyor" if applying else "← uzaklaşıyor"
-                deg_diff = abs(pa.longitude - pb.longitude) % 360
-                if deg_diff > 180: deg_diff = 360 - deg_diff
-                aspect_lines.append(
-                    f"  {PLANET_TR[planet_names[i]]} {ASPECT_TR.get(asp, asp)} {PLANET_TR[planet_names[j]]} "
-                    f"({deg_diff:.1f}°) {app_str}"
-                )
+            if not asp:
+                continue
+
+            # Hız mutlak değerine göre uygulayan gezegeni belirle
+            faster, slower = (pa, pb) if abs(pa.speed) >= abs(pb.speed) else (pb, pa)
+            applying = is_applying(faster, slower)
+
+            # Applying ama exact noktası daha hızlı gezegenin burcu dışında → atla
+            if applying and not will_perfect_in_sign(faster, slower):
+                continue
+
+            app_str = "→ yaklaşıyor" if applying else "← uzaklaşıyor"
+            deg_diff = abs(pa.longitude - pb.longitude) % 360
+            if deg_diff > 180:
+                deg_diff = 360 - deg_diff
+            aspect_lines.append(
+                f"  {PLANET_TR[planet_names[i]]} {ASPECT_TR.get(asp, asp)} {PLANET_TR[planet_names[j]]} "
+                f"({deg_diff:.1f}°) {app_str}"
+            )
     return aspect_lines
 
 
 def _build_moon_aspects(chart: HorarChart) -> list:
-    """Ay'ın aspektleri — ortak."""
+    """
+    Ay'ın aspektleri — klasik horary burç sınırı kuralı ile.
+
+    Ay en hızlı gezegen olduğundan uygulayan taraf her zaman Ay'dır.
+    Applying aspect: exact noktası Ay'ın mevcut burcu içinde olmalı.
+    Separating aspect: Ay bu burçta exact'ı geçmiş — geçmiş olayı gösterir.
+    """
     moon = chart.planets["moon"]
     moon_aspects = []
     for pname, planet in chart.planets.items():
         if pname == "moon":
             continue
-        asp = aspect_between(moon.longitude, planet.longitude, orb=10)
-        if asp:
-            applying = is_applying(moon, planet)
-            status = "yaklaşıyor →" if applying else "← uzaklaşıyor"
-            moon_aspects.append(f"{ASPECT_TR.get(asp, asp)} {PLANET_TR[pname]} ({status})")
+        asp = aspect_between(moon.longitude, planet.longitude)
+        if not asp:
+            continue
+        applying = is_applying(moon, planet)
+        if applying:
+            if not will_perfect_in_sign(moon, planet):
+                continue  # Exact noktası Ay'ın burcu dışında → aspekt geçersiz
+            status = "yaklaşıyor →"
+        else:
+            status = "← uzaklaşıyor"
+        moon_aspects.append(f"{ASPECT_TR.get(asp, asp)} {PLANET_TR[pname]} ({status})")
     return moon_aspects
 
 
@@ -1451,17 +1532,29 @@ def chart_to_dict(chart: HorarChart) -> dict:
             pa = chart.planets[pnames[i]]
             pb = chart.planets[pnames[j]]
             asp = aspect_between(pa.longitude, pb.longitude)
-            if asp:
-                aspects_out.append({
-                    "planet_a": pnames[i],
-                    "planet_b": pnames[j],
-                    "aspect": asp,
-                    "applying": is_applying(pa, pb),
-                    "orb": round(abs(abs(pa.longitude - pb.longitude) % 360 - {
-                        "conjunction": 0, "sextile": 60, "square": 90,
-                        "trine": 120, "opposition": 180
-                    }.get(asp, 0)), 2),
-                })
+            if not asp:
+                continue
+
+            faster, slower = (pa, pb) if abs(pa.speed) >= abs(pb.speed) else (pb, pa)
+            applying = is_applying(faster, slower)
+            will_perfect = will_perfect_in_sign(faster, slower) if applying else False
+
+            # UI'da burç sınırında frustrate olacak applying aspectleri gösterme
+            if applying and not will_perfect:
+                continue
+
+            raw_diff = abs(pa.longitude - pb.longitude) % 360
+            if raw_diff > 180:
+                raw_diff = 360 - raw_diff
+            target_angle = {"conjunction": 0, "sextile": 60, "square": 90,
+                            "trine": 120, "opposition": 180}.get(asp, 0)
+            aspects_out.append({
+                "planet_a": pnames[i],
+                "planet_b": pnames[j],
+                "aspect": asp,
+                "applying": applying,
+                "orb": round(abs(raw_diff - target_angle), 2),
+            })
 
     # Sabit yıldız konjunksiyonları
     fixed_stars_out = []
