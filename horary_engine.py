@@ -1150,6 +1150,14 @@ Sonuna şunu ekle, çift tire ile ayrılmış:
 
 ---
 
+⚠️ VERİ KULLANIM KURALI — MUTLAK ZORUNLU:
+Aşağıdaki tüm veriler (pozisyonlar, aspektler, dignity, VOC, combust) yazılım tarafından hesaplanmış ve doğrulanmıştır.
+SADECE bu bölümdeki verileri kullan.
+ASPECTLER listesinde YER ALMAYAN hiçbir aspekti ASLA yorumuna dahil etme.
+AY'IN ASPECTLERİ listesinde YER ALMAYAN hiçbir Ay aspektini ASLA zikretme.
+GEZEGEN POZİSYONLARI'nda yazmayan hiçbir dignity, burç veya ev bilgisini ASLA uydurma.
+Kendi genel astroloji bilginden veri türetmek KESİN HATADIR — bu haritaya özgü gerçek veridir.
+
 SORU: {chart.question}
 Tarih/Saat: {chart.dt.strftime("%d.%m.%Y %H:%M")}
 {"Gündüz" if chart.is_daytime else "Gece"}
@@ -1166,11 +1174,11 @@ GEZEGEN POZİSYONLARI:
 EV BAŞLANGÇLARI (Regiomontanus):
 {chr(10).join(house_lines)}
 
-ASPECTLER:
-{chr(10).join(aspect_lines) if aspect_lines else "  Önemli aspect yok"}
+ASPECTLER (SADECE BU LİSTEDEKİLERİ KULLAN — başka aspect YOK):
+{chr(10).join(aspect_lines) if aspect_lines else "  Aspect yok — bu haritada hiçbir major aspect aktif değil"}
 
-AY'IN ASPECTLERİ:
-{chr(10).join(moon_aspects) if moon_aspects else "  Önemli ay aspekti yok"}
+AY'IN ASPECTLERİ (SADECE BU LİSTEDEKİLERİ KULLAN — başka Ay aspekti YOK):
+{chr(10).join(moon_aspects) if moon_aspects else "  Ay aspekti yok — Ay bu haritada hiçbir gezegene major aspect uygulamıyor"}
 {"⚠️ AY VOID OF COURSE — Ay bu burçta hiçbir aspekt tamamlamayacak. Mesele askıya alınmış." if moon_voc else ""}
 
 COMBUST / CAZİMİ:
@@ -1323,6 +1331,14 @@ Sonuna şunu ekle, çift tire ile ayrılmış:
 
 ---
 
+⚠️ VERİ KULLANIM KURALI — MUTLAK ZORUNLU:
+Aşağıdaki tüm veriler (pozisyonlar, aspektler, dignity, VOC, combust) yazılım tarafından hesaplanmış ve doğrulanmıştır.
+SADECE bu bölümdeki verileri kullan.
+ASPECTLER listesinde YER ALMAYAN hiçbir aspekti ASLA yorumuna dahil etme.
+AY'IN ASPECTLERİ listesinde YER ALMAYAN hiçbir Ay aspektini ASLA zikretme.
+GEZEGEN POZİSYONLARI'nda yazmayan hiçbir dignity, burç veya ev bilgisini ASLA uydurma.
+Kendi genel astroloji bilginden veri türetmek KESİN HATADIRMIRA — bu haritaya özgü gerçek veridir.
+
 SORU: {chart.question}
 SORU TİPİ: {q_data["desc"]}
 Tarih/Saat: {chart.dt.strftime("%d.%m.%Y %H:%M")}
@@ -1338,11 +1354,11 @@ GEZEGEN POZİSYONLARI:
 EV BAŞLANGÇLARI (Regiomontanus):
 {chr(10).join(house_lines)}
 
-ASPECTLER:
-{chr(10).join(aspect_lines) if aspect_lines else "  Önemli aspect yok"}
+ASPECTLER (SADECE BU LİSTEDEKİLERİ KULLAN — başka aspect YOK):
+{chr(10).join(aspect_lines) if aspect_lines else "  Aspect yok — bu haritada hiçbir major aspect aktif değil"}
 
-AY'IN ASPECTLERİ:
-{chr(10).join(moon_aspects) if moon_aspects else "  Önemli ay aspekti yok"}
+AY'IN ASPECTLERİ (SADECE BU LİSTEDEKİLERİ KULLAN — başka Ay aspekti YOK):
+{chr(10).join(moon_aspects) if moon_aspects else "  Ay aspekti yok — Ay bu haritada hiçbir gezegene major aspect uygulamıyor"}
 {"⚠️ AY VOID OF COURSE — Mesele askıya alınmış." if moon_voc else ""}
 
 COMBUST / CAZİMİ:
