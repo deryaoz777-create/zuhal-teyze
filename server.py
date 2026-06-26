@@ -687,15 +687,15 @@ def privacy():
 <h1>Gizlilik Politikası</h1>
 <p>Son güncelleme: Haziran 2026</p>
 <h2>Topladığımız Veriler</h2>
-<p>Platform yalnızca şu verileri toplar: e-posta adresi (giriş için) ve soru zamanı. Bu uygulama şu an deneme aşamasındadır ve tamamen ücretsizdir; herhangi bir ödeme sistemi aktif değildir.</p>
+<p>Platform şu verileri toplar: e-posta adresi (giriş için), sorduğunuz sorular ve bu sorulara üretilen yapay zeka yorumları (hizmet kalitesini geliştirmek amacıyla), oturum bilgileri. Ücretli paket satın alırsanız işlem ID'si ve e-posta adresi ödeme işlemcimiz Lemon Squeezy tarafından işlenir; kart bilgileriniz platformumuzda saklanmaz.</p>
 <h2>Verilerin Kullanımı</h2>
-<p>E-posta adresiniz yalnızca kimlik doğrulama ve hizmet bildirimleri için kullanılır. Verileriniz üçüncü taraflarla paylaşılmaz veya satılmaz.</p>
+<p>Verileriniz yalnızca hizmetin çalıştırılması, geliştirilmesi ve gerektiğinde sizinle iletişim kurulması amacıyla kullanılır. Verileriniz reklam amacıyla kullanılmaz, üçüncü taraflara satılmaz veya devredilmez. Ödeme işlemleri Lemon Squeezy altyapısı üzerinden yürütülür.</p>
 <h2>Çerezler ve Oturumlar</h2>
 <p>Platform, oturum yönetimi için çerez kullanır. Tarayıcı ayarlarınızdan çerezleri devre dışı bırakabilirsiniz; ancak bu durumda giriş yapamazsınız.</p>
 <h2>Veri Saklama</h2>
-<p>Hesabınızı silmek veya verilerinizin kaldırılmasını talep etmek için bizimle iletişime geçebilirsiniz.</p>
+<p>Soru ve yorum kayıtları hizmet geliştirilmesi amacıyla saklanır. Hesabınızın ve ilgili tüm verilerinizin silinmesini talep etmek için bizimle iletişime geçebilirsiniz.</p>
 <h2>KVKK / GDPR</h2>
-<p>Türkiye'de yerleşik kullanıcılar KVKK kapsamındaki haklarını, AB'de yerleşik kullanıcılar GDPR kapsamındaki haklarını kullanabilir. Talepler için: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+<p>Türkiye'de yerleşik kullanıcılar KVKK kapsamındaki haklarını, AB'de yerleşik kullanıcılar GDPR kapsamındaki haklarını kullanabilir. Talepler için: <a href="mailto:deryaoz777@gmail.com">deryaoz777@gmail.com</a></p>
 </body></html>"""
 
 
@@ -1029,15 +1029,15 @@ def en_privacy():
 <h1>Privacy Policy</h1>
 <p>Last updated: June 2026</p>
 <h2>Data We Collect</h2>
-<p>The platform collects only the following: email address (for login) and question time. This application is currently in beta and is completely free; no payment system is active.</p>
+<p>The platform collects the following data: email address (for login), the questions you submit and the AI-generated interpretations for those questions (retained to improve service quality), and session information. If you purchase a credit package, your transaction ID and email address are processed by our payment provider Lemon Squeezy; no card details are stored on our servers.</p>
 <h2>How Data Is Used</h2>
-<p>Your email address is used only for authentication and service notifications. Your data is not shared with or sold to third parties.</p>
+<p>Your data is used solely to operate and improve the service, and to contact you when necessary. Your data is not used for advertising, and is not sold or transferred to third parties. Payments are handled via Lemon Squeezy infrastructure.</p>
 <h2>Cookies and Sessions</h2>
 <p>The platform uses a cookie for session management. You may disable cookies in your browser settings; however, you will not be able to log in if you do so.</p>
 <h2>Data Retention</h2>
-<p>To request deletion of your account or data, please contact us.</p>
+<p>Question and interpretation records are retained for service improvement purposes. To request deletion of your account and all associated data, please contact us.</p>
 <h2>GDPR</h2>
-<p>Users resident in the EU may exercise their rights under GDPR. Requests: <a href="mailto:noreply@zuhalteyze.live">noreply@zuhalteyze.live</a></p>
+<p>Users resident in the EU may exercise their rights under GDPR. Requests: <a href="mailto:deryaoz777@gmail.com">deryaoz777@gmail.com</a></p>
 </body></html>"""
 
 

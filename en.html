@@ -91,8 +91,8 @@ textarea:focus,input:focus{border-color:rgba(232,154,139,.65);box-shadow:0 0 10p
 .astro-msg.err{color:#e07070}
 .astro-msg.ok{color:rgba(142,203,150,.75)}
 footer{margin-top:2.5rem;position:relative;z-index:1}
-footer a{font-size:11px;color:rgba(201,168,118,.32);text-decoration:none;letter-spacing:.05em}
-footer a:hover{color:rgba(201,168,118,.65)}
+footer a{font-size:11px;color:rgba(201,168,118,.62);text-decoration:none;letter-spacing:.05em}
+footer a:hover{color:rgba(201,168,118,.92)}
 .pay-overlay{position:fixed;inset:0;background:rgba(15,6,11,.88);backdrop-filter:blur(5px);z-index:200;display:none;align-items:center;justify-content:center;padding:1.25rem}
 .pay-overlay.show{display:flex}
 .pay-modal{width:100%;max-width:400px;background:rgba(46,18,30,.97);border:1px solid rgba(201,168,118,.3);border-radius:10px;padding:1.75rem 1.5rem}
@@ -322,7 +322,7 @@ footer a:hover{color:rgba(201,168,118,.65)}
   </div>
   <div class="title">AUNTIE ZUHAL</div>
   <div class="subtitle">Chaos Lab &middot; Horary</div>
-  <div style="font-size:10px;letter-spacing:.12em;color:rgba(201,168,118,.32);margin-bottom:.2rem"><a href="/" style="color:rgba(201,168,118,.45);text-decoration:none">TR</a> &nbsp;·&nbsp; <span style="color:rgba(201,168,118,.75)">EN</span></div>
+  <div style="font-size:10px;letter-spacing:.12em;color:rgba(201,168,118,.32);margin-bottom:.2rem"><a href="/" style="color:rgba(201,168,118,.65);text-decoration:none">TR</a> &nbsp;·&nbsp; <span style="color:rgba(201,168,118,.75)">EN</span></div>
   <div class="disclaimer">She seeks answers from the stars for every question in life. But what she truly knows — is that you already know.</div>
   <div class="tagline" id="tagline">This application is for entertainment purposes.</div>
 
@@ -719,7 +719,7 @@ function sendAstro(){
   fetch('https://formspree.io/f/' + FORMSPREE_ID, {
     method:'POST',
     headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body: JSON.stringify({email, soru, _subject:'Auntie Zuhal — Real Astrologer Request'})
+    body: JSON.stringify({email, _replyto: email, soru, _subject:'Auntie Zuhal — Real Astrologer Request'})
   }).then(r=>{
     if(r.ok){
       msg.classList.add('ok');
