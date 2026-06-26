@@ -327,7 +327,7 @@ def api_zuhal():
         # Credit kullan ve logla (admin harcamaz)
         if not is_admin:
             use_credit(user["id"])
-        log_question(user["id"], question)
+        log_question(user["id"], question, interpretation)
 
         # Güncel credit sayısını al
         updated_user = get_or_create_user(user["email"])
@@ -373,6 +373,7 @@ def api_zuhal_free():
         chart = calc_chart(question, dt, lat, lon)
         prompt = build_frawley_prompt(chart, lang=lang)
         interpretation = ask_claude(prompt, ANTHROPIC_API_KEY)
+        log_question(0, question, interpretation)  # 0 = anonim
         return jsonify({"success": True, "interpretation": interpretation})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -1836,6 +1837,81 @@ def lab_review_update(review_id):
     conn.commit()
     conn.close()
     return jsonify({"success": True})
+
+
+
+
+# ─────────────────────────────────────────
+# ADMIN PANELİ
+# ─────────────────────────────────────────
+
+@app.route("/admin")
+def admin_panel():
+    return send_from_directory(".", "admin.html")
+
+
+@app.route("/api/admin/readings", methods=["GET"])
+def admin_readings():
+    """Admin: tüm soru-cevap geçmişini döndür. Lab auth gerektirir."""
+    if not _lab_authed():
+        return jsonify({"error": "Yetkisiz erişim."}), 401
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    main_rows = conn.execute("""
+        SELECT
+            q.id,
+            q.asked_at   AS date,
+            u.email,
+            q.user_id,
+            q.question,
+            q.output,
+            CASE WHEN q.user_id = 0 THEN 1 ELSE 0 END AS is_free
+        FROM question_log q
+        LEFT JOIN users u ON u.id = q.user_id AND q.user_id != 0
+        ORDER BY q.id DESC
+        LIMIT 500
+    """).fetchall()
+
+    review_rows = conn.execute("""
+        SELECT
+            r.id,
+            r.submitted_at  AS date,
+            u.email,
+            r.user_id,
+            r.question,
+            r.output,
+            r.status,
+            r.astrologer_note
+        FROM review_requests r
+        LEFT JOIN users u ON u.id = r.user_id
+        ORDER BY r.id DESC
+        LIMIT 200
+    """).fetchall()
+
+    lab_rows = conn.execute("""
+        SELECT
+            id,
+            created_at  AS date,
+            ''          AS email,
+            0           AS user_id,
+            question,
+            output,
+            rating,
+            note
+        FROM lab_feedback
+        ORDER BY id DESC
+        LIMIT 200
+    """).fetchall()
+
+    conn.close()
+
+    return _json.dumps({
+        "main":    [dict(r) for r in main_rows],
+        "reviews": [dict(r) for r in review_rows],
+        "lab":     [dict(r) for r in lab_rows]
+    }, ensure_ascii=False), 200, {"Content-Type": "application/json"}
 
 
 if __name__ == "__main__":
