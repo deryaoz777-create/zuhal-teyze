@@ -50,14 +50,24 @@ def init_db():
         )
     """)
 
+    # ── question_log: user_id=0 → anonim/ücretsiz soru ──
     c.execute("""
         CREATE TABLE IF NOT EXISTS question_log (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
             question TEXT,
+            output TEXT DEFAULT '',
             asked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
+
+    # Migration: mevcut DB'de output kolonu yoksa ekle
+    try:
+        c.execute("ALTER TABLE question_log ADD COLUMN output TEXT DEFAULT ''")
+        conn.commit()
+        print("[DB] question_log.output kolonu eklendi.")
+    except sqlite3.OperationalError:
+        pass  # Zaten var
 
     # ── LAB TABLOLARI ──────────────────────────
     c.execute("""
@@ -199,10 +209,17 @@ def use_credit(user_id: int) -> bool:
     return True
 
 
-def log_question(user_id: int, question: str):
+def log_question(user_id: int, question: str, output: str = ""):
+    """
+    Soruyu ve Claude'un cevabını kaydet.
+    user_id=0 → anonim/ücretsiz soru.
+    """
     conn = get_db()
     c = conn.cursor()
-    c.execute("INSERT INTO question_log (user_id, question) VALUES (?, ?)", (user_id, question))
+    c.execute(
+        "INSERT INTO question_log (user_id, question, output) VALUES (?, ?, ?)",
+        (user_id, question, output)
+    )
     conn.commit()
     conn.close()
 

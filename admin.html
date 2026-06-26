@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Zuhal Teyze</title>
+  <style>
+    :root {
+      --bg:      #12101e;
+      --bg2:     #1c1830;
+      --bg3:     #251f3d;
+      --gold:    #c9a84c;
+      --gold-d:  #8a6e2a;
+      --purple:  #5b3fa0;
+      --purple2: #7c3aed;
+      --text:    #e8dfc0;
+      --dim:     #9e8c6a;
+      --border:  #332660;
+      --red:     #c0392b;
+      --green:   #27ae60;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Georgia, 'Times New Roman', serif;
+      min-height: 100vh;
+      font-size: 15px;
+    }
+
+    /* ── LOGIN ───────────────────────────────── */
+    #login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .login-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 3rem 2.5rem 2.5rem;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .logotype {
+      font-size: 11px;
+      letter-spacing: 5px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    .login-box h1 {
+      font-size: 1rem;
+      color: var(--dim);
+      font-weight: normal;
+      margin-bottom: 2.5rem;
+      letter-spacing: 1px;
+    }
+
+    .pw-input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 4px;
+      font-size: 16px;
+      font-family: monospace;
+      letter-spacing: 4px;
+      text-align: center;
+      margin-bottom: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .pw-input:focus { border-color: var(--gold-d); }
+
+    .btn-login {
+      width: 100%;
+      background: var(--purple);
+      color: var(--text);
+      border: none;
+      padding: 13px;
+      border-radius: 4px;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: Georgia, serif;
+      transition: background 0.2s;
+    }
+
+    .btn-login:hover { background: var(--purple2); }
+
+    .login-err {
+      color: var(--red);
+      font-size: 12px;
+      margin-top: 1rem;
+      min-height: 1rem;
+    }
+
+    /* ── MAIN APP ─────────────────────────────── */
+    #app { display: none; flex-direction: column; min-height: 100vh; }
+
+    header {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .header-logo {
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .header-stats {
+      font-size: 12px;
+      color: var(--dim);
+      font-family: monospace;
+    }
+
+    /* ── TABS ─────────────────────────────────── */
+    .tabs {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      padding: 0 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .tab {
+      padding: 14px 18px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--dim);
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .tab:hover:not(.active) { color: var(--text); }
+
+    .tab-count {
+      background: var(--bg3);
+      border-radius: 10px;
+      padding: 1px 7px;
+      font-size: 10px;
+      font-family: monospace;
+    }
+
+    /* ── TOOLBAR ──────────────────────────────── */
+    .toolbar {
+      padding: 0.9rem 1.8rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-shrink: 0;
+    }
+
+    .search-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: Georgia, serif;
+      outline: none;
+      flex: 1;
+      max-width: 440px;
+      transition: border-color 0.2s;
+    }
+
+    .search-box:focus { border-color: var(--gold-d); }
+    .search-box::placeholder { color: var(--dim); }
+
+    .result-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--dim);
+      font-family: monospace;
+    }
+
+    /* ── CONTENT ──────────────────────────────── */
+    .content {
+      padding: 1.4rem 1.8rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    /* ── CARDS ────────────────────────────────── */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: var(--gold-d); }
+
+    .card-head {
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 170px;
+      flex-shrink: 0;
+    }
+
+    .card-date {
+      font-size: 11px;
+      color: var(--dim);
+      font-family: monospace;
+    }
+
+    .card-email {
+      font-size: 11px;
+      color: var(--gold-d);
+      word-break: break-all;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      font-family: monospace;
+      width: fit-content;
+    }
+
+    .badge-main   { background: rgba(91, 63, 160, 0.35); color: #c4b5fd; }
+    .badge-free   { background: rgba(39, 174, 96, 0.2);  color: #6ee7b7; }
+    .badge-review { background: rgba(201, 168, 76, 0.2); color: var(--gold); }
+    .badge-lab    { background: rgba(14, 165, 233, 0.2); color: #7dd3fc; }
+
+    .card-question {
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .chevron {
+      font-size: 14px;
+      color: var(--dim);
+      flex-shrink: 0;
+      margin-top: 2px;
+      transition: transform 0.2s;
+      line-height: 1;
+    }
+
+    .chevron.open { transform: rotate(180deg); }
+
+    .card-body {
+      display: none;
+      padding: 4px 16px 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-body.open { display: block; }
+
+    .answer-wrap {
+      margin-top: 12px;
+    }
+
+    .answer-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 8px;
+    }
+
+    .answer-text {
+      font-size: 13px;
+      line-height: 1.85;
+      color: #ccc4a6;
+      white-space: pre-wrap;
+      padding: 14px 16px;
+      background: var(--bg);
+      border-radius: 4px;
+      border-left: 2px solid var(--gold-d);
+      max-height: 420px;
+      overflow-y: auto;
+    }
+
+    .no-answer {
+      font-size: 12px;
+      color: var(--dim);
+      font-style: italic;
+      padding: 10px 0;
+    }
+
+    .extra-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .status-badge {
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      padding: 2px 9px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      font-family: monospace;
+    }
+
+    .status-pending  { background: rgba(201, 168, 76, 0.2);  color: var(--gold); }
+    .status-reviewed { background: rgba(39, 174, 96, 0.2);   color: #6ee7b7; }
+
+    .stars {
+      color: var(--gold);
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    .card-note {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--dim);
+      font-style: italic;
+      padding: 8px 12px;
+      background: rgba(91, 63, 160, 0.12);
+      border-radius: 4px;
+    }
+
+    /* ── STATES ───────────────────────────────── */
+    .empty-state, .loading-state {
+      text-align: center;
+      padding: 5rem 2rem;
+      color: var(--dim);
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .loading-state::after {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      margin-left: 8px;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    /* ── SCROLLBAR ────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ──────────────────────────────────────── -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="logotype">⊕ Zuhal Teyze</div>
+    <h1>Admin Paneli</h1>
+    <input class="pw-input" type="password" id="pw" placeholder="••••••" autocomplete="current-password" />
+    <button class="btn-login" onclick="doLogin()">Giriş</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- ── MAIN APP ───────────────────────────────────── -->
+<div id="app">
+
+  <header>
+    <div class="header-logo">⊕ Zuhal Teyze — Admin</div>
+    <div class="header-stats" id="header-stats">—</div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="main"    onclick="switchTab('main')">
+      Ana Okumalar <span class="tab-count" id="cnt-main">—</span>
+    </div>
+    <div class="tab" data-tab="reviews"  onclick="switchTab('reviews')">
+      Review Queue <span class="tab-count" id="cnt-reviews">—</span>
+    </div>
+    <div class="tab" data-tab="lab"      onclick="switchTab('lab')">
+      Lab <span class="tab-count" id="cnt-lab">—</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input class="search-box" id="search" type="text"
+           placeholder="Soru veya e-posta ara…"
+           oninput="renderCurrent()" />
+    <div class="result-count" id="result-count">—</div>
+  </div>
+
+  <div class="content" id="content">
+    <div class="loading-state">Yükleniyor</div>
+  </div>
+
+</div>
+
+<script>
+  /* ── STATE ─────────────────────────────────── */
+  let db = { main: [], reviews: [], lab: [] };
+  let activeTab = 'main';
+
+  /* ── BOOT ──────────────────────────────────── */
+  (async () => {
+    try {
+      const r = await fetch('/api/lab/debug');
+      if (r.ok) { showApp(); await loadData(); }
+    } catch (_) {}
+  })();
+
+  /* ── AUTH ──────────────────────────────────── */
+  document.getElementById('pw').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  async function doLogin() {
+    const pw  = document.getElementById('pw').value;
+    const err = document.getElementById('login-err');
+    err.textContent = '';
+
+    const r = await fetch('/api/lab/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    });
+
+    if (r.ok) { showApp(); await loadData(); }
+    else       { err.textContent = 'Şifre yanlış.'; }
+  }
+
+  function showApp() {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'flex';
+  }
+
+  /* ── DATA ──────────────────────────────────── */
+  async function loadData() {
+    document.getElementById('content').innerHTML =
+      '<div class="loading-state">Veriler yükleniyor</div>';
+
+    const r = await fetch('/api/admin/readings');
+    if (!r.ok) {
+      document.getElementById('content').innerHTML =
+        '<div class="empty-state">Veri yüklenemedi. Yetki sorunu olabilir.</div>';
+      return;
+    }
+
+    db = await r.json();
+
+    const total = db.main.length + db.reviews.length + db.lab.length;
+    document.getElementById('header-stats').textContent =
+      `${db.main.length} ana · ${db.reviews.length} review · ${db.lab.length} lab · ${total} toplam`;
+
+    document.getElementById('cnt-main').textContent    = db.main.length;
+    document.getElementById('cnt-reviews').textContent = db.reviews.length;
+    document.getElementById('cnt-lab').textContent     = db.lab.length;
+
+    renderCurrent();
+  }
+
+  /* ── TABS ──────────────────────────────────── */
+  function switchTab(tab) {
+    activeTab = tab;
+    document.querySelectorAll('.tab').forEach(t =>
+      t.classList.toggle('active', t.dataset.tab === tab)
+    );
+    document.getElementById('search').value = '';
+    renderCurrent();
+  }
+
+  function renderCurrent() { render(activeTab); }
+
+  /* ── RENDER ────────────────────────────────── */
+  function render(tab) {
+    const q    = document.getElementById('search').value.toLowerCase().trim();
+    const rows = db[tab] || [];
+
+    const filtered = q
+      ? rows.filter(r =>
+          (r.question || '').toLowerCase().includes(q) ||
+          (r.email    || '').toLowerCase().includes(q) ||
+          (r.output   || '').toLowerCase().includes(q)
+        )
+      : rows;
+
+    document.getElementById('result-count').textContent =
+      `${filtered.length} / ${rows.length} kayıt`;
+
+    if (!filtered.length) {
+      document.getElementById('content').innerHTML =
+        '<div class="empty-state">Kayıt bulunamadı.</div>';
+      return;
+    }
+
+    document.getElementById('content').innerHTML =
+      filtered.map((row, i) => buildCard(row, tab, i)).join('');
+  }
+
+  /* ── CARD BUILDER ──────────────────────────── */
+  function buildCard(row, tab, idx) {
+    const date     = (row.date || '').replace('T', ' ').slice(0, 16);
+    const email    = row.email || (tab === 'main' && row.user_id == 0 ? 'anonim' : '—');
+    const question = esc(row.question || '(soru yok)');
+    const output   = row.output || '';
+
+    /* badge */
+    let badge = '';
+    if (tab === 'main') {
+      badge = row.is_free
+        ? '<span class="badge badge-free">Ücretsiz</span>'
+        : '<span class="badge badge-main">Kayıtlı</span>';
+    } else if (tab === 'reviews') {
+      badge = '<span class="badge badge-review">Review</span>';
+    } else {
+      badge = '<span class="badge badge-lab">Lab</span>';
+    }
+
+    /* extra info (status / stars / note) */
+    let extra = '';
+    if (tab === 'reviews') {
+      const sc = row.status === 'pending' ? 'status-pending' : 'status-reviewed';
+      extra = `<div class="extra-row">
+        <span class="status-badge ${sc}">${esc(row.status || 'pending')}</span>
+      </div>`;
+      if (row.astrologer_note) {
+        extra += `<div class="card-note">Not: ${esc(row.astrologer_note)}</div>`;
+      }
+    }
+    if (tab === 'lab' && row.rating) {
+      const full  = '★'.repeat(Math.min(row.rating, 5));
+      const empty = '☆'.repeat(Math.max(0, 5 - row.rating));
+      extra = `<div class="extra-row"><span class="stars">${full}${empty}</span></div>`;
+      if (row.note) {
+        extra += `<div class="card-note">${esc(row.note)}</div>`;
+      }
+    }
+
+    /* answer block */
+    const answerBlock = output
+      ? `<div class="answer-wrap">
+           <div class="answer-label">Yorum</div>
+           <div class="answer-text">${esc(output)}</div>
+         </div>`
+      : `<div class="no-answer">— Cevap bu soru için kaydedilmemiş (eski kayıt) —</div>`;
+
+    const id = `${tab}-${idx}`;
+
+    return `
+      <div class="card">
+        <div class="card-head" onclick="toggle('${id}')">
+          <div class="card-meta">
+            <span class="card-date">${esc(date)}</span>
+            <span class="card-email">${esc(email)}</span>
+            ${badge}
+          </div>
+          <div class="card-question">${question}</div>
+          <div class="chevron" id="chv-${id}">▾</div>
+        </div>
+        <div class="card-body" id="body-${id}">
+          ${extra}
+          ${answerBlock}
+        </div>
+      </div>`;
+  }
+
+  /* ── TOGGLE ────────────────────────────────── */
+  function toggle(id) {
+    const body = document.getElementById(`body-${id}`);
+    const chv  = document.getElementById(`chv-${id}`);
+    const open = body.classList.contains('open');
+    body.classList.toggle('open', !open);
+    chv.classList.toggle('open', !open);
+  }
+
+  /* ── UTILS ─────────────────────────────────── */
+  function esc(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+</script>
+</body>
+</html>
