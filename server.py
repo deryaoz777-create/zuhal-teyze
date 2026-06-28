@@ -319,15 +319,17 @@ def api_zuhal():
         return jsonify({"error": "Sunucu yapılandırma hatası."}), 500
 
     try:
-        dt = datetime.datetime.now()
-        chart = calc_chart(question, dt, DEFAULT_LAT, DEFAULT_LON)
+        dt  = datetime.datetime.now()
+        lat = float(data.get("lat", DEFAULT_LAT))
+        lon = float(data.get("lon", DEFAULT_LON))
+        chart = calc_chart(question, dt, lat, lon)
         prompt = build_frawley_prompt(chart, lang=lang)
         interpretation = ask_claude(prompt, ANTHROPIC_API_KEY)
 
         # Credit kullan ve logla (admin harcamaz)
         if not is_admin:
             use_credit(user["id"])
-        log_question(user["id"], question, interpretation)
+        log_question(user["id"], question, interpretation, _get_ip())
 
         # Güncel credit sayısını al
         updated_user = get_or_create_user(user["email"])
@@ -373,7 +375,7 @@ def api_zuhal_free():
         chart = calc_chart(question, dt, lat, lon)
         prompt = build_frawley_prompt(chart, lang=lang)
         interpretation = ask_claude(prompt, ANTHROPIC_API_KEY)
-        log_question(0, question, interpretation)  # 0 = anonim
+        log_question(0, question, interpretation, _get_ip())  # 0 = anonim
         return jsonify({"success": True, "interpretation": interpretation})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -1845,6 +1847,47 @@ def lab_review_update(review_id):
 # ADMIN PANELİ
 # ─────────────────────────────────────────
 
+def _get_ip() -> str:
+    """Railway proxy arkasında gerçek client IP'sini al."""
+    forwarded = request.headers.get("X-Forwarded-For", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.remote_addr or ""
+
+
+def _resolve_countries(ips: list) -> dict:
+    """
+    ip-api.com batch endpoint ile IP → ülke çözümle.
+    Boş/local IP'leri atlar. {ip: {country, countryCode}} döner.
+    """
+    import urllib.request as _ur
+    import urllib.error as _ue
+
+    valid = [ip for ip in set(ips) if ip and not ip.startswith(("127.", "10.", "192.168.", "::1"))]
+    if not valid:
+        return {}
+
+    result = {}
+    # Batch: max 100 IP per request
+    for i in range(0, len(valid), 100):
+        batch = valid[i:i+100]
+        try:
+            payload = _json.dumps([{"query": ip, "fields": "query,country,countryCode"} for ip in batch]).encode()
+            req = _ur.Request("http://ip-api.com/batch", data=payload,
+                              headers={"Content-Type": "application/json"}, method="POST")
+            with _ur.urlopen(req, timeout=3) as resp:
+                data = _json.loads(resp.read())
+                for entry in data:
+                    if entry.get("countryCode"):
+                        result[entry["query"]] = {
+                            "country": entry.get("country", ""),
+                            "countryCode": entry.get("countryCode", "")
+                        }
+        except (_ue.URLError, Exception):
+            pass  # Geo lookup başarısız olursa IP gösterilir
+    return result
+
+
 @app.route("/admin")
 def admin_panel():
     return send_from_directory(".", "admin.html")
@@ -1867,6 +1910,7 @@ def admin_readings():
             q.user_id,
             q.question,
             q.output,
+            q.ip_address,
             CASE WHEN q.user_id = 0 THEN 1 ELSE 0 END AS is_free
         FROM question_log q
         LEFT JOIN users u ON u.id = q.user_id AND q.user_id != 0
@@ -1883,7 +1927,8 @@ def admin_readings():
             r.question,
             r.output,
             r.status,
-            r.astrologer_note
+            r.astrologer_note,
+            '' AS ip_address
         FROM review_requests r
         LEFT JOIN users u ON u.id = r.user_id
         ORDER BY r.id DESC
@@ -1899,7 +1944,8 @@ def admin_readings():
             question,
             output,
             rating,
-            note
+            note,
+            ''          AS ip_address
         FROM lab_feedback
         ORDER BY id DESC
         LIMIT 200
@@ -1907,8 +1953,17 @@ def admin_readings():
 
     conn.close()
 
+    main_list = [dict(r) for r in main_rows]
+
+    # IP → ülke çözümle (sadece main readings'te IP var)
+    all_ips = [r["ip_address"] for r in main_list if r.get("ip_address")]
+    geo = _resolve_countries(all_ips)
+    for r in main_list:
+        ip = r.get("ip_address", "")
+        r["geo"] = geo.get(ip, {})
+
     return _json.dumps({
-        "main":    [dict(r) for r in main_rows],
+        "main":    main_list,
         "reviews": [dict(r) for r in review_rows],
         "lab":     [dict(r) for r in lab_rows]
     }, ensure_ascii=False), 200, {"Content-Type": "application/json"}
