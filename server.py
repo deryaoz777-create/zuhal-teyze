@@ -1902,10 +1902,12 @@ def admin_readings():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
 
-    # ip_address kolonu var mı kontrol et (migration henüz çalışmamış olabilir)
+    # Hangi kolonların var olduğunu kontrol et (migration henüz çalışmamış olabilir)
     cols = {row[1] for row in conn.execute("PRAGMA table_info(question_log)")}
-    has_ip = "ip_address" in cols
-    ip_select = "q.ip_address" if has_ip else "'' AS ip_address"
+    has_ip     = "ip_address" in cols
+    has_output = "output" in cols
+    ip_select     = "q.ip_address" if has_ip     else "'' AS ip_address"
+    output_select = "q.output"     if has_output else "'' AS output"
 
     main_rows = conn.execute(f"""
         SELECT
@@ -1914,7 +1916,7 @@ def admin_readings():
             u.email,
             q.user_id,
             q.question,
-            q.output,
+            {output_select},
             {ip_select},
             CASE WHEN q.user_id = 0 THEN 1 ELSE 0 END AS is_free
         FROM question_log q
