@@ -57,6 +57,7 @@ def init_db():
             user_id INTEGER NOT NULL,
             question TEXT,
             output TEXT DEFAULT '',
+            ip_address TEXT DEFAULT '',
             asked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
@@ -66,6 +67,14 @@ def init_db():
         c.execute("ALTER TABLE question_log ADD COLUMN output TEXT DEFAULT ''")
         conn.commit()
         print("[DB] question_log.output kolonu eklendi.")
+    except sqlite3.OperationalError:
+        pass  # Zaten var
+
+    # Migration: ip_address kolonu
+    try:
+        c.execute("ALTER TABLE question_log ADD COLUMN ip_address TEXT DEFAULT ''")
+        conn.commit()
+        print("[DB] question_log.ip_address kolonu eklendi.")
     except sqlite3.OperationalError:
         pass  # Zaten var
 
@@ -209,7 +218,7 @@ def use_credit(user_id: int) -> bool:
     return True
 
 
-def log_question(user_id: int, question: str, output: str = ""):
+def log_question(user_id: int, question: str, output: str = "", ip_address: str = ""):
     """
     Soruyu ve Claude'un cevabını kaydet.
     user_id=0 → anonim/ücretsiz soru.
@@ -217,8 +226,8 @@ def log_question(user_id: int, question: str, output: str = ""):
     conn = get_db()
     c = conn.cursor()
     c.execute(
-        "INSERT INTO question_log (user_id, question, output) VALUES (?, ?, ?)",
-        (user_id, question, output)
+        "INSERT INTO question_log (user_id, question, output, ip_address) VALUES (?, ?, ?, ?)",
+        (user_id, question, output, ip_address)
     )
     conn.commit()
     conn.close()

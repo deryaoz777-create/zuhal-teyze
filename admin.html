@@ -255,6 +255,15 @@
       word-break: break-all;
     }
 
+    .card-geo {
+      font-size: 10px;
+      color: var(--dim);
+      font-family: monospace;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .badge {
       display: inline-block;
       font-size: 9px;
@@ -596,6 +605,7 @@
           <div class="card-meta">
             <span class="card-date">${esc(date)}</span>
             <span class="card-email">${esc(email)}</span>
+            ${geoHtml(d)}
             ${badge}
           </div>
           <div class="card-question">${question}</div>
@@ -618,6 +628,17 @@
   }
 
   /* ── UTILS ─────────────────────────────────── */
+  function geoHtml(d) {
+    const geo = d.geo || {};
+    const ip  = d.ip_address || '';
+    if (!ip) return '';
+    const flag = geo.countryCode
+      ? String.fromCodePoint(...[...geo.countryCode.toUpperCase()].map(c => 0x1F1E6 - 65 + c.charCodeAt(0)))
+      : '🌐';
+    const label = geo.country || ip;
+    return `<span class="card-geo">${flag} ${esc(label)}</span>`;
+  }
+
   function esc(s) {
     return String(s)
       .replace(/&/g, '&amp;')

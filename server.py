@@ -1902,7 +1902,12 @@ def admin_readings():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
 
-    main_rows = conn.execute("""
+    # ip_address kolonu var mı kontrol et (migration henüz çalışmamış olabilir)
+    cols = {row[1] for row in conn.execute("PRAGMA table_info(question_log)")}
+    has_ip = "ip_address" in cols
+    ip_select = "q.ip_address" if has_ip else "'' AS ip_address"
+
+    main_rows = conn.execute(f"""
         SELECT
             q.id,
             q.asked_at   AS date,
@@ -1910,7 +1915,7 @@ def admin_readings():
             q.user_id,
             q.question,
             q.output,
-            q.ip_address,
+            {ip_select},
             CASE WHEN q.user_id = 0 THEN 1 ELSE 0 END AS is_free
         FROM question_log q
         LEFT JOIN users u ON u.id = q.user_id AND q.user_id != 0
@@ -1955,12 +1960,16 @@ def admin_readings():
 
     main_list = [dict(r) for r in main_rows]
 
-    # IP → ülke çözümle (sadece main readings'te IP var)
-    all_ips = [r["ip_address"] for r in main_list if r.get("ip_address")]
-    geo = _resolve_countries(all_ips)
-    for r in main_list:
-        ip = r.get("ip_address", "")
-        r["geo"] = geo.get(ip, {})
+    # IP → ülke çözümle (sadece ip varsa)
+    if has_ip:
+        all_ips = [r["ip_address"] for r in main_list if r.get("ip_address")]
+        geo = _resolve_countries(all_ips)
+        for r in main_list:
+            ip = r.get("ip_address", "")
+            r["geo"] = geo.get(ip, {})
+    else:
+        for r in main_list:
+            r["geo"] = {}
 
     return _json.dumps({
         "main":    main_list,
