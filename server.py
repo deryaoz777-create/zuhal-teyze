@@ -1872,7 +1872,7 @@ def _resolve_countries(ips: list) -> dict:
     for i in range(0, len(valid), 100):
         batch = valid[i:i+100]
         try:
-            payload = _json.dumps([{"query": ip, "fields": "query,country,countryCode"} for ip in batch]).encode()
+            payload = _json.dumps([{"query": ip, "fields": "query,country,countryCode,city"} for ip in batch]).encode()
             req = _ur.Request("http://ip-api.com/batch", data=payload,
                               headers={"Content-Type": "application/json"}, method="POST")
             with _ur.urlopen(req, timeout=3) as resp:
@@ -1881,7 +1881,8 @@ def _resolve_countries(ips: list) -> dict:
                     if entry.get("countryCode"):
                         result[entry["query"]] = {
                             "country": entry.get("country", ""),
-                            "countryCode": entry.get("countryCode", "")
+                            "countryCode": entry.get("countryCode", ""),
+                            "city": entry.get("city", "")
                         }
         except (_ue.URLError, Exception):
             pass  # Geo lookup başarısız olursa IP gösterilir

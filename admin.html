@@ -635,7 +635,7 @@
     const flag = geo.countryCode
       ? String.fromCodePoint(...[...geo.countryCode.toUpperCase()].map(c => 0x1F1E6 - 65 + c.charCodeAt(0)))
       : '🌐';
-    const label = geo.country || ip;
+    const label = geo.city ? `${geo.city}, ${geo.country}` : (geo.country || ip);
     return `<span class="card-geo">${flag} ${esc(label)}</span>`;
   }
 
