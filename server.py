@@ -48,6 +48,31 @@ resend.api_key = RESEND_API_KEY
 DEFAULT_LAT = 42.17
 DEFAULT_LON = 42.67
 
+# IP → (lat, lon) cache — process ömrü boyunca geçerli
+_geo_cache: dict = {}
+
+def _get_coords_for_ip(ip: str) -> tuple:
+    """
+    IP adresinden lat/lon döndür.
+    ip-api.com ücretsiz, cache'li. Başarısız → DEFAULT.
+    """
+    import urllib.request as _ur2
+    if not ip or ip in ("127.0.0.1", "::1", ""):
+        return DEFAULT_LAT, DEFAULT_LON
+    if ip in _geo_cache:
+        return _geo_cache[ip]
+    try:
+        url = f"http://ip-api.com/json/{ip}?fields=status,lat,lon"
+        with _ur2.urlopen(url, timeout=2) as resp:
+            d = _json.loads(resp.read())
+            if d.get("status") == "success":
+                coords = (float(d["lat"]), float(d["lon"]))
+                _geo_cache[ip] = coords
+                return coords
+    except Exception:
+        pass
+    return DEFAULT_LAT, DEFAULT_LON
+
 LAB_PASSWORD = os.environ.get("LAB_PASSWORD", "zuhal2024lab")
 DB_PATH      = os.environ.get("DB_PATH", "zuhal_teyze.db")
 
@@ -320,8 +345,7 @@ def api_zuhal():
 
     try:
         dt  = datetime.datetime.now()
-        lat = float(data.get("lat", DEFAULT_LAT))
-        lon = float(data.get("lon", DEFAULT_LON))
+        lat, lon = _get_coords_for_ip(_get_ip())
         chart = calc_chart(question, dt, lat, lon)
         prompt = build_frawley_prompt(chart, lang=lang)
         interpretation = ask_claude(prompt, ANTHROPIC_API_KEY)
@@ -363,8 +387,7 @@ def api_zuhal_free():
 
     data = request.json or {}
     question = data.get("question", "").strip()
-    lat = float(data.get("lat", DEFAULT_LAT))
-    lon = float(data.get("lon", DEFAULT_LON))
+    lat, lon = _get_coords_for_ip(_get_ip())
     lang = data.get("lang", "tr")
     if lang not in ("tr", "en"):
         lang = "tr"
