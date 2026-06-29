@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zuhal Teyze — Ücretsiz Horary Astroloji</title>
+<meta name="description" content="Hayatınızdaki her soruyu yıldızlara sorun. Klasik horary astroloji — ücretsiz, doğum haritası gerekmez.">
+<link rel="canonical" href="https://zuhalteyze.live/">
+<link rel="alternate" hreflang="tr" href="https://zuhalteyze.live/">
+<link rel="alternate" hreflang="en" href="https://zuhalteyze.live/en">
+<meta property="og:title" content="Zuhal Teyze — Ücretsiz Horary Astroloji">
+<meta property="og:description" content="Hayatınızdaki her soruyu yıldızlara sorun. Klasik horary astroloji — ücretsiz, doğum haritası gerekmez.">
+<meta property="og:url" content="https://zuhalteyze.live/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zuhal Teyze — Ücretsiz Horary Astroloji">
+<meta name="google-site-verification" content="hhgkCOajijszpcMpIxFkPTokjYTPS7CzDhsG1L1aqJA">
+<meta name="twitter:description" content="Hayatınızdaki her soruyu yıldızlara sorun. Klasik horary — ücretsiz.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(ellipse 90% 60% at 70% -10%, rgba(217,118,106,.12), transparent 60%),radial-gradient(ellipse 70% 80% at 10% 100%, rgba(29,85,96,.16), transparent 55%),linear-gradient(160deg,#3a1f2e 0%,#241019 45%,#160a10 100%) fixed;font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem;position:relative}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(15,6,11,.85) 100%);pointer-events:none;z-index:0}
+.wrap{width:100%;max-width:480px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.avatar-wrap{width:170px;height:212px;margin-bottom:1rem;border-radius:50% 50% 4px 4px;overflow:hidden;position:relative;z-index:1}
+.avatar-wrap::before{content:'';position:absolute;inset:-3px;background:conic-gradient(from 0deg,#c9a876,#d9766a,#b25490,#c9a876);border-radius:52% 52% 6px 6px;animation:crystalRing 4s linear infinite;z-index:-1;pointer-events:none}
+.avatar-wrap::after{content:'';position:absolute;inset:-2px;background:#2c1620;border-radius:50% 50% 5px 5px;z-index:-1;pointer-events:none}
+.avatar-wrap svg{width:100%;height:100%;display:block;animation:floaty 7s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='grainf'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainf)' opacity='0.5'/%3E%3C/svg%3E");opacity:.06;mix-blend-mode:overlay;pointer-events:none;z-index:0}
+@keyframes crystalRing{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.title{font-family:'Cinzel',serif;font-size:22px;letter-spacing:.12em;margin-bottom:4px;text-align:center;background:linear-gradient(135deg,#c9a876,#d9766a,#b25490,#c9a876);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:bShift 5s linear infinite}
+@keyframes bShift{0%{background-position:0%}100%{background-position:300%}}
+.subtitle{font-size:11px;color:rgba(201,168,118,.5);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.4rem;text-align:center}
+.disclaimer{font-size:12px;color:rgba(201,168,118,.38);text-align:center;margin-bottom:.4rem;max-width:380px;line-height:1.5}
+.tagline{font-size:13px;color:rgba(230,211,174,.45);font-style:italic;text-align:center;margin-bottom:1.5rem;min-height:18px;transition:opacity .4s}
+.card{width:100%;background:rgba(54,24,38,.72);backdrop-filter:blur(6px);border:1px solid rgba(201,168,118,.22);border-radius:8px;padding:1.5rem}
+textarea,input[type=email],input[type=tel]{width:100%;background:rgba(217,118,106,.07);border:1px solid rgba(201,168,118,.22);border-radius:5px;color:rgba(230,211,174,.9);font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;padding:12px 14px;outline:none;transition:border-color .2s;resize:none}
+textarea::placeholder,input::placeholder{color:rgba(201,168,118,.32);font-style:italic}
+textarea:focus,input:focus{border-color:rgba(232,154,139,.65);box-shadow:0 0 10px rgba(201,168,118,.12)}
+.btn{width:100%;margin-top:1rem;background:rgba(125,51,68,.18);border:1px solid rgba(201,168,118,.38);border-radius:5px;color:rgba(230,211,174,.9);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.18em;padding:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,118,.18),transparent);pointer-events:none}
+.btn:hover:not(:disabled){background:rgba(217,118,106,.28);box-shadow:0 0 16px rgba(201,168,118,.28);border-color:rgba(232,154,139,.55)}
+.btn:hover:not(:disabled)::after{animation:shimmer .7s ease-in-out}
+.btn:disabled{opacity:.45;cursor:default}
+.btn-sm{background:transparent;border:1px solid rgba(201,168,118,.18);color:rgba(201,168,118,.48);font-size:10px;padding:9px;margin-top:.6rem;letter-spacing:.12em}
+.btn-sm:hover:not(:disabled){background:rgba(217,118,106,.1);border-color:rgba(201,168,118,.38)}
+@keyframes shimmer{from{left:-70%}to{left:160%}}
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,118,.38),transparent);margin:1.25rem 0;position:relative;overflow:visible}
+.divider::after{content:'✦';position:absolute;left:50%;top:-8px;transform:translateX(-50%);font-size:11px;color:rgba(201,168,118,.6);background:#241019;padding:0 5px;animation:ornPulse 2.5s ease-in-out infinite}
+@keyframes ornPulse{0%,100%{opacity:.28;transform:translateX(-50%) scale(.85)}50%{opacity:1;transform:translateX(-50%) scale(1.1);text-shadow:0 0 10px rgba(201,168,118,.8)}}
+.response-area{overflow:hidden;max-height:0;transition:max-height .4s ease}
+.response-area.show{max-height:2000px}
+.response-text{font-size:19px;font-style:italic;line-height:1.85;color:rgba(230,211,174,.88);opacity:0;transition:opacity .5s;white-space:pre-wrap}
+.response-text.visible{opacity:1;animation:crystalReveal .9s ease-out both}
+@keyframes crystalReveal{from{opacity:0;filter:blur(5px) hue-rotate(30deg)}to{opacity:1;filter:blur(0) hue-rotate(0)}}
+.loading-phrase{font-size:14px;color:rgba(201,168,118,.65);font-style:italic;animation:floatText 2s ease-in-out infinite;display:inline-block}
+@keyframes floatText{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(-4px);opacity:1;text-shadow:0 0 12px rgba(201,168,118,.65)}}
+.error-text{font-size:15px;color:#ff9180;font-style:normal;opacity:1!important}
+.credits-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid rgba(201,168,118,.12)}
+.user-email{font-size:12px;color:rgba(201,168,118,.42);font-style:italic}
+.credits-info{font-size:12px;color:rgba(201,168,118,.5);letter-spacing:.06em}
+.credits-count{font-family:'Cinzel',serif;font-size:14px;background:linear-gradient(135deg,#c9a876,#d9766a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.wall-hint{font-size:14px;color:rgba(201,168,118,.52);font-style:italic;text-align:center;margin-bottom:1.25rem;line-height:1.6}
+.wall-msg{min-height:18px;margin-top:.75rem;font-size:13px;color:#ff9180;text-align:center}
+.back-link{font-size:12px;color:rgba(201,168,118,.38);cursor:pointer;text-decoration:underline;margin-top:.75rem;display:block;text-align:center}
+.free-tag{font-size:10px;color:rgba(201,168,118,.55);letter-spacing:.15em;text-transform:uppercase;text-align:center;margin-bottom:.75rem}
+.share-bar{display:none;margin-top:1.25rem;flex-direction:column;gap:.7rem}
+.share-bar.show{display:flex}
+.share-viral{font-size:14px;color:rgba(230,211,174,.68);font-style:italic;text-align:center;padding:.85rem 1rem;border:1px dashed rgba(201,168,118,.2);border-radius:6px;cursor:pointer;transition:all .25s;line-height:1.5}
+.share-viral:hover{background:rgba(217,118,106,.09);border-color:rgba(201,168,118,.42)}
+.share-btns{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.share-btn{padding:12px;border:1px solid rgba(201,168,118,.28);border-radius:5px;background:rgba(54,24,38,.9);color:rgba(230,211,174,.78);font-family:'Cinzel',serif;font-size:10px;letter-spacing:.14em;cursor:pointer;transition:all .25s;text-align:center}
+.share-btn:hover{background:rgba(201,168,118,.16);box-shadow:0 0 12px rgba(201,168,118,.22)}
+.copy-toast{font-size:11px;color:rgba(201,168,118,.5);text-align:center;min-height:16px;letter-spacing:.05em}
+@keyframes cardEnter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.state-enter{animation:cardEnter .4s ease-out both}
+.star{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:twinkle var(--dur,3s) ease-in-out infinite;animation-delay:var(--delay,0s)}
+@keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.9;transform:scale(1.4)}}
+.moon-deco{position:fixed;top:1.5rem;right:2rem;font-size:1.6rem;color:rgba(201,168,118,.38);pointer-events:none;z-index:0;animation:moonFloat 7s ease-in-out infinite}
+@keyframes moonFloat{0%,100%{transform:translateY(0) rotate(-8deg);opacity:.3}50%{transform:translateY(-8px) rotate(8deg);opacity:.55}}
+.btn-astro{width:100%;margin-top:1.25rem;background:rgba(13,80,86,.45);border:1px solid rgba(46,122,134,.5);border-radius:5px;color:#8ecbd4;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.18em;padding:13px;cursor:pointer;transition:all .3s;position:relative;z-index:1}
+.btn-astro:hover{background:rgba(46,122,134,.25);border-color:#2e7a86;color:#b0dde4;box-shadow:0 0 18px rgba(46,122,134,.3)}
+.astro-card{width:100%;margin-top:.75rem;background:rgba(8,40,46,.75);backdrop-filter:blur(8px);border:1px solid rgba(46,122,134,.32);border-radius:8px;padding:1.4rem;display:none;position:relative;z-index:1}
+.astro-card.show{display:block;animation:cardEnter .35s ease-out both}
+.astro-hint{font-size:12px;color:rgba(201,168,118,.6);font-style:italic;text-align:center;margin-bottom:1.1rem;line-height:1.65;letter-spacing:.02em}
+.astro-divider{display:flex;align-items:center;gap:.75rem;margin:.9rem 0;color:rgba(201,168,118,.22);font-size:10px;letter-spacing:.1em}
+.astro-divider::before,.astro-divider::after{content:'';flex:1;height:1px;background:rgba(201,168,118,.14)}
+.astro-msg{min-height:18px;margin-top:.75rem;font-size:12px;text-align:center;color:rgba(201,168,118,.65);letter-spacing:.04em}
+.astro-msg.err{color:#e07070}
+.astro-msg.ok{color:rgba(142,203,150,.75)}
+footer{margin-top:2.5rem;position:relative;z-index:1}
+footer a{font-size:11px;color:rgba(201,168,118,.32);text-decoration:none;letter-spacing:.05em}
+footer a:hover{color:rgba(201,168,118,.65)}
+.pay-overlay{position:fixed;inset:0;background:rgba(15,6,11,.88);backdrop-filter:blur(5px);z-index:200;display:none;align-items:center;justify-content:center;padding:1.25rem}
+.pay-overlay.show{display:flex}
+.pay-modal{width:100%;max-width:400px;background:rgba(46,18,30,.97);border:1px solid rgba(201,168,118,.3);border-radius:10px;padding:1.75rem 1.5rem}
+.pay-title{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.16em;color:rgba(201,168,118,.9);text-align:center;margin-bottom:.35rem}
+.pay-sub{font-size:13px;color:rgba(230,211,174,.4);font-style:italic;text-align:center;margin-bottom:1.4rem;line-height:1.55}
+.pay-pkgs{display:flex;flex-direction:column;gap:.65rem}
+.pay-pkg{background:rgba(217,118,106,.06);border:1px solid rgba(201,168,118,.18);border-radius:7px;padding:.9rem 1.1rem;cursor:pointer;transition:all .22s;display:flex;justify-content:space-between;align-items:center;position:relative;overflow:hidden}
+.pay-pkg::after{content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,118,.1),transparent);pointer-events:none}
+.pay-pkg:hover{background:rgba(217,118,106,.15);border-color:rgba(201,168,118,.48);box-shadow:0 0 16px rgba(201,168,118,.14)}
+.pay-pkg:hover::after{animation:shimmer .6s ease-in-out}
+.pay-pkg.loading{opacity:.55;pointer-events:none}
+.pay-pkg-left{display:flex;flex-direction:column;gap:.25rem}
+.pay-pkg-name{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;color:rgba(230,211,174,.85)}
+.pay-pkg-credits{font-size:12px;color:rgba(201,168,118,.48);font-style:italic}
+.pay-pkg-price{font-family:'Cinzel',serif;font-size:15px;background:linear-gradient(135deg,#c9a876,#d9766a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.06em}
+.pay-err{min-height:16px;margin-top:.85rem;font-size:12px;color:#ff9180;text-align:center;font-style:italic}
+.pay-close{display:block;margin-top:1.1rem;text-align:center;font-size:11px;color:rgba(201,168,118,.28);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+.pay-close:hover{color:rgba(201,168,118,.6)}
+</style>
+</head>
+<body>
+<div class="moon-deco">☽</div>
+<div class="wrap">
+  <div class="avatar-wrap">
+    <svg role="img" aria-label="Zuhal Teyze" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600">
+  <defs>
+    <filter id="zt-plaster" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0" result="grain"/>
+      <feComposite in="grain" in2="SourceGraphic" operator="over"/>
+    </filter>
+    <filter id="zt-brush">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="3" seed="7" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="7"/>
+    </filter>
+    <filter id="zt-brushSoft">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.05" numOctaves="2" seed="11" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="4"/>
+    </filter>
+    <filter id="zt-blurGlow"><feGaussianBlur stdDeviation="18"/></filter>
+    <filter id="zt-blurSoft"><feGaussianBlur stdDeviation="6"/></filter>
+    <filter id="zt-blurTiny"><feGaussianBlur stdDeviation="2"/></filter>
+
+    <radialGradient id="zt-niche" cx="50%" cy="32%" r="85%">
+      <stop offset="0%" stop-color="#5c2c3e"/>
+      <stop offset="45%" stop-color="#3a1f2e"/>
+      <stop offset="100%" stop-color="#241019"/>
+    </radialGradient>
+    <radialGradient id="zt-halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d9766a" stop-opacity=".55"/>
+      <stop offset="55%" stop-color="#d9766a" stop-opacity=".18"/>
+      <stop offset="100%" stop-color="#d9766a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="zt-skin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e0a98d"/>
+      <stop offset="55%" stop-color="#c98a72"/>
+      <stop offset="100%" stop-color="#8a4f4a"/>
+    </linearGradient>
+    <linearGradient id="zt-skinShadow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6e3a42" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#4a2430" stop-opacity=".85"/>
+    </linearGradient>
+    <linearGradient id="zt-shawl" x1="0%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#7d3344"/>
+      <stop offset="55%" stop-color="#5c2c3e"/>
+      <stop offset="100%" stop-color="#33141f"/>
+    </linearGradient>
+    <linearGradient id="zt-shawlHi" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d9766a" stop-opacity=".5"/>
+      <stop offset="100%" stop-color="#d9766a" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="zt-ring" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c9a876" stop-opacity=".1"/>
+      <stop offset="35%" stop-color="#e6d3ae"/>
+      <stop offset="65%" stop-color="#c9a876"/>
+      <stop offset="100%" stop-color="#c9a876" stop-opacity=".1"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M30 600 L30 240 Q30 60 240 60 Q450 60 450 240 L450 600 Z" fill="url(#zt-niche)"/>
+  <path d="M30 600 L30 240 Q30 60 240 60 Q450 60 450 240 L450 600 Z" fill="none" stroke="#c9a876" stroke-opacity=".4" stroke-width="2"/>
+  <path d="M42 600 L42 244 Q42 74 240 74 Q438 74 438 244 L438 600 Z" fill="none" stroke="#c9a876" stroke-opacity=".18" stroke-width="1"/>
+
+  <ellipse cx="240" cy="250" rx="190" ry="200" fill="url(#zt-halo)" filter="url(#zt-blurGlow)"/>
+
+  <g fill="#e6d3ae">
+    <circle cx="95" cy="160" r="1.6" opacity=".8"/>
+    <circle cx="385" cy="135" r="1.2" opacity=".6"/>
+    <circle cx="350" cy="420" r="1.4" opacity=".5"/>
+    <circle cx="120" cy="470" r="1.1" opacity=".55"/>
+    <circle cx="410" cy="300" r="1" opacity=".45"/>
+    <path d="M88 320 l2.4 6 6 2.4 -6 2.4 -2.4 6 -2.4 -6 -6 -2.4 6 -2.4 Z" opacity=".7"/>
+    <path d="M395 200 l1.8 4.5 4.5 1.8 -4.5 1.8 -1.8 4.5 -1.8 -4.5 -4.5 -1.8 4.5 -1.8 Z" opacity=".55"/>
+  </g>
+
+  <g filter="url(#zt-brushSoft)">
+    <ellipse cx="240" cy="208" rx="158" ry="44" fill="none" stroke="url(#zt-ring)" stroke-width="7" transform="rotate(-9 240 208)" opacity=".9"/>
+    <ellipse cx="240" cy="208" rx="172" ry="52" fill="none" stroke="#c9a876" stroke-width="1.6" transform="rotate(-9 240 208)" opacity=".4"/>
+  </g>
+
+  <g filter="url(#zt-brush)">
+    <path d="M240 96
+             Q150 100 128 196 Q118 244 124 300
+             Q110 360 92 430 Q80 480 86 600 L394 600
+             Q400 480 388 430 Q370 360 356 300
+             Q362 244 352 196 Q330 100 240 96 Z" fill="url(#zt-shawl)"/>
+    <path d="M240 96 Q160 102 136 190 Q128 230 130 280 Q146 200 178 158 Q204 124 240 116 Z"
+          fill="url(#zt-shawlHi)" opacity=".8"/>
+    <path d="M150 250 Q142 360 118 470" stroke="#33141f" stroke-width="5" fill="none" opacity=".7"/>
+    <path d="M330 250 Q340 360 362 470" stroke="#33141f" stroke-width="5" fill="none" opacity=".6"/>
+    <path d="M176 300 Q170 400 152 520" stroke="#33141f" stroke-width="3" fill="none" opacity=".5"/>
+    <path d="M304 300 Q312 400 328 520" stroke="#33141f" stroke-width="3" fill="none" opacity=".5"/>
+  </g>
+  <path d="M168 178 Q150 240 158 320 Q166 420 150 560" stroke="#c9a876" stroke-width="2.4" fill="none" opacity=".75" filter="url(#zt-brushSoft)"/>
+  <path d="M312 178 Q330 240 322 320 Q314 420 330 560" stroke="#c9a876" stroke-width="2.4" fill="none" opacity=".75" filter="url(#zt-brushSoft)"/>
+
+  <g filter="url(#zt-brushSoft)">
+    <path d="M204 330 Q206 380 196 404 Q240 432 284 404 Q274 380 276 330 Z" fill="#a9685c"/>
+    <path d="M240 336 Q262 372 276 396 L276 330 Z" fill="#5e2f38" opacity=".7"/>
+    <path d="M240 130
+             Q176 132 168 210
+             Q164 258 178 300
+             Q194 348 240 356
+             Q286 348 302 300
+             Q316 258 312 210
+             Q304 132 240 130 Z" fill="url(#zt-skin)"/>
+    <path d="M240 130 Q304 132 312 210 Q316 258 302 300 Q286 348 240 356 L240 130 Z"
+          fill="url(#zt-skinShadow)" opacity=".75"/>
+    <ellipse cx="200" cy="252" rx="26" ry="18" fill="#e8b294" opacity=".5" filter="url(#zt-blurSoft)"/>
+    <ellipse cx="206" cy="180" rx="34" ry="22" fill="#ecc09e" opacity=".4" filter="url(#zt-blurSoft)"/>
+  </g>
+
+  <g filter="url(#zt-brushSoft)">
+    <path d="M182 212 Q204 198 232 208 L230 217 Q205 209 186 220 Z" fill="#2c1219"/>
+    <path d="M252 208 Q280 198 300 214 L296 222 Q278 209 254 217 Z" fill="#2c1219"/>
+  </g>
+
+  <g>
+    <ellipse cx="208" cy="232" rx="24" ry="13" fill="#7a4046" opacity=".45" filter="url(#zt-blurSoft)"/>
+    <ellipse cx="276" cy="232" rx="24" ry="13" fill="#5e2f38" opacity=".55" filter="url(#zt-blurSoft)"/>
+    <path d="M188 232 Q206 220 228 230 Q208 244 188 232 Z" fill="#f0e2cd"/>
+    <circle cx="209" cy="231" r="8.5" fill="#3a1f1a"/>
+    <circle cx="209" cy="231" r="4" fill="#160a10"/>
+    <circle cx="206" cy="228" r="1.8" fill="#e6d3ae"/>
+    <path d="M188 232 Q206 219 228 230" stroke="#2c1219" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M191 236 Q207 245 226 233" stroke="#5e2f38" stroke-width="1.6" fill="none" opacity=".8"/>
+    <path d="M254 230 Q274 220 294 232 Q274 243 254 230 Z" fill="#e8d8c0"/>
+    <circle cx="273" cy="230" r="8.5" fill="#3a1f1a"/>
+    <circle cx="273" cy="230" r="4" fill="#160a10"/>
+    <circle cx="270" cy="227" r="1.6" fill="#e6d3ae"/>
+    <path d="M254 230 Q274 219 294 232" stroke="#2c1219" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M257 233 Q274 243 292 234" stroke="#4a2430" stroke-width="1.6" fill="none" opacity=".8"/>
+    <path d="M194 246 Q208 252 222 247" stroke="#9c5e54" stroke-width="2" fill="none" opacity=".6"/>
+    <path d="M258 245 Q272 251 288 247" stroke="#7a4046" stroke-width="2" fill="none" opacity=".6"/>
+  </g>
+
+  <g filter="url(#zt-brushSoft)">
+    <path d="M238 226 Q236 262 230 282 Q236 292 248 290 Q256 286 252 276 Q248 258 246 226 Z"
+          fill="#b06a58" opacity=".55"/>
+    <path d="M248 282 Q254 287 252 292" stroke="#5e2f38" stroke-width="2.4" fill="none"/>
+    <path d="M228 284 Q233 290 240 291" stroke="#8a4f4a" stroke-width="2" fill="none" opacity=".7"/>
+  </g>
+
+  <g filter="url(#zt-brushSoft)">
+    <path d="M210 314 Q240 306 272 312 Q258 322 240 322 Q222 322 210 314 Z" fill="#8a3f48"/>
+    <path d="M210 314 Q240 309 272 312" stroke="#4a1f2a" stroke-width="2.2" fill="none"/>
+    <path d="M216 322 Q240 330 266 321" stroke="#5e2f38" stroke-width="1.6" fill="none" opacity=".5"/>
+    <path d="M212 290 Q204 304 206 316" stroke="#9c5e54" stroke-width="2.2" fill="none" opacity=".65"/>
+    <path d="M268 288 Q278 302 276 314" stroke="#7a4046" stroke-width="2.2" fill="none" opacity=".65"/>
+    <path d="M204 168 Q240 160 278 168" stroke="#a9685c" stroke-width="1.8" fill="none" opacity=".5"/>
+    <path d="M210 184 Q240 177 272 184" stroke="#a9685c" stroke-width="1.6" fill="none" opacity=".45"/>
+    <path d="M236 200 Q240 196 246 200" stroke="#8a4f4a" stroke-width="2" fill="none" opacity=".7"/>
+  </g>
+
+  <g filter="url(#zt-brushSoft)">
+    <path d="M174 296 q-12 14 0 26 q14 12 26 1 q-16 4 -22 -7 q-6 -12 -4 -20 Z" fill="#c9a876"/>
+    <circle cx="173" cy="292" r="2.4" fill="#e6d3ae"/>
+  </g>
+
+  <g stroke="#cfc2b0" stroke-width="1.6" fill="none" opacity=".8" filter="url(#zt-brushSoft)">
+    <path d="M186 156 Q176 176 178 196"/>
+    <path d="M196 148 Q188 168 188 184"/>
+    <path d="M292 152 Q300 172 298 192"/>
+  </g>
+
+  <path d="M240 124 Q186 128 174 196 Q170 240 180 290 Q160 240 166 192 Q176 116 240 110 Q304 116 314 192 Q320 240 300 290 Q310 240 306 196 Q294 128 240 124 Z"
+        fill="#33141f" opacity=".85" filter="url(#zt-brushSoft)"/>
+
+  <g filter="url(#zt-brushSoft)">
+    <circle cx="240" cy="470" r="34" fill="none" stroke="#c9a876" stroke-width="2" opacity=".85"/>
+    <text x="240" y="484" text-anchor="middle" font-family="serif" font-size="40" fill="#c9a876" opacity=".95">♄</text>
+    <path d="M240 436 L240 410" stroke="#c9a876" stroke-width="1.6" opacity=".6"/>
+  </g>
+
+  <!-- plaster texture overlay -->
+  <rect x="0" y="0" width="480" height="600" filter="url(#zt-plaster)" fill="rgba(0,0,0,0)" opacity=".4"/>
+</svg>
+  </div>
+  <div class="title">ZUHAL TEYZE</div>
+  <div class="subtitle">Chaos Lab &middot; Horary</div>
+  <div style="font-size:10px;letter-spacing:.12em;color:rgba(201,168,118,.32);margin-bottom:.2rem"><span style="color:rgba(201,168,118,.75)">TR</span> &nbsp;·&nbsp; <a href="/en" style="color:rgba(201,168,118,.45);text-decoration:none">EN</a></div>
+  <div class="disclaimer">Hayatın her sorusuna yıldızlardan cevap arar. Ama asıl bildiği şey — cevabı zaten bildiğinizi.</div>
+  <div class="tagline" id="tagline">Bu uygulama eğlence amaçlıdır.</div>
+
+  <div class="card" id="app-card">
+    <div id="state-free">
+      <textarea id="q-free" placeholder="Yıldızlara sormak istediğiniz şey..." rows="4"></textarea>
+      <div class="response-area" id="ra-free">
+        <div class="divider"></div>
+        <div class="response-text" id="rt-free"></div>
+      </div>
+      <div class="share-bar" id="share-bar-free">
+        <div class="share-viral" id="viral-free" onclick="copyViral('free')" title="Kopyala"></div>
+        <div class="share-btns">
+          <button class="share-btn" onclick="shareStory('free')">STORY İNDİR</button>
+          <button class="share-btn" onclick="shareNative('free')">PAYLAŞ</button>
+        </div>
+        <div class="copy-toast" id="toast-free"></div>
+      </div>
+      <button class="btn" id="btn-free" onclick="askFree()">SORMAK İSTİYORUM</button>
+    </div>
+
+    <div id="state-wall" style="display:none">
+      <div class="wall-hint">Devam etmek için email adresinizi girin.</div>
+      <input type="email" id="wall-email" placeholder="email adresiniz...">
+      <div class="wall-msg" id="wall-msg"></div>
+      <button class="btn" id="btn-wall" onclick="sendCode()">KODU GÖNDER</button>
+    </div>
+
+    <div id="state-code" style="display:none">
+      <div class="wall-hint">6 haneli doğrulama kodunuzu girin.<br><small style="opacity:.65">Spam klasörünü de kontrol edin.</small></div>
+      <input type="tel" id="code-input" placeholder="— — — — — —" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+      <div class="wall-msg" id="code-msg"></div>
+      <button class="btn" id="btn-code" onclick="verifyCode()">DOĞRULA</button>
+      <span class="back-link" onclick="showWall()">← geri dön</span>
+    </div>
+
+    <div id="state-authed" style="display:none">
+      <div class="credits-bar">
+        <span class="user-email" id="user-email"></span>
+        <span class="credits-info">Kalan: <span class="credits-count" id="credits-count">—</span></span>
+      </div>
+      <button class="btn btn-sm" id="btn-buy" onclick="openCheckout()">✦ KREDİ SATIN AL</button>
+      <div id="carry-wrap" style="display:none">
+        <div class="divider"></div>
+        <div class="response-text visible" id="carry-answer" style="font-size:16px"></div>
+        <div class="divider"></div>
+      </div>
+      <textarea id="q" placeholder="Bir soru daha..." rows="4" style="margin-top:1rem"></textarea>
+      <div class="response-area" id="ra">
+        <div class="divider"></div>
+        <div class="response-text" id="rt"></div>
+      </div>
+      <div class="share-bar" id="share-bar-authed">
+        <div class="share-viral" id="viral-authed" onclick="copyViral('authed')" title="Kopyala"></div>
+        <div class="share-btns">
+          <button class="share-btn" onclick="shareStory('authed')">STORY İNDİR</button>
+          <button class="share-btn" onclick="shareNative('authed')">PAYLAŞ</button>
+        </div>
+        <div class="copy-toast" id="toast-authed"></div>
+      </div>
+      <button class="btn" id="ask-btn" onclick="ask()">SORMAK İSTİYORUM</button>
+      <button class="btn btn-sm" onclick="logout()">çıkış yap</button>
+    </div>
+  </div>
+
+  <button class="btn-astro" onclick="toggleAstro()">✦ &nbsp;GERÇEK ASTROLOGA SOR&nbsp; ✦</button>
+
+  <div class="astro-card" id="astro-card">
+    <div class="astro-hint">Yapay teyze değil, gerçek bir horary astroloğu baksın istiyorsan —<br>sorunla birlikte e-postanı bırak, sana dönülür.</div>
+    <input type="email" id="astro-email" placeholder="e-posta adresiniz...">
+    <textarea id="astro-soru" placeholder="Sorunuz... (soru tarihi, saati, yeri varsa ekleyin)" rows="4" style="margin-top:.6rem"></textarea>
+    <input type="text" id="astro-gotcha" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+    <div class="astro-msg" id="astro-msg"></div>
+    <button class="btn" id="astro-send-btn" onclick="sendAstro()">GÖNDER</button>
+  </div>
+
+  <footer>
+    <div style="display:flex;gap:1.25rem;justify-content:center;flex-wrap:wrap">
+      <a href="/faq">SSS</a>
+      <a href="/ogren">Öğren</a>
+      <a href="/vakalar">Vakalar</a>
+      <a href="/tablo">Onurlar</a>
+      <a href="/contact">İletişim</a>
+      <a href="/terms">Kullanım Koşulları</a>
+      <a href="/privacy">Gizlilik</a>
+    </div>
+  </footer>
+</div>
+<!-- Payment Modal -->
+<div class="pay-overlay" id="pay-overlay" onclick="if(event.target===this)closePay()">
+  <div class="pay-modal">
+    <div class="pay-title">✦ &nbsp;KREDİ SATIN AL&nbsp; ✦</div>
+    <div class="pay-sub">Her soru tek kullanımlık bir horary okumadır.<br>Kredi satın al, istediğin zaman sor.</div>
+    <div class="pay-pkgs">
+      <div class="pay-pkg" id="pkg-3q" onclick="goPay('3q')">
+        <div class="pay-pkg-left">
+          <div class="pay-pkg-name">3 SORU</div>
+          <div class="pay-pkg-credits">3 horary okuma</div>
+        </div>
+        <div class="pay-pkg-price">$5</div>
+      </div>
+      <div class="pay-pkg" id="pkg-5q" onclick="goPay('5q')">
+        <div class="pay-pkg-left">
+          <div class="pay-pkg-name">5 SORU</div>
+          <div class="pay-pkg-credits">5 horary okuma</div>
+        </div>
+        <div class="pay-pkg-price">$8</div>
+      </div>
+      <div class="pay-pkg" id="pkg-10q" onclick="goPay('10q')">
+        <div class="pay-pkg-left">
+          <div class="pay-pkg-name">10 SORU</div>
+          <div class="pay-pkg-credits">10 horary okuma · en iyi değer</div>
+        </div>
+        <div class="pay-pkg-price">$10</div>
+      </div>
+    </div>
+    <div class="pay-err" id="pay-err"></div>
+    <span class="pay-close" onclick="closePay()">vazgeç</span>
+  </div>
+</div>
+
+<script>
+
+const PHRASES = ["Sabrınızı... yıldızlar acele etmez.","Görüyorum, görüyorum...","Saturnus düşünüyor.","Bu soruyu zaten biliyordun.","Hmm. İlginç bir soru."];
+const TAGS = ["Saturnus her şeyi görür.","Yıldızlar yalan söylemiyor.","Bu cevabı zaten biliyordun.","Sormadan önce aynaya bak derim ama..."];
+let savedAnswer='', wallEmail='', viralText={free:'',authed:''}, loadingInterval;
+
+function showState(id){
+  ['state-free','state-wall','state-code','state-authed'].forEach(s=>{
+    const el=document.getElementById(s);
+    el.style.display = s===id ? 'block' : 'none';
+    if(s===id){ el.classList.remove('state-enter'); void el.offsetWidth; el.classList.add('state-enter'); }
+  });
+}
+function showFree(){ showState('state-free'); }
+function showWall(){ showState('state-wall'); document.getElementById('wall-msg').textContent=''; }
+function showCodeState(){ showState('state-code'); document.getElementById('code-msg').textContent=''; }
+function showAuthed(email,credits,carry){
+  showState('state-authed');
+  document.getElementById('user-email').textContent=email;
+  document.getElementById('credits-count').textContent=credits;
+  if(carry && savedAnswer){
+    document.getElementById('carry-wrap').style.display='block';
+    document.getElementById('carry-answer').textContent=savedAnswer;
+  }
+}
+
+window.onload=function(){
+  fetch('/api/auth/me').then(r=>r.json()).then(d=>{
+    if(d.logged_in) showAuthed(d.email,d.credits,false);
+    else showFree();
+  }).catch(()=>showFree());
+  createStars();
+};
+
+function getLocation(cb){
+  if(navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(p=>cb(p.coords.latitude,p.coords.longitude),()=>cb(41.01,28.97),{timeout:5000});
+  else cb(41.01,28.97);
+}
+
+function cleanMD(t){ return t.replace(/\*\*(.+?)\*\*/g,'$1').replace(/#{1,6}\s*/g,'').replace(/\*(.+?)\*/g,'$1').trim(); }
+
+function startLoading(rt){
+  clearInterval(loadingInterval);
+  let i=0;
+  rt.className='response-text';
+  rt.innerHTML='<span class="loading-phrase">'+PHRASES[0]+'</span>';
+  loadingInterval=setInterval(()=>{ i=(i+1)%PHRASES.length; rt.innerHTML='<span class="loading-phrase">'+PHRASES[i]+'</span>'; },2200);
+}
+function stopLoading(){ clearInterval(loadingInterval); }
+
+function rotateTagline(){
+  const el=document.getElementById('tagline');
+  el.style.opacity=0;
+  setTimeout(()=>{ el.textContent=TAGS[Math.floor(Math.random()*TAGS.length)]; el.style.opacity=1; },400);
+}
+
+function askFree(){
+  const q=document.getElementById('q-free').value.trim();
+  if(!q) return;
+  const ra=document.getElementById('ra-free'), rt=document.getElementById('rt-free'), btn=document.getElementById('btn-free');
+  ra.classList.add('show');
+  document.getElementById('share-bar-free').classList.remove('show');
+  startLoading(rt);
+  btn.disabled=true; btn.textContent='· · ·';
+  savedAnswer='';
+  getLocation((lat,lon)=>{
+    fetch('/api/zuhal/free',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,lat,lon})})
+    .then(r=>r.json()).then(d=>{
+      stopLoading();
+      if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
+      else{
+        const text=cleanMD(d.interpretation||'Yıldızlar şu an sessiz.');
+        rt.className='response-text'; rt.textContent=text; savedAnswer=text;
+        setTimeout(()=>rt.classList.add('visible'),30);
+        showShareBtns('free',text); rotateTagline();
+      }
+      btn.disabled=false; btn.textContent='BİR SORU DAHA'; btn.onclick=()=>showWall();
+    }).catch(()=>{
+      stopLoading(); rt.className='response-text error-text';
+      rt.textContent='Bağlantı hatası. Lütfen tekrar deneyin.';
+      setTimeout(()=>rt.classList.add('visible'),30);
+      btn.disabled=false; btn.textContent='TEKRAR DENE';
+    });
+  });
+}
+
+function sendCode(){
+  const email=document.getElementById('wall-email').value.trim();
+  const msg=document.getElementById('wall-msg');
+  if(!email){ msg.textContent='Email girin.'; return; }
+  const btn=document.getElementById('btn-wall'); btn.disabled=true; btn.textContent='· · ·';
+  fetch('/api/auth/code/send',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email})})
+  .then(r=>r.json()).then(d=>{
+    if(d.success){ wallEmail=email; showCodeState(); }
+    else{ msg.textContent=d.error||'Hata oluştu.'; btn.disabled=false; btn.textContent='KODU GÖNDER'; }
+  }).catch(()=>{ msg.textContent='Bağlantı hatası.'; btn.disabled=false; btn.textContent='KODU GÖNDER'; });
+}
+
+function verifyCode(){
+  const code=document.getElementById('code-input').value.trim();
+  const msg=document.getElementById('code-msg');
+  if(code.length!==6){ msg.textContent='6 haneli kodu girin.'; return; }
+  const btn=document.getElementById('btn-code'); btn.disabled=true; btn.textContent='· · ·';
+  fetch('/api/auth/code/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:wallEmail,code})})
+  .then(r=>r.json()).then(d=>{
+    if(d.success) showAuthed(d.email,d.credits,true);
+    else{ msg.textContent=d.error||'Kod hatalı.'; btn.disabled=false; btn.textContent='DOĞRULA'; }
+  }).catch(()=>{ msg.textContent='Bağlantı hatası.'; btn.disabled=false; btn.textContent='DOĞRULA'; });
+}
+
+function ask(){
+  const q=document.getElementById('q').value.trim();
+  if(!q) return;
+  const ra=document.getElementById('ra'), rt=document.getElementById('rt'), btn=document.getElementById('ask-btn');
+  ra.classList.add('show');
+  document.getElementById('share-bar-authed').classList.remove('show');
+  startLoading(rt);
+  btn.disabled=true; btn.textContent='· · ·';
+  getLocation((lat,lon)=>{
+    fetch('/api/zuhal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,lat,lon})})
+    .then(r=>r.json()).then(d=>{
+      stopLoading();
+      if(d.auth_required){ showWall(); return; }
+      if(d.error){ rt.className='response-text error-text'; rt.textContent=d.error; }
+      else{
+        const text=cleanMD(d.interpretation||'Yıldızlar şu an sessiz.');
+        rt.className='response-text'; rt.textContent=text;
+        setTimeout(()=>rt.classList.add('visible'),30);
+        if(d.credits_remaining!==undefined) document.getElementById('credits-count').textContent=d.credits_remaining;
+        showShareBtns('authed',text); rotateTagline();
+      }
+      btn.disabled=false; btn.textContent='YENİDEN SOR';
+    }).catch(()=>{
+      stopLoading(); rt.className='response-text error-text';
+      rt.textContent='Bağlantı hatası. Lütfen tekrar deneyin.';
+      setTimeout(()=>rt.classList.add('visible'),30);
+      btn.disabled=false; btn.textContent='TEKRAR DENE';
+    });
+  });
+}
+
+function logout(){
+  document.cookie='zt_session=; path=/; max-age=0';
+  savedAnswer='';
+  document.getElementById('q-free').value='';
+  document.getElementById('ra-free').classList.remove('show');
+  document.getElementById('share-bar-free').classList.remove('show');
+  showFree();
+}
+
+function extractViral(text){
+  const lines=text.split('\n');
+  for(let i=lines.length-1;i>=0;i--){
+    const l=lines[i].trim();
+    if(l==='--' && lines[i+1] && lines[i+1].trim().length>10) return lines[i+1].trim();
+    if(l.startsWith('--') && l.replace(/^-+\s*/,'').length>10) return l.replace(/^-+\s*/,'');
+  }
+  const m=lines.filter(l=>l.trim().length>20);
+  return m[m.length-1]||'';
+}
+function showShareBtns(which,text){
+  const viral=extractViral(text);
+  viralText[which]=viral;
+  document.getElementById('viral-'+which).textContent=viral||'zuhalteyze.live';
+  document.getElementById('share-bar-'+which).classList.add('show');
+}
+function copyViral(which){
+  const text=(viralText[which]||'zuhalteyze.live')+'\n\nzuhalteyze.live';
+  navigator.clipboard.writeText(text).then(()=>{
+    const t=document.getElementById('toast-'+which);
+    t.textContent='✓ kopyalandı'; setTimeout(()=>t.textContent='',2000);
+  });
+}
+function shareNative(which){
+  const viral=viralText[which]||'Zuhal Teyze konuştu';
+  if(navigator.share) navigator.share({title:'Zuhal Teyze',text:viral+'\n\nzuhalteyze.live',url:'https://zuhalteyze.live'}).catch(()=>{});
+  else copyViral(which);
+}
+function shareStory(which){
+  const viral=viralText[which]||'Yıldızlar biliyor.';
+  const c=document.createElement('canvas'); c.width=1080; c.height=1920;
+  const ctx=c.getContext('2d');
+  const g=ctx.createLinearGradient(0,0,1080,1920);
+  g.addColorStop(0,'#241019'); g.addColorStop(.5,'#3a1f2e'); g.addColorStop(1,'#160a10');
+  ctx.fillStyle=g; ctx.fillRect(0,0,1080,1920);
+  const sc=['#c9a876','#d9766a','#b25490','#e6d3ae'];
+  for(let i=0;i<120;i++){
+    ctx.fillStyle=sc[i%4]; ctx.globalAlpha=Math.random()*.8+.2;
+    ctx.beginPath(); ctx.arc(Math.random()*1080,Math.random()*1920,Math.random()*2+.5,0,Math.PI*2); ctx.fill();
+  }
+  ctx.globalAlpha=1;
+  ctx.strokeStyle='rgba(201,168,118,.25)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(100,780); ctx.lineTo(980,780); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(100,1140); ctx.lineTo(980,1140); ctx.stroke();
+  ctx.fillStyle='rgba(201,168,118,.65)'; ctx.font='36px serif'; ctx.textAlign='center';
+  ctx.fillText('✦',540,758); ctx.fillText('✦',540,1162);
+  ctx.fillStyle='#c9a876'; ctx.font='500 58px Georgia,serif';
+  ctx.fillText('ZUHAL TEYZE',540,900);
+  ctx.fillStyle='rgba(201,168,118,.5)'; ctx.font='26px Georgia,serif';
+  ctx.fillText('CHAOS LAB · HORARY',540,955);
+  ctx.fillStyle='rgba(230,211,174,.9)'; ctx.font='italic 44px Georgia,serif';
+  const words=viral.split(' '); let wlines=[],wline='';
+  for(const w of words){ const t2=wline?wline+' '+w:w; if(ctx.measureText(t2).width>820){wlines.push(wline);wline=w;}else wline=t2; }
+  if(wline) wlines.push(wline);
+  const sy=1050-(wlines.length-1)*54/2;
+  wlines.forEach((l,i)=>ctx.fillText(l,540,sy+i*54));
+  ctx.fillStyle='rgba(201,168,118,.35)'; ctx.font='26px Georgia,serif';
+  ctx.fillText('zuhalteyze.live',540,1790);
+  const a=document.createElement('a'); a.download='zuhal-teyze-story.png';
+  a.href=c.toDataURL('image/png'); a.click();
+}
+
+function openCheckout(){
+  document.getElementById('pay-err').textContent='';
+  document.getElementById('pay-overlay').classList.add('show');
+}
+function closePay(){
+  document.getElementById('pay-overlay').classList.remove('show');
+  document.getElementById('pay-err').textContent='';
+  ['3q','5q','10q'].forEach(v=>document.getElementById('pkg-'+v).classList.remove('loading'));
+}
+async function goPay(variant){
+  const pkg=document.getElementById('pkg-'+variant);
+  const err=document.getElementById('pay-err');
+  err.textContent='';
+  pkg.classList.add('loading');
+  try{
+    const r=await fetch('/api/checkout/url?variant='+variant);
+    const d=await r.json();
+    if(d.url){ window.location.href=d.url; }
+    else{ err.textContent='Bağlantı hatası, tekrar deneyin.'; pkg.classList.remove('loading'); }
+  }catch(e){
+    err.textContent='Bağlantı hatası, tekrar deneyin.';
+    pkg.classList.remove('loading');
+  }
+}
+
+function createStars(){
+  const cols=['#c9a876','#d9766a','#e6d3ae','#b25490','#2e7a86'];
+  for(let i=0;i<40;i++){
+    const s=document.createElement('div'); s.className='star';
+    const sz=Math.random()*2.5+.8, c=cols[Math.floor(Math.random()*cols.length)];
+    s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'vw;top:'+Math.random()*100+'vh;--dur:'+(Math.random()*3+2).toFixed(1)+'s;--delay:'+(Math.random()*4).toFixed(1)+'s;background:'+c+';box-shadow:0 0 '+Math.ceil(sz*2)+'px '+c;
+    document.body.appendChild(s);
+  }
+}
+
+const FORMSPREE_ID = 'xwvrwpnj';
+
+function toggleAstro(){
+  const card = document.getElementById('astro-card');
+  card.classList.toggle('show');
+  if(card.classList.contains('show')) card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function sendAstro(){
+  if(document.getElementById('astro-gotcha').value) return;
+  const email = document.getElementById('astro-email').value.trim();
+  const soru  = document.getElementById('astro-soru').value.trim();
+  const msg   = document.getElementById('astro-msg');
+  msg.className = 'astro-msg';
+
+  if(!email || !email.includes('@')){ msg.classList.add('err'); msg.textContent='Geçerli bir e-posta girin.'; return; }
+  if(soru.length < 10){ msg.classList.add('err'); msg.textContent='Sorunuzu biraz daha açar mısınız?'; return; }
+
+  const btn = document.getElementById('astro-send-btn');
+  btn.disabled = true; btn.textContent = '· · ·';
+
+  fetch('https://formspree.io/f/' + FORMSPREE_ID, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({email, soru, _subject:'Zuhal Teyze — Gerçek Astrolog Talebi'})
+  }).then(r=>{
+    if(r.ok){
+      msg.classList.add('ok');
+      msg.textContent='✓ Mesajınız ulaştı. Yıldızlar değil, insan dönecek — biraz sabır.';
+      document.getElementById('astro-soru').value='';
+      btn.textContent='GÖNDER'; btn.disabled=false;
+    } else throw new Error();
+  }).catch(()=>{
+    msg.classList.add('err'); msg.textContent='Gönderilemedi, tekrar deneyin.';
+    btn.textContent='GÖNDER'; btn.disabled=false;
+  });
+}
+
+</script>
+</body>
+</html>
