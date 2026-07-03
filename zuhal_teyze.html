@@ -24,32 +24,29 @@ body{background:radial-gradient(ellipse 90% 60% at 70% -10%, rgba(217,118,106,.1
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(15,6,11,.85) 100%);pointer-events:none;z-index:0}
 .wrap{width:100%;max-width:480px;position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
 .avatar-wrap{width:170px;height:212px;margin-bottom:1rem;border-radius:50% 50% 4px 4px;overflow:hidden;position:relative;z-index:1}
-.avatar-wrap::before{content:'';position:absolute;inset:-3px;background:conic-gradient(from 0deg,#c9a876,#d9766a,#b25490,#c9a876);border-radius:52% 52% 6px 6px;animation:crystalRing 4s linear infinite;z-index:-1;pointer-events:none}
+.avatar-wrap::before{content:'';position:absolute;inset:-3px;background:conic-gradient(from 0deg,#c9a876,#d9766a,#b25490,#c9a876);border-radius:52% 52% 6px 6px;z-index:-1;pointer-events:none}
 .avatar-wrap::after{content:'';position:absolute;inset:-2px;background:#2c1620;border-radius:50% 50% 5px 5px;z-index:-1;pointer-events:none}
 .avatar-wrap svg{width:100%;height:100%;display:block;animation:floaty 7s ease-in-out infinite}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='grainf'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grainf)' opacity='0.5'/%3E%3C/svg%3E");opacity:.06;mix-blend-mode:overlay;pointer-events:none;z-index:0}
-@keyframes crystalRing{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-.title{font-family:'Cinzel',serif;font-size:22px;letter-spacing:.12em;margin-bottom:4px;text-align:center;background:linear-gradient(135deg,#c9a876,#d9766a,#b25490,#c9a876);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:bShift 5s linear infinite}
-@keyframes bShift{0%{background-position:0%}100%{background-position:300%}}
-.subtitle{font-size:11px;color:rgba(201,168,118,.5);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.4rem;text-align:center}
-.disclaimer{font-size:12px;color:rgba(201,168,118,.38);text-align:center;margin-bottom:.4rem;max-width:380px;line-height:1.5}
-.tagline{font-size:13px;color:rgba(230,211,174,.45);font-style:italic;text-align:center;margin-bottom:1.5rem;min-height:18px;transition:opacity .4s}
+.title{font-family:'Cinzel',serif;font-size:22px;letter-spacing:.12em;margin-bottom:4px;text-align:center;background:linear-gradient(135deg,#c9a876,#d9766a,#b25490,#c9a876);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.subtitle{font-size:11px;color:rgba(201,168,118,.68);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.4rem;text-align:center}
+.disclaimer{font-size:14px;color:rgba(230,211,174,.7);text-align:center;margin-bottom:.4rem;max-width:380px;line-height:1.5}
+.tagline{font-size:13px;color:rgba(230,211,174,.65);font-style:italic;text-align:center;margin-bottom:1.5rem;min-height:18px;transition:opacity .4s}
 .card{width:100%;background:rgba(54,24,38,.72);backdrop-filter:blur(6px);border:1px solid rgba(201,168,118,.22);border-radius:8px;padding:1.5rem}
 textarea,input[type=email],input[type=tel]{width:100%;background:rgba(217,118,106,.07);border:1px solid rgba(201,168,118,.22);border-radius:5px;color:rgba(230,211,174,.9);font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;padding:12px 14px;outline:none;transition:border-color .2s;resize:none}
-textarea::placeholder,input::placeholder{color:rgba(201,168,118,.32);font-style:italic}
+textarea::placeholder,input::placeholder{color:rgba(201,168,118,.5);font-style:italic}
 textarea:focus,input:focus{border-color:rgba(232,154,139,.65);box-shadow:0 0 10px rgba(201,168,118,.12)}
-.btn{width:100%;margin-top:1rem;background:rgba(125,51,68,.18);border:1px solid rgba(201,168,118,.38);border-radius:5px;color:rgba(230,211,174,.9);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.18em;padding:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.btn::after{content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,118,.18),transparent);pointer-events:none}
-.btn:hover:not(:disabled){background:rgba(217,118,106,.28);box-shadow:0 0 16px rgba(201,168,118,.28);border-color:rgba(232,154,139,.55)}
+.btn{width:100%;margin-top:1rem;background:linear-gradient(135deg,#c9a876,#d9766a);border:none;border-radius:5px;color:#241019;font-family:'Cinzel',serif;font-size:12px;font-weight:500;letter-spacing:.18em;padding:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);pointer-events:none}
+.btn:hover:not(:disabled){background:linear-gradient(135deg,#e6d3ae,#e89a8b);box-shadow:0 0 20px rgba(217,118,106,.45)}
 .btn:hover:not(:disabled)::after{animation:shimmer .7s ease-in-out}
 .btn:disabled{opacity:.45;cursor:default}
-.btn-sm{background:transparent;border:1px solid rgba(201,168,118,.18);color:rgba(201,168,118,.48);font-size:10px;padding:9px;margin-top:.6rem;letter-spacing:.12em}
-.btn-sm:hover:not(:disabled){background:rgba(217,118,106,.1);border-color:rgba(201,168,118,.38)}
+.btn-sm{background:transparent;border:1px solid rgba(201,168,118,.18);color:rgba(201,168,118,.6);font-size:10px;font-weight:400;padding:9px;margin-top:.6rem;letter-spacing:.12em}
+.btn-sm:hover:not(:disabled){background:rgba(217,118,106,.1);border-color:rgba(201,168,118,.38);box-shadow:none}
 @keyframes shimmer{from{left:-70%}to{left:160%}}
 .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,118,.38),transparent);margin:1.25rem 0;position:relative;overflow:visible}
-.divider::after{content:'✦';position:absolute;left:50%;top:-8px;transform:translateX(-50%);font-size:11px;color:rgba(201,168,118,.6);background:#241019;padding:0 5px;animation:ornPulse 2.5s ease-in-out infinite}
-@keyframes ornPulse{0%,100%{opacity:.28;transform:translateX(-50%) scale(.85)}50%{opacity:1;transform:translateX(-50%) scale(1.1);text-shadow:0 0 10px rgba(201,168,118,.8)}}
+.divider::after{content:'✦';position:absolute;left:50%;top:-8px;transform:translateX(-50%);font-size:11px;color:rgba(201,168,118,.6);background:#241019;padding:0 5px}
 .response-area{overflow:hidden;max-height:0;transition:max-height .4s ease}
 .response-area.show{max-height:2000px}
 .response-text{font-size:19px;font-style:italic;line-height:1.85;color:rgba(230,211,174,.88);opacity:0;transition:opacity .5s;white-space:pre-wrap}
@@ -59,45 +56,46 @@ textarea:focus,input:focus{border-color:rgba(232,154,139,.65);box-shadow:0 0 10p
 @keyframes floatText{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(-4px);opacity:1;text-shadow:0 0 12px rgba(201,168,118,.65)}}
 .error-text{font-size:15px;color:#ff9180;font-style:normal;opacity:1!important}
 .credits-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid rgba(201,168,118,.12)}
-.user-email{font-size:12px;color:rgba(201,168,118,.42);font-style:italic}
-.credits-info{font-size:12px;color:rgba(201,168,118,.5);letter-spacing:.06em}
+.user-email{font-size:12px;color:rgba(201,168,118,.6);font-style:italic}
+.credits-info{font-size:12px;color:rgba(201,168,118,.68);letter-spacing:.06em}
 .credits-count{font-family:'Cinzel',serif;font-size:14px;background:linear-gradient(135deg,#c9a876,#d9766a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.wall-hint{font-size:14px;color:rgba(201,168,118,.52);font-style:italic;text-align:center;margin-bottom:1.25rem;line-height:1.6}
+.wall-hint{font-size:14px;color:rgba(201,168,118,.7);font-style:italic;text-align:center;margin-bottom:1.25rem;line-height:1.6}
 .wall-msg{min-height:18px;margin-top:.75rem;font-size:13px;color:#ff9180;text-align:center}
-.back-link{font-size:12px;color:rgba(201,168,118,.38);cursor:pointer;text-decoration:underline;margin-top:.75rem;display:block;text-align:center}
-.free-tag{font-size:10px;color:rgba(201,168,118,.55);letter-spacing:.15em;text-transform:uppercase;text-align:center;margin-bottom:.75rem}
+.back-link{font-size:12px;color:rgba(201,168,118,.6);cursor:pointer;text-decoration:underline;margin-top:.75rem;display:block;text-align:center}
+.free-tag{font-size:10px;color:rgba(201,168,118,.7);letter-spacing:.15em;text-transform:uppercase;text-align:center;margin-bottom:.75rem}
 .share-bar{display:none;margin-top:1.25rem;flex-direction:column;gap:.7rem}
 .share-bar.show{display:flex}
-.share-viral{font-size:14px;color:rgba(230,211,174,.68);font-style:italic;text-align:center;padding:.85rem 1rem;border:1px dashed rgba(201,168,118,.2);border-radius:6px;cursor:pointer;transition:all .25s;line-height:1.5}
+.share-viral{font-size:14px;color:rgba(230,211,174,.8);font-style:italic;text-align:center;padding:.85rem 1rem;border:1px dashed rgba(201,168,118,.2);border-radius:6px;cursor:pointer;transition:all .25s;line-height:1.5}
 .share-viral:hover{background:rgba(217,118,106,.09);border-color:rgba(201,168,118,.42)}
 .share-btns{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
 .share-btn{padding:12px;border:1px solid rgba(201,168,118,.28);border-radius:5px;background:rgba(54,24,38,.9);color:rgba(230,211,174,.78);font-family:'Cinzel',serif;font-size:10px;letter-spacing:.14em;cursor:pointer;transition:all .25s;text-align:center}
 .share-btn:hover{background:rgba(201,168,118,.16);box-shadow:0 0 12px rgba(201,168,118,.22)}
-.copy-toast{font-size:11px;color:rgba(201,168,118,.5);text-align:center;min-height:16px;letter-spacing:.05em}
+.copy-toast{font-size:11px;color:rgba(201,168,118,.65);text-align:center;min-height:16px;letter-spacing:.05em}
 @keyframes cardEnter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .state-enter{animation:cardEnter .4s ease-out both}
 .star{position:fixed;border-radius:50%;pointer-events:none;z-index:0;animation:twinkle var(--dur,3s) ease-in-out infinite;animation-delay:var(--delay,0s)}
 @keyframes twinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:.9;transform:scale(1.4)}}
-.moon-deco{position:fixed;top:1.5rem;right:2rem;font-size:1.6rem;color:rgba(201,168,118,.38);pointer-events:none;z-index:0;animation:moonFloat 7s ease-in-out infinite}
+.moon-deco{position:fixed;top:1.5rem;right:2rem;font-size:1.6rem;color:rgba(201,168,118,.38);pointer-events:none;z-index:0;animation:moonFloat 18s ease-in-out infinite}
 @keyframes moonFloat{0%,100%{transform:translateY(0) rotate(-8deg);opacity:.3}50%{transform:translateY(-8px) rotate(8deg);opacity:.55}}
 .btn-astro{width:100%;margin-top:1.25rem;background:rgba(13,80,86,.45);border:1px solid rgba(46,122,134,.5);border-radius:5px;color:#8ecbd4;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.18em;padding:13px;cursor:pointer;transition:all .3s;position:relative;z-index:1}
 .btn-astro:hover{background:rgba(46,122,134,.25);border-color:#2e7a86;color:#b0dde4;box-shadow:0 0 18px rgba(46,122,134,.3)}
 .astro-card{width:100%;margin-top:.75rem;background:rgba(8,40,46,.75);backdrop-filter:blur(8px);border:1px solid rgba(46,122,134,.32);border-radius:8px;padding:1.4rem;display:none;position:relative;z-index:1}
 .astro-card.show{display:block;animation:cardEnter .35s ease-out both}
-.astro-hint{font-size:12px;color:rgba(201,168,118,.6);font-style:italic;text-align:center;margin-bottom:1.1rem;line-height:1.65;letter-spacing:.02em}
+.astro-hint{font-size:12px;color:rgba(201,168,118,.75);font-style:italic;text-align:center;margin-bottom:1.1rem;line-height:1.65;letter-spacing:.02em}
 .astro-divider{display:flex;align-items:center;gap:.75rem;margin:.9rem 0;color:rgba(201,168,118,.22);font-size:10px;letter-spacing:.1em}
 .astro-divider::before,.astro-divider::after{content:'';flex:1;height:1px;background:rgba(201,168,118,.14)}
 .astro-msg{min-height:18px;margin-top:.75rem;font-size:12px;text-align:center;color:rgba(201,168,118,.65);letter-spacing:.04em}
 .astro-msg.err{color:#e07070}
 .astro-msg.ok{color:rgba(142,203,150,.75)}
 footer{margin-top:2.5rem;position:relative;z-index:1}
-footer a{font-size:11px;color:rgba(201,168,118,.32);text-decoration:none;letter-spacing:.05em}
-footer a:hover{color:rgba(201,168,118,.65)}
+footer a{font-size:11px;color:rgba(201,168,118,.55);text-decoration:none;letter-spacing:.05em}
+footer a:hover{color:rgba(201,168,118,.85)}
+.footer-disclaimer{margin-top:.9rem;text-align:center;font-size:11px;color:rgba(201,168,118,.45);font-style:italic}
 .pay-overlay{position:fixed;inset:0;background:rgba(15,6,11,.88);backdrop-filter:blur(5px);z-index:200;display:none;align-items:center;justify-content:center;padding:1.25rem}
 .pay-overlay.show{display:flex}
 .pay-modal{width:100%;max-width:400px;background:rgba(46,18,30,.97);border:1px solid rgba(201,168,118,.3);border-radius:10px;padding:1.75rem 1.5rem}
 .pay-title{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.16em;color:rgba(201,168,118,.9);text-align:center;margin-bottom:.35rem}
-.pay-sub{font-size:13px;color:rgba(230,211,174,.4);font-style:italic;text-align:center;margin-bottom:1.4rem;line-height:1.55}
+.pay-sub{font-size:13px;color:rgba(230,211,174,.6);font-style:italic;text-align:center;margin-bottom:1.4rem;line-height:1.55}
 .pay-pkgs{display:flex;flex-direction:column;gap:.65rem}
 .pay-pkg{background:rgba(217,118,106,.06);border:1px solid rgba(201,168,118,.18);border-radius:7px;padding:.9rem 1.1rem;cursor:pointer;transition:all .22s;display:flex;justify-content:space-between;align-items:center;position:relative;overflow:hidden}
 .pay-pkg::after{content:'';position:absolute;top:0;left:-70%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(201,168,118,.1),transparent);pointer-events:none}
@@ -106,7 +104,7 @@ footer a:hover{color:rgba(201,168,118,.65)}
 .pay-pkg.loading{opacity:.55;pointer-events:none}
 .pay-pkg-left{display:flex;flex-direction:column;gap:.25rem}
 .pay-pkg-name{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;color:rgba(230,211,174,.85)}
-.pay-pkg-credits{font-size:12px;color:rgba(201,168,118,.48);font-style:italic}
+.pay-pkg-credits{font-size:12px;color:rgba(201,168,118,.65);font-style:italic}
 .pay-pkg-price{font-family:'Cinzel',serif;font-size:15px;background:linear-gradient(135deg,#c9a876,#d9766a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.06em}
 .pay-err{min-height:16px;margin-top:.85rem;font-size:12px;color:#ff9180;text-align:center;font-style:italic}
 .pay-close{display:block;margin-top:1.1rem;text-align:center;font-size:11px;color:rgba(201,168,118,.28);cursor:pointer;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
@@ -119,11 +117,13 @@ footer a:hover{color:rgba(201,168,118,.65)}
   <div class="avatar-wrap">
     <svg role="img" aria-label="Zuhal Teyze" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600">
   <defs>
+    <!-- sıva dokusu -->
     <filter id="zt-plaster" x="-10%" y="-10%" width="120%" height="120%">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" result="n"/>
       <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .07 0" result="grain"/>
       <feComposite in="grain" in2="SourceGraphic" operator="over"/>
     </filter>
+    <!-- boyamsı kenar titremesi -->
     <filter id="zt-brush">
       <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="3" seed="7" result="t"/>
       <feDisplacementMap in="SourceGraphic" in2="t" scale="7"/>
@@ -172,12 +172,15 @@ footer a:hover{color:rgba(201,168,118,.65)}
     </linearGradient>
   </defs>
 
+  <!-- niş zemini -->
   <path d="M30 600 L30 240 Q30 60 240 60 Q450 60 450 240 L450 600 Z" fill="url(#zt-niche)"/>
   <path d="M30 600 L30 240 Q30 60 240 60 Q450 60 450 240 L450 600 Z" fill="none" stroke="#c9a876" stroke-opacity=".4" stroke-width="2"/>
   <path d="M42 600 L42 244 Q42 74 240 74 Q438 74 438 244 L438 600 Z" fill="none" stroke="#c9a876" stroke-opacity=".18" stroke-width="1"/>
 
+  <!-- somon glow -->
   <ellipse cx="240" cy="250" rx="190" ry="200" fill="url(#zt-halo)" filter="url(#zt-blurGlow)"/>
 
+  <!-- yıldızlar -->
   <g fill="#e6d3ae">
     <circle cx="95" cy="160" r="1.6" opacity=".8"/>
     <circle cx="385" cy="135" r="1.2" opacity=".6"/>
@@ -188,30 +191,38 @@ footer a:hover{color:rgba(201,168,118,.65)}
     <path d="M395 200 l1.8 4.5 4.5 1.8 -4.5 1.8 -1.8 4.5 -1.8 -4.5 -4.5 -1.8 4.5 -1.8 Z" opacity=".55"/>
   </g>
 
+  <!-- Satürn halkası: başın arkasında, hale gibi -->
   <g filter="url(#zt-brushSoft)">
     <ellipse cx="240" cy="208" rx="158" ry="44" fill="none" stroke="url(#zt-ring)" stroke-width="7" transform="rotate(-9 240 208)" opacity=".9"/>
     <ellipse cx="240" cy="208" rx="172" ry="52" fill="none" stroke="#c9a876" stroke-width="1.6" transform="rotate(-9 240 208)" opacity=".4"/>
   </g>
 
+  <!-- ŞAL: baş + omuzlar -->
   <g filter="url(#zt-brush)">
     <path d="M240 96
              Q150 100 128 196 Q118 244 124 300
              Q110 360 92 430 Q80 480 86 600 L394 600
              Q400 480 388 430 Q370 360 356 300
              Q362 244 352 196 Q330 100 240 96 Z" fill="url(#zt-shawl)"/>
+    <!-- şal ışığı (sol-üst somon vurması) -->
     <path d="M240 96 Q160 102 136 190 Q128 230 130 280 Q146 200 178 158 Q204 124 240 116 Z"
           fill="url(#zt-shawlHi)" opacity=".8"/>
+    <!-- kıvrımlar -->
     <path d="M150 250 Q142 360 118 470" stroke="#33141f" stroke-width="5" fill="none" opacity=".7"/>
     <path d="M330 250 Q340 360 362 470" stroke="#33141f" stroke-width="5" fill="none" opacity=".6"/>
     <path d="M176 300 Q170 400 152 520" stroke="#33141f" stroke-width="3" fill="none" opacity=".5"/>
     <path d="M304 300 Q312 400 328 520" stroke="#33141f" stroke-width="3" fill="none" opacity=".5"/>
   </g>
+  <!-- şal altın kenarı -->
   <path d="M168 178 Q150 240 158 320 Q166 420 150 560" stroke="#c9a876" stroke-width="2.4" fill="none" opacity=".75" filter="url(#zt-brushSoft)"/>
   <path d="M312 178 Q330 240 322 320 Q314 420 330 560" stroke="#c9a876" stroke-width="2.4" fill="none" opacity=".75" filter="url(#zt-brushSoft)"/>
 
+  <!-- YÜZ -->
   <g filter="url(#zt-brushSoft)">
+    <!-- boyun -->
     <path d="M204 330 Q206 380 196 404 Q240 432 284 404 Q274 380 276 330 Z" fill="#a9685c"/>
     <path d="M240 336 Q262 372 276 396 L276 330 Z" fill="#5e2f38" opacity=".7"/>
+    <!-- yüz ovali: güçlü çene -->
     <path d="M240 130
              Q176 132 168 210
              Q164 258 178 300
@@ -219,36 +230,45 @@ footer a:hover{color:rgba(201,168,118,.65)}
              Q286 348 302 300
              Q316 258 312 210
              Q304 132 240 130 Z" fill="url(#zt-skin)"/>
+    <!-- sağ gölge (chiaroscuro) -->
     <path d="M240 130 Q304 132 312 210 Q316 258 302 300 Q286 348 240 356 L240 130 Z"
           fill="url(#zt-skinShadow)" opacity=".75"/>
+    <!-- elmacık ışığı -->
     <ellipse cx="200" cy="252" rx="26" ry="18" fill="#e8b294" opacity=".5" filter="url(#zt-blurSoft)"/>
     <ellipse cx="206" cy="180" rx="34" ry="22" fill="#ecc09e" opacity=".4" filter="url(#zt-blurSoft)"/>
   </g>
 
+  <!-- KAŞLAR: kalın, sert, hafif çatık -->
   <g filter="url(#zt-brushSoft)">
     <path d="M182 212 Q204 198 232 208 L230 217 Q205 209 186 220 Z" fill="#2c1219"/>
     <path d="M252 208 Q280 198 300 214 L296 222 Q278 209 254 217 Z" fill="#2c1219"/>
   </g>
 
+  <!-- GÖZLER: delici -->
   <g>
+    <!-- göz çukuru gölgesi -->
     <ellipse cx="208" cy="232" rx="24" ry="13" fill="#7a4046" opacity=".45" filter="url(#zt-blurSoft)"/>
     <ellipse cx="276" cy="232" rx="24" ry="13" fill="#5e2f38" opacity=".55" filter="url(#zt-blurSoft)"/>
+    <!-- sol göz -->
     <path d="M188 232 Q206 220 228 230 Q208 244 188 232 Z" fill="#f0e2cd"/>
     <circle cx="209" cy="231" r="8.5" fill="#3a1f1a"/>
     <circle cx="209" cy="231" r="4" fill="#160a10"/>
     <circle cx="206" cy="228" r="1.8" fill="#e6d3ae"/>
     <path d="M188 232 Q206 219 228 230" stroke="#2c1219" stroke-width="3" fill="none" stroke-linecap="round"/>
     <path d="M191 236 Q207 245 226 233" stroke="#5e2f38" stroke-width="1.6" fill="none" opacity=".8"/>
+    <!-- sağ göz -->
     <path d="M254 230 Q274 220 294 232 Q274 243 254 230 Z" fill="#e8d8c0"/>
     <circle cx="273" cy="230" r="8.5" fill="#3a1f1a"/>
     <circle cx="273" cy="230" r="4" fill="#160a10"/>
     <circle cx="270" cy="227" r="1.6" fill="#e6d3ae"/>
     <path d="M254 230 Q274 219 294 232" stroke="#2c1219" stroke-width="3" fill="none" stroke-linecap="round"/>
     <path d="M257 233 Q274 243 292 234" stroke="#4a2430" stroke-width="1.6" fill="none" opacity=".8"/>
+    <!-- alt göz çizgisi: yaş, ağırlık -->
     <path d="M194 246 Q208 252 222 247" stroke="#9c5e54" stroke-width="2" fill="none" opacity=".6"/>
     <path d="M258 245 Q272 251 288 247" stroke="#7a4046" stroke-width="2" fill="none" opacity=".6"/>
   </g>
 
+  <!-- BURUN: güçlü, gölgeli -->
   <g filter="url(#zt-brushSoft)">
     <path d="M238 226 Q236 262 230 282 Q236 292 248 290 Q256 286 252 276 Q248 258 246 226 Z"
           fill="#b06a58" opacity=".55"/>
@@ -256,46 +276,53 @@ footer a:hover{color:rgba(201,168,118,.65)}
     <path d="M228 284 Q233 290 240 291" stroke="#8a4f4a" stroke-width="2" fill="none" opacity=".7"/>
   </g>
 
+  <!-- DUDAK: ince, ciddi, hafif aşağı -->
   <g filter="url(#zt-brushSoft)">
     <path d="M210 314 Q240 306 272 312 Q258 322 240 322 Q222 322 210 314 Z" fill="#8a3f48"/>
     <path d="M210 314 Q240 309 272 312" stroke="#4a1f2a" stroke-width="2.2" fill="none"/>
     <path d="M216 322 Q240 330 266 321" stroke="#5e2f38" stroke-width="1.6" fill="none" opacity=".5"/>
+    <!-- nazolabial çizgiler: yaş ve sertlik -->
     <path d="M212 290 Q204 304 206 316" stroke="#9c5e54" stroke-width="2.2" fill="none" opacity=".65"/>
     <path d="M268 288 Q278 302 276 314" stroke="#7a4046" stroke-width="2.2" fill="none" opacity=".65"/>
+    <!-- alın çizgileri -->
     <path d="M204 168 Q240 160 278 168" stroke="#a9685c" stroke-width="1.8" fill="none" opacity=".5"/>
     <path d="M210 184 Q240 177 272 184" stroke="#a9685c" stroke-width="1.6" fill="none" opacity=".45"/>
     <path d="M236 200 Q240 196 246 200" stroke="#8a4f4a" stroke-width="2" fill="none" opacity=".7"/>
   </g>
 
+  <!-- KÜPE: altın hilal -->
   <g filter="url(#zt-brushSoft)">
     <path d="M174 296 q-12 14 0 26 q14 12 26 1 q-16 4 -22 -7 q-6 -12 -4 -20 Z" fill="#c9a876"/>
     <circle cx="173" cy="292" r="2.4" fill="#e6d3ae"/>
   </g>
 
+  <!-- saç teli: şal altından kaçan gümüş -->
   <g stroke="#cfc2b0" stroke-width="1.6" fill="none" opacity=".8" filter="url(#zt-brushSoft)">
     <path d="M186 156 Q176 176 178 196"/>
     <path d="M196 148 Q188 168 188 184"/>
     <path d="M292 152 Q300 172 298 192"/>
   </g>
 
+  <!-- şal yüz çevresi gölgesi -->
   <path d="M240 124 Q186 128 174 196 Q170 240 180 290 Q160 240 166 192 Q176 116 240 110 Q304 116 314 192 Q320 240 300 290 Q310 240 306 196 Q294 128 240 124 Z"
         fill="#33141f" opacity=".85" filter="url(#zt-brushSoft)"/>
 
+  <!-- ön plan tılsımı: göğüste altın Satürn mührü -->
   <g filter="url(#zt-brushSoft)">
     <circle cx="240" cy="470" r="34" fill="none" stroke="#c9a876" stroke-width="2" opacity=".85"/>
     <text x="240" y="484" text-anchor="middle" font-family="serif" font-size="40" fill="#c9a876" opacity=".95">♄</text>
     <path d="M240 436 L240 410" stroke="#c9a876" stroke-width="1.6" opacity=".6"/>
   </g>
 
-  <!-- plaster texture overlay -->
-  <rect x="0" y="0" width="480" height="600" filter="url(#zt-plaster)" fill="rgba(0,0,0,0)" opacity=".4"/>
+  <!-- sıva dokusu tüm sahneye -->
+  <rect x="0" y="0" filter="url(#zt-plaster)" fill="none"/>
 </svg>
   </div>
   <div class="title">ZUHAL TEYZE</div>
   <div class="subtitle">Chaos Lab &middot; Horary</div>
-  <div style="font-size:10px;letter-spacing:.12em;color:rgba(201,168,118,.32);margin-bottom:.2rem"><span style="color:rgba(201,168,118,.75)">TR</span> &nbsp;·&nbsp; <a href="/en" style="color:rgba(201,168,118,.45);text-decoration:none">EN</a></div>
+  <div style="font-size:10px;letter-spacing:.12em;color:rgba(201,168,118,.55);margin-bottom:.2rem"><span style="color:rgba(201,168,118,.85)">TR</span> &nbsp;·&nbsp; <a href="/en" style="color:rgba(201,168,118,.65);text-decoration:none">EN</a></div>
   <div class="disclaimer">Hayatın her sorusuna yıldızlardan cevap arar. Ama asıl bildiği şey — cevabı zaten bildiğinizi.</div>
-  <div class="tagline" id="tagline">Bu uygulama eğlence amaçlıdır.</div>
+  <div class="tagline" id="tagline">Saturnus her şeyi görür.</div>
 
   <div class="card" id="app-card">
     <div id="state-free">
@@ -380,6 +407,7 @@ footer a:hover{color:rgba(201,168,118,.65)}
       <a href="/terms">Kullanım Koşulları</a>
       <a href="/privacy">Gizlilik</a>
     </div>
+    <div class="footer-disclaimer">Bu uygulama eğlence amaçlıdır.</div>
   </footer>
 </div>
 <!-- Payment Modal -->
@@ -566,6 +594,7 @@ function logout(){
   showFree();
 }
 
+// Share
 function extractViral(text){
   const lines=text.split('\n');
   for(let i=lines.length-1;i>=0;i--){
@@ -628,6 +657,7 @@ function shareStory(which){
   a.href=c.toDataURL('image/png'); a.click();
 }
 
+// Lemon Squeezy Checkout
 function openCheckout(){
   document.getElementById('pay-err').textContent='';
   document.getElementById('pay-overlay').classList.add('show');
@@ -653,6 +683,7 @@ async function goPay(variant){
   }
 }
 
+// Stars
 function createStars(){
   const cols=['#c9a876','#d9766a','#e6d3ae','#b25490','#2e7a86'];
   for(let i=0;i<40;i++){
@@ -662,7 +693,7 @@ function createStars(){
     document.body.appendChild(s);
   }
 }
-
+// ── Gerçek Astrologa Sor ──
 const FORMSPREE_ID = 'xwvrwpnj';
 
 function toggleAstro(){
